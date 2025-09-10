@@ -19,6 +19,7 @@ import 'package:dot_connections/app/views/screens/initial/workplace_view.dart';
 import 'package:dot_connections/app/views/screens/initial/whats_dob_view.dart';
 import 'package:dot_connections/app/views/screens/initial/whats_email_view.dart';
 import 'package:dot_connections/app/views/screens/initial/whats_name_view.dart';
+import 'package:dot_connections/app/views/screens/parent/parent_screen.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 
 import '../../views/screens/initial/hometown_view.dart';
@@ -46,6 +47,7 @@ class AppRoutes {
   static String smokingStatus = '/smoking-status';
   static String addBio = '/add-bio';
   static String welcome = '/welcome';
+  static String parent = '/parent';
   static String signIn = '/signIn';
   static String signUp = '/signUp';
   static String forget = '/forget';
@@ -74,5 +76,6 @@ class AppRoutes {
     GetPage(name: smokingStatus, page: () => const SmokingStatusView()),
     GetPage(name: addBio, page: () => const AddBioView()),
     GetPage(name: welcome, page: () => const WelcomeView()),
+    GetPage(name: parent, page: () => const ParentScreen()),
   ];
 }
