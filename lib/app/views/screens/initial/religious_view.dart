@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class HometownView extends StatelessWidget {
-  const HometownView({super.key});
+class ReligiousView extends StatelessWidget {
+  const ReligiousView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class HometownView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Where is your hometown?",
+                  "What is your religious beliefs?",
                   style: AppTextStyle.primaryTextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -33,14 +33,26 @@ class HometownView extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 20.h),
-                TextField(
-                  controller: controller.hometownController,
-                  decoration: InputDecoration(
-                    hintText: 'e.g. New York, USA',
-                    hintStyle: AppTextStyle.primaryTextStyle(
-                      color: Colors.grey,
-                    ),
-                  ),
+                Wrap(
+                  spacing: 10.w,
+                  runSpacing: 10.h,
+                  children: controller.religionOptions.map((religion) {
+                    return Obx(() {
+                      final isSelected =
+                          controller.selectedReligion.value == religion;
+                      return GestureDetector(
+                        onTap: () => controller.setReligion(religion),
+                        child: Chip(
+                          label: Text(religion),
+                          backgroundColor:
+                              isSelected ? Colors.purple : Colors.grey[200],
+                          labelStyle: AppTextStyle.primaryTextStyle(
+                            color: isSelected ? Colors.white : Colors.black,
+                          ),
+                        ),
+                      );
+                    });
+                  }).toList(),
                 ),
                 SizedBox(height: 20.h),
                 Row(
@@ -52,8 +64,8 @@ class HometownView extends StatelessWidget {
                     ),
                     Obx(
                       () => Switch(
-                        value: controller.showHometownOnProfile.value,
-                        onChanged: controller.toggleShowHometown,
+                        value: controller.showReligionOnProfile.value,
+                        onChanged: controller.toggleShowReligion,
                         activeColor: Colors.purple,
                       ),
                     ),
@@ -62,7 +74,7 @@ class HometownView extends StatelessWidget {
                 const Spacer(),
                 ElevatedButton(
                   onPressed: () {
-                    Get.toNamed(AppRoutes.workplace);
+                    Get.toNamed(AppRoutes.drinkStatus);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple,

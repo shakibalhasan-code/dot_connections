@@ -5,5 +5,7 @@ class AppImages {
   static String getStartedImage = '$appImagesPath/get_started_image.png';
   static String appCover = '$appImagesPath/app_cover.png';
   static String mapDemo = '$appImagesPath/map_demo.png';
+  static String welcomeImage = '$appImagesPath/welcome_image.png';
+
 
 }

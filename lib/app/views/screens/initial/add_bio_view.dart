@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class HometownView extends StatelessWidget {
-  const HometownView({super.key});
+class AddBioView extends StatelessWidget {
+  const AddBioView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class HometownView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Where is your hometown?",
+                  "Add Bio",
                   style: AppTextStyle.primaryTextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -34,35 +34,22 @@ class HometownView extends StatelessWidget {
                 ),
                 SizedBox(height: 20.h),
                 TextField(
-                  controller: controller.hometownController,
+                  controller: controller.bioController,
+                  maxLines: 5,
                   decoration: InputDecoration(
-                    hintText: 'e.g. New York, USA',
+                    hintText: 'Write something about you...',
                     hintStyle: AppTextStyle.primaryTextStyle(
                       color: Colors.grey,
                     ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.r),
+                    ),
                   ),
-                ),
-                SizedBox(height: 20.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Show on profile',
-                      style: AppTextStyle.primaryTextStyle(),
-                    ),
-                    Obx(
-                      () => Switch(
-                        value: controller.showHometownOnProfile.value,
-                        onChanged: controller.toggleShowHometown,
-                        activeColor: Colors.purple,
-                      ),
-                    ),
-                  ],
                 ),
                 const Spacer(),
                 ElevatedButton(
                   onPressed: () {
-                    Get.toNamed(AppRoutes.workplace);
+                    Get.toNamed(AppRoutes.welcome);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple,

@@ -62,7 +62,7 @@ class WorkplaceView extends StatelessWidget {
                 const Spacer(),
                 ElevatedButton(
                   onPressed: () {
-                    Get.toNamed(AppRoutes.hometown);
+                    Get.toNamed(AppRoutes.jobTitle);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple,

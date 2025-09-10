@@ -65,7 +65,7 @@ class PassionsView extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    Get.toNamed(AppRoutes.workplace);
+                    Get.toNamed(AppRoutes.hometown);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple,

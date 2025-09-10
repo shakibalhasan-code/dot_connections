@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class HometownView extends StatelessWidget {
-  const HometownView({super.key});
+class SmokingStatusView extends StatelessWidget {
+  const SmokingStatusView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class HometownView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Where is your hometown?",
+                  "Do you smoke?",
                   style: AppTextStyle.primaryTextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -33,14 +33,26 @@ class HometownView extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 20.h),
-                TextField(
-                  controller: controller.hometownController,
-                  decoration: InputDecoration(
-                    hintText: 'e.g. New York, USA',
-                    hintStyle: AppTextStyle.primaryTextStyle(
-                      color: Colors.grey,
-                    ),
-                  ),
+                Wrap(
+                  spacing: 10.w,
+                  runSpacing: 10.h,
+                  children: controller.smokeOptions.map((smoke) {
+                    return Obx(() {
+                      final isSelected =
+                          controller.selectedSmoke.value == smoke;
+                      return GestureDetector(
+                        onTap: () => controller.setSmoke(smoke),
+                        child: Chip(
+                          label: Text(smoke),
+                          backgroundColor:
+                              isSelected ? Colors.purple : Colors.grey[200],
+                          labelStyle: AppTextStyle.primaryTextStyle(
+                            color: isSelected ? Colors.white : Colors.black,
+                          ),
+                        ),
+                      );
+                    });
+                  }).toList(),
                 ),
                 SizedBox(height: 20.h),
                 Row(
@@ -52,8 +64,8 @@ class HometownView extends StatelessWidget {
                     ),
                     Obx(
                       () => Switch(
-                        value: controller.showHometownOnProfile.value,
-                        onChanged: controller.toggleShowHometown,
+                        value: controller.showSmokeOnProfile.value,
+                        onChanged: controller.toggleShowSmoke,
                         activeColor: Colors.purple,
                       ),
                     ),
@@ -62,7 +74,7 @@ class HometownView extends StatelessWidget {
                 const Spacer(),
                 ElevatedButton(
                   onPressed: () {
-                    Get.toNamed(AppRoutes.workplace);
+                    Get.toNamed(AppRoutes.addBio);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple,

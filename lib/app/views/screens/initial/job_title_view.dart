@@ -62,7 +62,7 @@ class JobTitleView extends StatelessWidget {
                 const Spacer(),
                 ElevatedButton(
                   onPressed: () {
-                    Get.toNamed(AppRoutes.preferences);
+                    Get.toNamed(AppRoutes.education);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple,

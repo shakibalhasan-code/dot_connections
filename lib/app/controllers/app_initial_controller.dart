@@ -59,6 +59,42 @@ class AppInitialController extends GetxController {
   final maxAgeController = TextEditingController();
   final RxDouble maxDistance = 25.0.obs;
 
+  final List<String> educationOptions = [
+    'High school',
+    'Under graduation',
+    'Post graduation',
+    'Prefer Not to Say'
+  ];
+  final RxString selectedEducation = ''.obs;
+  final RxBool showEducationOnProfile = false.obs;
+
+  final List<String> religionOptions = [
+    'Buddhist', 'Catholic', 'Christian', 'Hindu', 'Jewish', 'Muslim',
+    'Spiritual', 'Agnostic', 'Atheist', 'Other', 'Prefer Not to Say'
+  ];
+  final RxString selectedReligion = ''.obs;
+  final RxBool showReligionOnProfile = false.obs;
+
+  final List<String> drinkOptions = [
+    'Yes',
+    'Occasionally',
+    'No',
+    'Prefer Not to Say'
+  ];
+  final RxString selectedDrink = ''.obs;
+  final RxBool showDrinkOnProfile = false.obs;
+
+  final List<String> smokeOptions = [
+    'Yes',
+    'Occasionally',
+    'No',
+    'Prefer Not to Say'
+  ];
+  final RxString selectedSmoke = ''.obs;
+  final RxBool showSmokeOnProfile = false.obs;
+
+  final bioController = TextEditingController();
+
   bool get isEmailButtonEnabled =>
       email.value.isNotEmpty && GetUtils.isEmail(email.value);
   bool get isOtpButtonEnabled => otp.value.length == 6;
@@ -148,6 +184,46 @@ class AppInitialController extends GetxController {
 
   void setMaxDistance(double value) {
     maxDistance.value = value;
+    update();
+  }
+
+  void setEducation(String value) {
+    selectedEducation.value = value;
+    update();
+  }
+
+  void toggleShowEducation(bool value) {
+    showEducationOnProfile.value = value;
+    update();
+  }
+
+  void setReligion(String value) {
+    selectedReligion.value = value;
+    update();
+  }
+
+  void toggleShowReligion(bool value) {
+    showReligionOnProfile.value = value;
+    update();
+  }
+
+  void setDrink(String value) {
+    selectedDrink.value = value;
+    update();
+  }
+
+  void toggleShowDrink(bool value) {
+    showDrinkOnProfile.value = value;
+    update();
+  }
+
+  void setSmoke(String value) {
+    selectedSmoke.value = value;
+    update();
+  }
+
+  void toggleShowSmoke(bool value) {
+    showSmokeOnProfile.value = value;
     update();
   }
 }
