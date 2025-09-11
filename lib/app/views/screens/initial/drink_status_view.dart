@@ -43,6 +43,7 @@ class DrinkStatusView extends StatelessWidget {
                       return GestureDetector(
                         onTap: () => controller.setDrink(drink),
                         child: Chip(
+                          shape: const StadiumBorder(),
                           label: Text(drink),
                           backgroundColor:
                               isSelected ? Colors.purple : Colors.grey[200],

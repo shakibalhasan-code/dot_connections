@@ -51,6 +51,7 @@ class PassionsView extends StatelessWidget {
                         return GestureDetector(
                           onTap: () => controller.togglePassion(passion),
                           child: Chip(
+                            shape: const StadiumBorder(),
                             label: Text(passion),
                             backgroundColor:
                                 isSelected ? Colors.purple : Colors.grey[200],

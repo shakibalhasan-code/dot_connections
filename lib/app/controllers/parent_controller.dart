@@ -2,7 +2,7 @@ import 'package:dot_connections/app/views/screens/parent/chat/chat_screen.dart';
 import 'package:dot_connections/app/views/screens/parent/find/find_screen.dart';
 import 'package:dot_connections/app/views/screens/parent/map/map_screen.dart';
 import 'package:dot_connections/app/views/screens/parent/match/match_screen.dart';
-import 'package:dot_connections/app/views/screens/profile/profile_screen.dart';
+import 'package:dot_connections/app/views/screens/parent/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,12 +18,23 @@ class ParentController extends GetxController {
     const ProfileScreen(),
   ];
 
+  @override
+  void onClose() {
+    pageController.dispose();
+    super.onClose();
+  }
+
   void onPageChanged(int index) {
     currentIndex.value = index;
   }
 
   void onTabTapped(int index) {
     currentIndex.value = index;
-    pageController.jumpToPage(index);
+    // Use animateToPage for a smoother transition
+    pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
   }
 }

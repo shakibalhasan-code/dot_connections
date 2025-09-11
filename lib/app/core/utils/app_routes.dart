@@ -19,7 +19,9 @@ import 'package:dot_connections/app/views/screens/initial/workplace_view.dart';
 import 'package:dot_connections/app/views/screens/initial/whats_dob_view.dart';
 import 'package:dot_connections/app/views/screens/initial/whats_email_view.dart';
 import 'package:dot_connections/app/views/screens/initial/whats_name_view.dart';
+import 'package:dot_connections/app/views/screens/parent/chat/conversation_screen.dart';
 import 'package:dot_connections/app/views/screens/parent/parent_screen.dart';
+import 'package:dot_connections/app/views/screens/parent/profile/sub_screens/account_manage_screen.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 
 import '../../views/screens/initial/hometown_view.dart';
@@ -52,6 +54,10 @@ class AppRoutes {
   static String signUp = '/signUp';
   static String forget = '/forget';
   static String resetPass = '/resetPassword';
+  static String conversation = '/conversation';
+  static String accountDetails = '/accountDetails';
+
+
 
   static List<GetPage> pages = [
     GetPage(name: initial, page: () => const InitialScreen()),
@@ -77,5 +83,8 @@ class AppRoutes {
     GetPage(name: addBio, page: () => const AddBioView()),
     GetPage(name: welcome, page: () => const WelcomeView()),
     GetPage(name: parent, page: () => const ParentScreen()),
+    GetPage(name: conversation, page: ()=> const  ConversationScreen()),
+    GetPage(name: accountDetails, page: ()=> const  AccountManageScreen()),
+
   ];
 }

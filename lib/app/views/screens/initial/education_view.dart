@@ -43,6 +43,7 @@ class EducationView extends StatelessWidget {
                       return GestureDetector(
                         onTap: () => controller.setEducation(education),
                         child: Chip(
+                          shape: const StadiumBorder(),
                           label: Text(education),
                           backgroundColor:
                               isSelected ? Colors.purple : Colors.grey[200],

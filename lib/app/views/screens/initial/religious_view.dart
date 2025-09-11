@@ -43,6 +43,7 @@ class ReligiousView extends StatelessWidget {
                       return GestureDetector(
                         onTap: () => controller.setReligion(religion),
                         child: Chip(
+                          shape: const StadiumBorder(),
                           label: Text(religion),
                           backgroundColor:
                               isSelected ? Colors.purple : Colors.grey[200],

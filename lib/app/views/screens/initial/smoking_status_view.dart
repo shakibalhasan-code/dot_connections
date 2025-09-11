@@ -43,6 +43,7 @@ class SmokingStatusView extends StatelessWidget {
                       return GestureDetector(
                         onTap: () => controller.setSmoke(smoke),
                         child: Chip(
+                          shape: const StadiumBorder(),
                           label: Text(smoke),
                           backgroundColor:
                               isSelected ? Colors.purple : Colors.grey[200],

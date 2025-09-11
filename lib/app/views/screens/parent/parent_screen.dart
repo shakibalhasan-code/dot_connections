@@ -1,5 +1,4 @@
 import 'package:dot_connections/app/controllers/parent_controller.dart';
-import 'package:dot_connections/app/core/utils/app_colors.dart';
 import 'package:dot_connections/app/core/utils/app_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,6 +10,7 @@ class ParentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+   
     final controller = Get.put(ParentController());
     return Scaffold(
       body: PageView(
@@ -41,21 +41,9 @@ class CustomBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 80.h,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            spreadRadius: 5,
-            blurRadius: 10,
-          ),
-        ],
-      ),
+      height: 90.h,
+      // The background color of the nav bar in the image is a light grey/off-white
+      color: const Color(0xFFF8F8F8), 
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -71,54 +59,79 @@ class CustomBottomNavBar extends StatelessWidget {
 
   Widget _buildNavItem(String icon, String label, int index) {
     final bool isSelected = currentIndex == index;
-    return GestureDetector(
-      onTap: () => onTap(index),
-      child: isSelected
-          ? Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-              decoration: BoxDecoration(
-                color: AppColors.primaryColor.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(20.r),
+
+    if (isSelected) {
+      // Style for the selected item
+      return GestureDetector(
+        onTap: () => onTap(index),
+        child: Container(
+          width: 70.w,
+          height: 60.h,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16.r),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.3),
+                spreadRadius: 1,
+                blurRadius: 2,
+                offset: const Offset(0, 3),
               ),
-              child: Row(
-                children: [
-                  SvgPicture.asset(
-                    icon,
-                    colorFilter: ColorFilter.mode(
-                      AppColors.primaryColor,
-                      BlendMode.srcIn,
-                    ),
-                  ),
-                  SizedBox(width: 8.w),
-                  Text(
-                    label,
-                    style:  TextStyle(
-                      color: AppColors.primaryColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+            ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SvgPicture.asset(
+                icon,
+                width: 24.w,
+                height: 24.h,
+                colorFilter: ColorFilter.mode(
+                  Colors.grey.shade800,
+                  BlendMode.srcIn,
+                ),
               ),
-            )
-          : Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SvgPicture.asset(
-                  icon,
-                  colorFilter: ColorFilter.mode(
-                    Colors.grey.shade600,
-                    BlendMode.srcIn,
-                  ),
+              SizedBox(height: 4.h),
+              Text(
+                label,
+                style: TextStyle(
+                  color: Colors.grey.shade800,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14.sp,
                 ),
-                SizedBox(height: 4.h),
-                Text(
-                  label,
-                  style: TextStyle(
-                    color: Colors.grey.shade600,
-                  ),
-                ),
-              ],
+              ),
+            ],
+          ),
+        ),
+      );
+    } else {
+      // Style for unselected items
+      return GestureDetector(
+        onTap: () => onTap(index),
+        behavior: HitTestBehavior.translucent,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              icon,
+              width: 24.w,
+              height: 24.h,
+              colorFilter: ColorFilter.mode(
+                Colors.grey.shade600,
+                BlendMode.srcIn,
+              ),
             ),
-    );
+            SizedBox(height: 4.h),
+            Text(
+              label,
+              style: TextStyle(
+                color: Colors.grey.shade600,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
   }
 }
