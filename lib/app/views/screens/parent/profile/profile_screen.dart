@@ -106,12 +106,12 @@ class ProfileScreen extends StatelessWidget {
             ProfileMenu(
               icon: AppIcons.personalData,
               text: "Personal Details",
-              press: () {},
+              press: () => Get.toNamed(AppRoutes.personalDetails),
             ),
             ProfileMenu(
               icon: AppIcons.photoGallery,
               text: "Photo Gallery",
-              press: () {},
+              press: () => Get.toNamed(AppRoutes.photoGallery),
             ),
             ProfileMenu(
               icon: AppIcons.blockedIcon,

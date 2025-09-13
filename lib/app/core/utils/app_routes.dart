@@ -21,7 +21,11 @@ import 'package:dot_connections/app/views/screens/initial/whats_email_view.dart'
 import 'package:dot_connections/app/views/screens/initial/whats_name_view.dart';
 import 'package:dot_connections/app/views/screens/parent/chat/conversation_screen.dart';
 import 'package:dot_connections/app/views/screens/parent/parent_screen.dart';
-import 'package:dot_connections/app/views/screens/parent/profile/sub_screens/account_manage_screen.dart';
+import 'package:dot_connections/app/views/screens/parent/profile/sub_screens/accounts/account_manage_screen.dart';
+import 'package:dot_connections/app/views/screens/parent/profile/sub_screens/accounts/update_full_name_view.dart';
+import 'package:dot_connections/app/views/screens/parent/profile/sub_screens/accounts/update_phone_view.dart';
+import 'package:dot_connections/app/views/screens/parent/profile/sub_screens/personal_details/personal_details_screen.dart';
+import 'package:dot_connections/app/views/screens/parent/profile/sub_screens/photo_gallery/photo_gallery_screen.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 
 import '../../views/screens/initial/hometown_view.dart';
@@ -56,6 +60,14 @@ class AppRoutes {
   static String resetPass = '/resetPassword';
   static String conversation = '/conversation';
   static String accountDetails = '/accountDetails';
+  static String editFullName = '/editFullName';
+  static String updatePhoneView = '/updatePhoneView';
+  static String personalDetails = '/personalDetails';
+  static String photoGallery = '/photoGallery';
+
+
+
+
 
 
 
@@ -85,6 +97,12 @@ class AppRoutes {
     GetPage(name: parent, page: () => const ParentScreen()),
     GetPage(name: conversation, page: ()=> const  ConversationScreen()),
     GetPage(name: accountDetails, page: ()=> const  AccountManageScreen()),
+    GetPage(name: editFullName, page: ()=> UpdateFullNameView()),
+    GetPage(name: updatePhoneView, page: ()=> UpdatePhoneView()),
+    GetPage(name: personalDetails, page: ()=> PersonalDetailsScreen()),
+    GetPage(name: photoGallery, page: ()=> PhotoGalleryScreen()),
+
+
 
   ];
 }
