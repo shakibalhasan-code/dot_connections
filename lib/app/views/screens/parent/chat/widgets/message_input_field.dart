@@ -2,6 +2,7 @@ import 'package:dot_connections/app/controllers/conversation_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 
 class MessageInputField extends StatelessWidget {
   const MessageInputField({super.key});
@@ -13,7 +14,7 @@ class MessageInputField extends StatelessWidget {
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
           decoration: BoxDecoration(
-            color: Colors.grey.shade100,
+            color: Colors.white70,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20.r),
               topRight: Radius.circular(20.r),
@@ -23,9 +24,9 @@ class MessageInputField extends StatelessWidget {
             child: Row(
               children: [
                 IconButton(
-                  icon: const Icon(Icons.image_outlined),
+                  icon:  HugeIcon(icon: HugeIcons.strokeRoundedImageAdd01, color: Colors.grey),
                   onPressed: () {
-                    controller.imagePicker();
+                    controller.pickImage();
                   },
                 ),
                 // IconButton(
@@ -33,7 +34,7 @@ class MessageInputField extends StatelessWidget {
                 //   onPressed: () {},
                 // ),
                 IconButton(
-                  icon: const Icon(Icons.mic_none_outlined),
+                    icon:  HugeIcon(icon: HugeIcons.strokeRoundedMic01, color: Colors.grey),
                   onPressed: () {},
                 ),
                 const Expanded(
@@ -45,7 +46,7 @@ class MessageInputField extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.send, color: Color(0xFF6A00FF)),
+                    icon:  HugeIcon(icon: HugeIcons.strokeRoundedSent, color: Colors.grey),
                   onPressed: () {},
                 ),
               ],

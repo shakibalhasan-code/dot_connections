@@ -43,18 +43,25 @@ class ConversationController extends GetxController {
   ].obs;
 
   var image = Rxn<XFile>();
-  final picker = ImagePicker();
+  final imagePicker = ImagePicker();
 
-  void imagePicker() async {
-    try {
-      // Pick singe image or video.
-      final XFile? media = await picker.pickMedia();
-      media != null
-          ? image.value = media
-          : Get.snackbar('Failed', 'Unable to get the image');
+
+
+
+
+
+
+  //image picker
+  void pickImage() async {
+   try {
+      final imagePicked = await imagePicker.pickImage(
+        source: ImageSource.gallery,
+      );
+      if (imagePicked == null) {
+        return;
+      } else {}
     } catch (e) {
-      print('Failed to pick the image');
-      kDebugMode ? printInfo(info: 'failed $e') : null;
+      debugPrint('error to pick the image> $e');
     }
   }
 }

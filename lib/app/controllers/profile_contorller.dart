@@ -36,7 +36,7 @@ class ProfileContorller extends GetxController {
     }
   }
 
-  //update the
+  //update the- reorder
   void updatePhoto({required int newIndex, required int oldIndex}) {
     ///get the current index and remove that from our gallery list
     final myPhoto = photoGllery.removeAt(oldIndex);

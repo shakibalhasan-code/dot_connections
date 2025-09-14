@@ -21,7 +21,7 @@ class CommonRoundedButton extends StatelessWidget {
     this.backgroundColor = AppColors.primaryColor,
     this.textColor = Colors.white,
     this.fontSize = 16,
-    this.borderRadius = 20,
+    this.borderRadius = 30,
     this.height = 48,
     this.width,
     this.fontWeight = FontWeight.w600,

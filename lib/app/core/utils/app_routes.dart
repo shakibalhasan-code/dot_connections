@@ -24,8 +24,11 @@ import 'package:dot_connections/app/views/screens/parent/parent_screen.dart';
 import 'package:dot_connections/app/views/screens/parent/profile/sub_screens/accounts/account_manage_screen.dart';
 import 'package:dot_connections/app/views/screens/parent/profile/sub_screens/accounts/update_full_name_view.dart';
 import 'package:dot_connections/app/views/screens/parent/profile/sub_screens/accounts/update_phone_view.dart';
+import 'package:dot_connections/app/views/screens/parent/profile/sub_screens/blocked_users/blocked_user_screen.dart';
 import 'package:dot_connections/app/views/screens/parent/profile/sub_screens/personal_details/personal_details_screen.dart';
 import 'package:dot_connections/app/views/screens/parent/profile/sub_screens/photo_gallery/photo_gallery_screen.dart';
+import 'package:dot_connections/app/views/screens/parent/profile/sub_screens/subscription/subscription_screen.dart';
+import 'package:dot_connections/app/views/screens/parent/profile/sub_screens/terms_condition_screen.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 
 import '../../views/screens/initial/hometown_view.dart';
@@ -64,6 +67,12 @@ class AppRoutes {
   static String updatePhoneView = '/updatePhoneView';
   static String personalDetails = '/personalDetails';
   static String photoGallery = '/photoGallery';
+  static String blockedUser = '/blockedUser';
+  static String subscription = '/subscription';
+  static String termCondition = '/termCondition';
+
+
+
 
 
 
@@ -97,10 +106,13 @@ class AppRoutes {
     GetPage(name: parent, page: () => const ParentScreen()),
     GetPage(name: conversation, page: ()=> const  ConversationScreen()),
     GetPage(name: accountDetails, page: ()=> const  AccountManageScreen()),
-    GetPage(name: editFullName, page: ()=> UpdateFullNameView()),
-    GetPage(name: updatePhoneView, page: ()=> UpdatePhoneView()),
-    GetPage(name: personalDetails, page: ()=> PersonalDetailsScreen()),
-    GetPage(name: photoGallery, page: ()=> PhotoGalleryScreen()),
+    GetPage(name: editFullName, page: ()=>const UpdateFullNameView()),
+    GetPage(name: updatePhoneView, page: ()=>const UpdatePhoneView()),
+    GetPage(name: personalDetails, page: ()=>const PersonalDetailsScreen()),
+    GetPage(name: photoGallery, page: ()=>const PhotoGalleryScreen()),
+    GetPage(name: blockedUser, page: ()=>const BlockedUserScreen()),
+    GetPage(name: subscription, page: ()=>const SubscriptionScreen()),
+    GetPage(name: termCondition, page: ()=>const TermsConditionScreen()),
 
 
 

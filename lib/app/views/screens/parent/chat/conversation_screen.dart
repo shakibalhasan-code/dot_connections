@@ -9,43 +9,40 @@ class ConversationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ConversationController controller = Get.put(ConversationController());
-
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Get.back(),
-        ),
-        title: const Text('Annette Black'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.more_vert),
-            onPressed: () {},
-          ),
-        ],
-        elevation: 0,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Obx(
-              () => ListView.builder(
-                padding: const EdgeInsets.all(16.0),
-                itemCount: controller.messages.length,
-                itemBuilder: (context, index) {
-                  final message = controller.messages[index];
-                  return MessageBubble(message: message);
-                },
-              ),
+    return GetBuilder<ConversationController>(
+      builder: (controller) {
+        return Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () => Get.back(),
             ),
+            title: const Text('Annette Black'),
+            actions: [
+              IconButton(icon: const Icon(Icons.more_vert), onPressed: () {}),
+            ],
+            elevation: 0,
+            foregroundColor: Colors.black,
           ),
-          const MessageInputField(),
-        ],
-      ),
+          body: Column(
+            children: [
+              Expanded(
+                child: Obx(
+                  () => ListView.builder(
+                    padding: const EdgeInsets.all(16.0),
+                    itemCount: controller.messages.length,
+                    itemBuilder: (context, index) {
+                      final message = controller.messages[index];
+                      return MessageBubble(message: message);
+                    },
+                  ),
+                ),
+              ),
+              const MessageInputField(),
+            ],
+          ),
+        );
+      },
     );
   }
 }
