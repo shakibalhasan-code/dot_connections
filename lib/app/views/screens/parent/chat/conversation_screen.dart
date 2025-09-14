@@ -9,40 +9,42 @@ class ConversationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ConversationController>(
-      builder: (controller) {
-        return Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () => Get.back(),
-            ),
-            title: const Text('Annette Black'),
-            actions: [
-              IconButton(icon: const Icon(Icons.more_vert), onPressed: () {}),
-            ],
-            elevation: 0,
-            foregroundColor: Colors.black,
+    final ConversationController controller = Get.put(ConversationController());
+
+    return Scaffold(
+      appBar: AppBar(
+        
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Get.back(),
+        ),
+        title: const Text('Annette Black'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.more_vert),
+            onPressed: () {},
           ),
-          body: Column(
-            children: [
-              Expanded(
-                child: Obx(
-                  () => ListView.builder(
-                    padding: const EdgeInsets.all(16.0),
-                    itemCount: controller.messages.length,
-                    itemBuilder: (context, index) {
-                      final message = controller.messages[index];
-                      return MessageBubble(message: message);
-                    },
-                  ),
-                ),
+        ],
+        elevation: 0,
+        foregroundColor: Colors.black,
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: Obx(
+              () => ListView.builder(
+                padding: const EdgeInsets.all(16.0),
+                itemCount: controller.messages.length,
+                itemBuilder: (context, index) {
+                  final message = controller.messages[index];
+                  return MessageBubble(message: message);
+                },
               ),
-              const MessageInputField(),
-            ],
+            ),
           ),
-        );
-      },
+          const MessageInputField(),
+        ],
+      ),
     );
   }
 }

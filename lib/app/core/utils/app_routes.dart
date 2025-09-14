@@ -104,7 +104,7 @@ class AppRoutes {
     GetPage(name: addBio, page: () => const AddBioView()),
     GetPage(name: welcome, page: () => const WelcomeView()),
     GetPage(name: parent, page: () => const ParentScreen()),
-    GetPage(name: conversation, page: ()=> const  ConversationScreen()),
+    GetPage(name: conversation, page: ()=>   ConversationScreen()),
     GetPage(name: accountDetails, page: ()=> const  AccountManageScreen()),
     GetPage(name: editFullName, page: ()=>const UpdateFullNameView()),
     GetPage(name: updatePhoneView, page: ()=>const UpdatePhoneView()),

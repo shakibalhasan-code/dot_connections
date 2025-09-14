@@ -71,8 +71,9 @@ class SubscriptionScreen extends StatelessWidget {
                       ),
                       child: Padding(
                         padding: EdgeInsets.symmetric(
-                          horizontal: 16.w,
-                          vertical: 16.h,
+                          horizontal: 10.w,
+                          
+                          vertical: 10.h,
                         ),
 
                         child: Column(
@@ -109,12 +110,14 @@ class SubscriptionScreen extends StatelessWidget {
                                   color: Colors.black,
                                 ),
                                 SizedBox(width: 8.w),
-                                Text(
-                                  'All Advanced Features Included',
-                                  style: AppTextStyle.primaryTextStyle(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.w400,
-                                    color: AppColors.primaryTextColor,
+                                Expanded(
+                                  child: Text(
+                                    'All Advanced Features Included',
+                                    style: AppTextStyle.primaryTextStyle(
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.w400,
+                                      color: AppColors.primaryTextColor,
+                                    ),
                                   ),
                                 ),
                               ],

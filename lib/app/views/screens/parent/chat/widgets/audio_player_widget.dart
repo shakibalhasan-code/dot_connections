@@ -146,18 +146,20 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
           ),
           onPressed: _handlePlayPause,
         ),
-        AudioFileWaveforms(
-          size: Size(MediaQuery.of(context).size.width * 0.5, 50),
-          playerController: _controller,
-          waveformType: WaveformType.long,
-          playerWaveStyle: PlayerWaveStyle(
-            fixedWaveColor: widget.isMe
-                ? Colors.white.withOpacity(0.5)
-                : AppColors.primaryColor.withOpacity(0.5),
-            liveWaveColor: widget.isMe ? Colors.white : AppColors.primaryColor,
-            spacing: 6,
-            showSeekLine: false,
-            waveCap: StrokeCap.round,
+        Expanded(
+          child: AudioFileWaveforms(
+            size: Size(MediaQuery.of(context).size.width * 0.5, 50),
+            playerController: _controller,
+            waveformType: WaveformType.long,
+            playerWaveStyle: PlayerWaveStyle(
+              fixedWaveColor: widget.isMe
+                  ? Colors.white.withOpacity(0.5)
+                  : AppColors.primaryColor.withOpacity(0.5),
+              liveWaveColor: widget.isMe ? Colors.white : AppColors.primaryColor,
+              spacing: 6,
+              showSeekLine: false,
+              waveCap: StrokeCap.round,
+            ),
           ),
         ),
       ],
