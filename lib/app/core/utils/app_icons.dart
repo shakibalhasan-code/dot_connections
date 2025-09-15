@@ -8,6 +8,8 @@ class AppIcons {
   static const String appIcons = "$iconsPath/app_icons.svg";
   static const String crossIcon = "$iconsPath/cross_icon.svg";
   static const String loveIcon = "$iconsPath/love_icon.svg";
+  static const String notification = "$iconsPath/notification_icon.svg";
+
 
 
   ///bottom nav icons
