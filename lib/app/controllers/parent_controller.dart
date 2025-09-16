@@ -30,11 +30,12 @@ class ParentController extends GetxController {
 
   void onTabTapped(int index) {
     currentIndex.value = index;
+    update();
     // Use animateToPage for a smoother transition
     pageController.animateToPage(
       index,
       duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
+      curve: Curves.ease,
     );
   }
 }

@@ -10,20 +10,21 @@ class ParentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   
-    final controller = Get.put(ParentController());
-    return Scaffold(
-      body: PageView(
-        controller: controller.pageController,
-        onPageChanged: controller.onPageChanged,
-        children: controller.pages,
-      ),
-      bottomNavigationBar: Obx(
-        () => CustomBottomNavBar(
-          currentIndex: controller.currentIndex.value,
-          onTap: controller.onTabTapped,
-        ),
-      ),
+    return GetBuilder<ParentController>(
+      builder: (controller) {
+        return Scaffold(
+          body: PageView(
+            physics: NeverScrollableScrollPhysics(),
+            controller: controller.pageController,
+            onPageChanged: controller.onPageChanged,
+            children: controller.pages,
+          ),
+          bottomNavigationBar: CustomBottomNavBar(
+              currentIndex: controller.currentIndex.value,
+              onTap: controller.onTabTapped,
+            ),
+        );
+      },
     );
   }
 }
@@ -41,9 +42,9 @@ class CustomBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 90.h,
+      height: 80.h,
       // The background color of the nav bar in the image is a light grey/off-white
-      color: const Color(0xFFF8F8F8), 
+      color: const Color(0xFFF8F8F8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [

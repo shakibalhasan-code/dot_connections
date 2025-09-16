@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
       designSize: const Size(392, 852),
       builder: (context, child) => GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: AppRoutes.initial,
+        initialRoute: AppRoutes.parent,
         getPages: AppRoutes.pages,
         initialBinding: AppBindings(),
       ),
