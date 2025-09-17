@@ -44,7 +44,7 @@ class ChatItem extends StatelessWidget {
               fontSize: 12.sp,
             ),
           ),
-          SizedBox(height: 4.h),
+          // SizedBox(height: 4.h),
           _buildStatusIcon(),
         ],
       ),

@@ -50,6 +50,9 @@ dependencies:
   hugeicons: ^1.0.2
   lottie: ^3.3.1
   flutter_card_swiper: ^7.0.2
+  google_maps_flutter: ^2.13.1
+  flutter_dotenv: ^6.0.0
+  flutter_map: ^8.2.1
 
 dev_dependencies:
   flutter_test:
@@ -81,6 +84,7 @@ flutter:
     - assets/svg/
     - assets/audio/
     - assets/raw/
+    - .env
 
 
   #   - images/a_dot_burr.jpeg
