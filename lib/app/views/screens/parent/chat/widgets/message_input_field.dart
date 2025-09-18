@@ -1,4 +1,6 @@
 import 'package:dot_connections/app/controllers/conversation_controller.dart';
+import 'package:dot_connections/app/core/utils/app_colors.dart';
+import 'package:dot_connections/app/views/screens/parent/chat/widgets/audio_player_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -14,7 +16,9 @@ class MessageInputField extends StatelessWidget {
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
           decoration: BoxDecoration(
-            color: Colors.white70,
+            color: controller.isRecording
+                ? AppColors.primaryColor.withOpacity(0.1)
+                : Colors.white,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20.r),
               topRight: Radius.circular(20.r),
@@ -24,7 +28,10 @@ class MessageInputField extends StatelessWidget {
             child: Row(
               children: [
                 IconButton(
-                  icon:  HugeIcon(icon: HugeIcons.strokeRoundedImageAdd01, color: Colors.grey),
+                  icon: HugeIcon(
+                    icon: HugeIcons.strokeRoundedImageAdd01,
+                    color: Colors.grey,
+                  ),
                   onPressed: () {
                     controller.pickImage();
                   },
@@ -34,19 +41,41 @@ class MessageInputField extends StatelessWidget {
                 //   onPressed: () {},
                 // ),
                 IconButton(
-                    icon:  HugeIcon(icon: HugeIcons.strokeRoundedMic01, color: Colors.grey),
-                  onPressed: () {},
-                ),
-                const Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Start your conversation here...',
-                      border: InputBorder.none,
-                    ),
+                  icon: HugeIcon(
+                    icon: HugeIcons.strokeRoundedMic01,
+                    color: controller.isRecording ? Colors.red : Colors.grey,
                   ),
+                  onPressed: () {
+                    if (controller.isRecording) {
+                      controller.toggleRecording();
+                    } else {
+                      controller.toggleRecording();
+                    }
+                  },
+                ),
+                Expanded(
+                  child:
+                      // //  controller.audioPath != null && controller.audioPath != ''
+                      //     ? AudioPlayerWidget(
+                      //         audioAsset: controller.audioPath!,
+                      //         isMe: true,
+                      //       )
+                      //     :
+                      controller.isRecording
+                      ? Text("Recording...")
+                      : TextField(
+                          controller: controller.messageFeildController,
+                          decoration: InputDecoration(
+                            hintText: "Type a message",
+                            border: InputBorder.none,
+                          ),
+                        ),
                 ),
                 IconButton(
-                    icon:  HugeIcon(icon: HugeIcons.strokeRoundedSent, color: Colors.grey),
+                  icon: HugeIcon(
+                    icon: HugeIcons.strokeRoundedSent,
+                    color: Colors.grey,
+                  ),
                   onPressed: () {},
                 ),
               ],

@@ -43,17 +43,14 @@ class MessageBubble extends StatelessWidget {
           constraints: BoxConstraints(maxWidth: 0.7.sw),
           padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
           margin: EdgeInsets.symmetric(vertical: 4.h),
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: borderRadius,
-          ),
+          decoration: BoxDecoration(color: color, borderRadius: borderRadius),
           child: message.type == MessageType.text
               ? Text(
                   message.text!,
                   style: TextStyle(
-                      color: textColor,
-                      fontSize: 16.sp,
-                      ), //TODO: add font family
+                    color: textColor,
+                    fontSize: 16.sp,
+                  ), //TODO: add font family
                 )
               : AudioPlayerWidget(
                   audioAsset: 'assets/audio/audio_test.mp3',

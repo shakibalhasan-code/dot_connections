@@ -155,7 +155,9 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
               fixedWaveColor: widget.isMe
                   ? Colors.white.withOpacity(0.5)
                   : AppColors.primaryColor.withOpacity(0.5),
-              liveWaveColor: widget.isMe ? Colors.white : AppColors.primaryColor,
+              liveWaveColor: widget.isMe
+                  ? Colors.white
+                  : AppColors.primaryColor,
               spacing: 6,
               showSeekLine: false,
               waveCap: StrokeCap.round,

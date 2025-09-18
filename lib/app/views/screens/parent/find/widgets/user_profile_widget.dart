@@ -34,7 +34,6 @@ class UserProfileWidget extends StatelessWidget {
               child: Stack(
                 children: [
                   _imageWidget(controller),
-
                   /// current index of container as like facebook story
                   _buildImageStoryProgress(context, controller),
 
