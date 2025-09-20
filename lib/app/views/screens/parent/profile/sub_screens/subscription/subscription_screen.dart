@@ -12,6 +12,7 @@ class SubscriptionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
@@ -72,7 +73,7 @@ class SubscriptionScreen extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: 10.w,
-                          
+
                           vertical: 10.h,
                         ),
 
@@ -87,7 +88,7 @@ class SubscriptionScreen extends StatelessWidget {
                                   '\$99',
                                   style: AppTextStyle.primaryTextStyle(
                                     fontSize: 40.sp,
-                                    color: Colors.black,
+                                    color: theme.colorScheme.onSurface,
                                     fontWeight: FontWeight.w800,
                                   ),
                                 ),
@@ -107,7 +108,7 @@ class SubscriptionScreen extends StatelessWidget {
                               children: [
                                 HugeIcon(
                                   icon: HugeIcons.strokeRoundedFire,
-                                  color: Colors.black,
+                                  color: theme.colorScheme.onSurface,
                                 ),
                                 SizedBox(width: 8.w),
                                 Expanded(
@@ -132,7 +133,7 @@ class SubscriptionScreen extends StatelessWidget {
             ),
             const Spacer(),
             CommonRoundedButton(title: 'Continue', onPressed: () {}),
-            SizedBox(height: 30.h,)
+            SizedBox(height: 30.h),
           ],
         ),
       ),

@@ -17,8 +17,7 @@ class UpdateFullNameView extends StatelessWidget {
     return GetBuilder<ProfileContorller>(
       builder: (controller) {
         return Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBar(backgroundColor: Colors.white),
+          appBar: AppBar(),
           body: Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
             child: Column(

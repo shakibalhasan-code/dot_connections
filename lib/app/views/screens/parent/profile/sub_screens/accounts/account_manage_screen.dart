@@ -13,9 +13,9 @@ class AccountManageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(backgroundColor: Colors.white),
+      appBar: AppBar(),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w),
         child: Column(
@@ -40,7 +40,7 @@ class AccountManageScreen extends StatelessWidget {
             data_edit_item(
               title: 'Full Name',
               subtitle: 'Shakib Al Hasan',
-              onTap: ()=> Get.toNamed(AppRoutes.editFullName),
+              onTap: () => Get.toNamed(AppRoutes.editFullName),
               isEditable: true,
             ),
             SizedBox(height: 10.h),
@@ -48,14 +48,14 @@ class AccountManageScreen extends StatelessWidget {
               title: 'Phone Number',
               subtitle: '+8801857895107',
               onTap: () => Get.toNamed(AppRoutes.updatePhoneView),
-              isEditable: true
+              isEditable: true,
             ),
             SizedBox(height: 10.h),
             data_edit_item(
               title: 'E-mail',
               subtitle: 'example.sah@gmail.com',
               onTap: () {},
-              isEditable: false
+              isEditable: false,
             ),
           ],
         ),
@@ -67,7 +67,7 @@ class AccountManageScreen extends StatelessWidget {
     required String title,
     required String subtitle,
     required VoidCallback onTap,
-    required bool isEditable
+    required bool isEditable,
   }) {
     return Row(
       children: [
@@ -96,10 +96,20 @@ class AccountManageScreen extends StatelessWidget {
           ),
         ),
         SizedBox(width: 10.w),
-        isEditable  ? IconButton(
-          onPressed: onTap,
-          icon: SvgPicture.asset(AppIcons.penIcon, color: Colors.black),
-        ) : const SizedBox()
+        isEditable
+            ? Builder(
+                builder: (context) {
+                  final theme = Theme.of(context);
+                  return IconButton(
+                    onPressed: onTap,
+                    icon: SvgPicture.asset(
+                      AppIcons.penIcon,
+                      color: theme.colorScheme.onSurface,
+                    ),
+                  );
+                },
+              )
+            : const SizedBox(),
       ],
     );
   }

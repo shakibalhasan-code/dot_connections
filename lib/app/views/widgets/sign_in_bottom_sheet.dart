@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
 import '../../controllers/app_initial_controller.dart';
-import '../../core/utils/app_colors.dart';
 
 class SignInBottomSheet extends StatefulWidget {
   const SignInBottomSheet({super.key});
@@ -48,18 +47,19 @@ class _SignInBottomSheetState extends State<SignInBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
       child: Container(
-        color: Colors.black.withOpacity(0.5),
+        color: theme.colorScheme.scrim.withOpacity(0.5),
         child: DraggableScrollableSheet(
           initialChildSize: 0.7,
           minChildSize: 0.5,
           maxChildSize: 0.9,
           builder: (context, scrollController) {
             return Container(
-              decoration: const BoxDecoration(
-                color: AppColors.scaffoldBg,
+              decoration: BoxDecoration(
+                color: theme.colorScheme.surface,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(24),
                   topRight: Radius.circular(24),
@@ -73,7 +73,7 @@ class _SignInBottomSheetState extends State<SignInBottomSheet> {
                     width: 50,
                     height: 4,
                     decoration: BoxDecoration(
-                      color: Colors.grey[300],
+                      color: theme.colorScheme.outline,
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
@@ -89,15 +89,15 @@ class _SignInBottomSheetState extends State<SignInBottomSheet> {
                           ),
                         Expanded(
                           child: Text(
-                            _currentStep == 0 
-                                ? 'Sign In' 
-                                : 'Verify OTP',
-                            style: const TextStyle(
+                            _currentStep == 0 ? 'Sign In' : 'Verify OTP',
+                            style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
-                              color: AppColors.primaryTextColor,
+                              color: theme.colorScheme.onSurface,
                             ),
-                            textAlign: _currentStep > 0 ? TextAlign.left : TextAlign.center,
+                            textAlign: _currentStep > 0
+                                ? TextAlign.left
+                                : TextAlign.center,
                           ),
                         ),
                         IconButton(
@@ -112,10 +112,7 @@ class _SignInBottomSheetState extends State<SignInBottomSheet> {
                     child: PageView(
                       controller: _pageController,
                       physics: const NeverScrollableScrollPhysics(),
-                      children: [
-                        _buildEmailStep(),
-                        _buildOtpStep(),
-                      ],
+                      children: [_buildEmailStep(), _buildOtpStep()],
                     ),
                   ),
                 ],
@@ -128,6 +125,7 @@ class _SignInBottomSheetState extends State<SignInBottomSheet> {
   }
 
   Widget _buildEmailStep() {
+    final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
@@ -136,80 +134,84 @@ class _SignInBottomSheetState extends State<SignInBottomSheet> {
           const SizedBox(height: 20),
           Text(
             'Enter your email address to sign in',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 16,
-              color: AppColors.secondaryTextColor,
+              color: theme.colorScheme.onSurface.withOpacity(0.7),
             ),
           ),
           const SizedBox(height: 32),
           // Email input field
           Container(
             decoration: BoxDecoration(
-              color: AppColors.fieldBgColor,
+              color: theme.colorScheme.surfaceVariant,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Obx(() => TextFormField(
-              controller: controller.emailController,
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                hintText: 'Email Address',
-                border: InputBorder.none,
-                contentPadding: const EdgeInsets.all(16),
-                hintStyle: TextStyle(
-                  color: AppColors.secondaryTextColor.withOpacity(0.6),
+            child: Obx(
+              () => TextFormField(
+                controller: controller.emailController,
+                keyboardType: TextInputType.emailAddress,
+                decoration: InputDecoration(
+                  hintText: 'Email Address',
+                  border: InputBorder.none,
+                  contentPadding: const EdgeInsets.all(16),
+                  hintStyle: TextStyle(
+                    color: theme.colorScheme.onSurface.withOpacity(0.6),
+                  ),
+                ),
+                style: TextStyle(
+                  fontSize: 16,
+                  color: theme.colorScheme.onSurface,
                 ),
               ),
-              style: const TextStyle(
-                fontSize: 16,
-                color: AppColors.primaryTextColor,
-              ),
-            )),
+            ),
           ),
           const SizedBox(height: 8),
           // Email validation message
           Obx(() {
-            if (controller.email.value.isNotEmpty && !GetUtils.isEmail(controller.email.value)) {
+            if (controller.email.value.isNotEmpty &&
+                !GetUtils.isEmail(controller.email.value)) {
               return Text(
                 'Please enter a valid email address',
-                style: const TextStyle(
-                  color: Colors.red,
-                  fontSize: 12,
-                ),
+                style: TextStyle(color: theme.colorScheme.error, fontSize: 12),
               );
             }
             return const SizedBox.shrink();
           }),
           const Spacer(),
           // Continue button
-          Obx(() => Container(
-            width: double.infinity,
-            margin: const EdgeInsets.only(bottom: 40),
-            child: ElevatedButton(
-              onPressed: controller.isEmailButtonEnabled ? _nextStep : null,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primaryColor,
-                disabledBackgroundColor: AppColors.primaryColor.withOpacity(0.3),
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+          Obx(
+            () => Container(
+              width: double.infinity,
+              margin: const EdgeInsets.only(bottom: 40),
+              child: ElevatedButton(
+                onPressed: controller.isEmailButtonEnabled ? _nextStep : null,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: theme.colorScheme.primary,
+                  disabledBackgroundColor: theme.colorScheme.primary
+                      .withOpacity(0.3),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
-              ),
-              child: Text(
-                'Continue',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                child: Text(
+                  'Continue',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: theme.colorScheme.onPrimary,
+                  ),
                 ),
               ),
             ),
-          )),
+          ),
         ],
       ),
     );
   }
 
   Widget _buildOtpStep() {
+    final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
@@ -218,20 +220,22 @@ class _SignInBottomSheetState extends State<SignInBottomSheet> {
           const SizedBox(height: 20),
           Text(
             'Enter the OTP sent to:',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 16,
-              color: AppColors.secondaryTextColor,
+              color: theme.colorScheme.onSurface.withOpacity(0.7),
             ),
           ),
           const SizedBox(height: 8),
-          Obx(() => Text(
-            controller.email.value,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: AppColors.primaryColor,
+          Obx(
+            () => Text(
+              controller.email.value,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: theme.colorScheme.primary,
+              ),
             ),
-          )),
+          ),
           const SizedBox(height: 32),
           // OTP input field
           Center(
@@ -242,15 +246,15 @@ class _SignInBottomSheetState extends State<SignInBottomSheet> {
               defaultPinTheme: PinTheme(
                 width: 48,
                 height: 56,
-                textStyle: const TextStyle(
+                textStyle: TextStyle(
                   fontSize: 20,
-                  color: AppColors.primaryTextColor,
+                  color: theme.colorScheme.onSurface,
                   fontWeight: FontWeight.w600,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.fieldBgColor,
+                  color: theme.colorScheme.surfaceVariant,
                   border: Border.all(
-                    color: AppColors.primaryColor.withOpacity(0.2),
+                    color: theme.colorScheme.primary.withOpacity(0.2),
                   ),
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -258,15 +262,15 @@ class _SignInBottomSheetState extends State<SignInBottomSheet> {
               focusedPinTheme: PinTheme(
                 width: 48,
                 height: 56,
-                textStyle: const TextStyle(
+                textStyle: TextStyle(
                   fontSize: 20,
-                  color: AppColors.primaryTextColor,
+                  color: theme.colorScheme.onSurface,
                   fontWeight: FontWeight.w600,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.fieldBgColor,
+                  color: theme.colorScheme.surfaceVariant,
                   border: Border.all(
-                    color: AppColors.primaryColor,
+                    color: theme.colorScheme.primary,
                     width: 2,
                   ),
                   borderRadius: BorderRadius.circular(12),
@@ -275,13 +279,13 @@ class _SignInBottomSheetState extends State<SignInBottomSheet> {
               submittedPinTheme: PinTheme(
                 width: 48,
                 height: 56,
-                textStyle: const TextStyle(
+                textStyle: TextStyle(
                   fontSize: 20,
-                  color: Colors.white,
+                  color: theme.colorScheme.onPrimary,
                   fontWeight: FontWeight.w600,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.primaryColor,
+                  color: theme.colorScheme.primary,
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
@@ -296,16 +300,16 @@ class _SignInBottomSheetState extends State<SignInBottomSheet> {
                 Get.snackbar(
                   'OTP Sent',
                   'OTP has been sent to ${controller.email.value}',
-                  backgroundColor: AppColors.primaryColor,
-                  colorText: Colors.white,
+                  backgroundColor: theme.colorScheme.primary,
+                  colorText: theme.colorScheme.onPrimary,
                   duration: const Duration(seconds: 2),
                 );
               },
               child: Text(
                 'Resend OTP',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
-                  color: AppColors.primaryColor,
+                  color: theme.colorScheme.primary,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -313,29 +317,34 @@ class _SignInBottomSheetState extends State<SignInBottomSheet> {
           ),
           const Spacer(),
           // Verify button
-          Obx(() => Container(
-            width: double.infinity,
-            margin: const EdgeInsets.only(bottom: 40),
-            child: ElevatedButton(
-              onPressed: controller.isOtpButtonEnabled ? _handleSignInSuccess : null,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primaryColor,
-                disabledBackgroundColor: AppColors.primaryColor.withOpacity(0.3),
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+          Obx(
+            () => Container(
+              width: double.infinity,
+              margin: const EdgeInsets.only(bottom: 40),
+              child: ElevatedButton(
+                onPressed: controller.isOtpButtonEnabled
+                    ? _handleSignInSuccess
+                    : null,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: theme.colorScheme.primary,
+                  disabledBackgroundColor: theme.colorScheme.primary
+                      .withOpacity(0.3),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
-              ),
-              child: Text(
-                'Verify & Sign In',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                child: Text(
+                  'Verify & Sign In',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: theme.colorScheme.onPrimary,
+                  ),
                 ),
               ),
             ),
-          )),
+          ),
         ],
       ),
     );

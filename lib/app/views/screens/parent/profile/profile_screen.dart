@@ -3,6 +3,7 @@ import 'package:dot_connections/app/core/utils/app_colors.dart';
 import 'package:dot_connections/app/core/utils/app_images.dart';
 import 'package:dot_connections/app/core/utils/app_routes.dart';
 import 'package:dot_connections/app/core/utils/text_style.dart';
+import 'package:dot_connections/app/core/localization/localization_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -15,19 +16,18 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return GetBuilder<ProfileContorller>(
       builder: (controller) {
         return Scaffold(
-          backgroundColor: Colors.white,
           appBar: AppBar(
             leading: const SizedBox(),
-            backgroundColor: Colors.white,
             elevation: 0,
             centerTitle: true,
             title: Text(
               "Your Profile",
               style: TextStyle(
-                color: Colors.black,
+                color: theme.colorScheme.onSurface,
                 fontSize: 24.sp,
                 fontWeight: FontWeight.bold,
               ),
@@ -62,7 +62,7 @@ class ProfileScreen extends StatelessWidget {
                         right: -10,
                         child: InkWell(
                           borderRadius: BorderRadius.circular(50.r),
-                          onTap: ()=> controller.pickImage(),
+                          onTap: () => controller.pickImage(),
                           child: Container(
                             height: 40.r,
                             width: 40.r,
@@ -94,12 +94,16 @@ class ProfileScreen extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 24.sp,
                     fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onSurface,
                   ),
                 ),
                 SizedBox(height: 4.h),
                 Text(
                   "brooklyn.sim@example.com",
-                  style: TextStyle(fontSize: 16.sp, color: Colors.grey[600]),
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    color: theme.colorScheme.onSurface.withOpacity(0.7),
+                  ),
                 ),
                 SizedBox(height: 40.h),
                 ProfileMenu(
@@ -128,6 +132,11 @@ class ProfileScreen extends StatelessWidget {
                   press: () => Get.toNamed(AppRoutes.subscription),
                 ),
                 ProfileMenu(
+                  icon: AppIcons.infoIcon, // Using an existing icon for now
+                  text: "Language",
+                  press: () => _showLanguageBottomSheet(context),
+                ),
+                ProfileMenu(
                   icon: AppIcons.termsConditionIcon,
                   text: "Trams & Condition",
                   press: () => Get.toNamed(AppRoutes.termCondition),
@@ -142,6 +151,90 @@ class ProfileScreen extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  void _showLanguageBottomSheet(BuildContext context) {
+    final theme = Theme.of(context);
+    final localizationService = LocalizationService.instance;
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: theme.colorScheme.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+      ),
+      builder: (context) => Container(
+        padding: EdgeInsets.all(20.w),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 50.w,
+              height: 4.h,
+              decoration: BoxDecoration(
+                color: theme.colorScheme.outline,
+                borderRadius: BorderRadius.circular(2.r),
+              ),
+            ),
+            SizedBox(height: 16.h),
+            Text(
+              'Select Language',
+              style: TextStyle(
+                fontSize: 20.sp,
+                fontWeight: FontWeight.bold,
+                color: theme.colorScheme.onSurface,
+              ),
+            ),
+            SizedBox(height: 16.h),
+            ConstrainedBox(
+              constraints: BoxConstraints(maxHeight: 400.h),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: localizationService.supportedLanguages.length,
+                itemBuilder: (context, index) {
+                  final languageCode =
+                      localizationService.supportedLanguages[index];
+                  final languageName = localizationService.getLanguageName(
+                    languageCode,
+                  );
+                  final isSelected =
+                      languageCode == localizationService.currentLanguage;
+
+                  return ListTile(
+                    title: Text(
+                      languageName,
+                      style: TextStyle(
+                        color: theme.colorScheme.onSurface,
+                        fontWeight: isSelected
+                            ? FontWeight.bold
+                            : FontWeight.normal,
+                      ),
+                    ),
+                    trailing: isSelected
+                        ? Icon(Icons.check, color: theme.colorScheme.primary)
+                        : null,
+                    onTap: () {
+                      localizationService.changeLanguage(languageCode);
+                      Navigator.pop(context);
+                      Get.snackbar(
+                        'Language Changed',
+                        'Language has been changed to $languageName',
+                        backgroundColor: theme.colorScheme.primary,
+                        colorText: theme.colorScheme.onPrimary,
+                        duration: const Duration(seconds: 2),
+                      );
+                      // Note: In a real app, you'd also want to update the app's locale
+                      // and possibly restart the app or rebuild the UI
+                    },
+                  );
+                },
+              ),
+            ),
+            SizedBox(height: 20.h),
+          ],
+        ),
+      ),
     );
   }
 }

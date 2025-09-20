@@ -93,7 +93,11 @@ class ProfileCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(15.0),
                     child: BackdropFilter(
                       filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                      child: Container(color: Colors.black.withOpacity(0.1)),
+                      child: Container(
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.scrim.withOpacity(0.1),
+                      ),
                     ),
                   ),
                 ),

@@ -5,12 +5,19 @@ class AppTextStyle {
   static TextStyle primaryTextStyle({
     double fontSize = 16,
     FontWeight fontWeight = FontWeight.normal,
-    Color color = Colors.black,
+    Color? color,
+    BuildContext? context,
   }) {
+    // If context is provided, use theme colors, otherwise fallback to color parameter or black
+    Color textColor = color ?? Colors.black;
+    if (context != null && color == null) {
+      textColor = Theme.of(context).colorScheme.onSurface;
+    }
+
     return GoogleFonts.montserrat(
       fontSize: fontSize,
       fontWeight: fontWeight,
-      color: color,
+      color: textColor,
     );
   }
 }
