@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dot_connections/app/models/conversation_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -90,6 +91,9 @@ class ConversationController extends GetxController {
   }
 
   void toggleRecording() async {
+    // Add haptic feedback
+    HapticFeedback.lightImpact();
+
     if (isRecording) {
       // Stop recording
       final recordeAudiodPath = await _audioRecorder.stop();
@@ -133,21 +137,51 @@ class ConversationController extends GetxController {
 
   //image picker
   void pickImage() async {
+    // Add haptic feedback
+    HapticFeedback.selectionClick();
+
     try {
       final imagePicked = await imagePicker.pickImage(
         source: ImageSource.gallery,
       );
       if (imagePicked == null) {
         return;
-      } else {}
+      } else {
+        image.value = imagePicked;
+        // Optionally send the image immediately or let user send it manually
+        sendImageMessage(imagePicked);
+      }
     } catch (e) {
       debugPrint('error to pick the image> $e');
     }
   }
 
+  // Send image message
+  void sendImageMessage(XFile imageFile) {
+    // Add haptic feedback
+    HapticFeedback.lightImpact();
+
+    messages.add(
+      Message(
+        isMe: true,
+        type: MessageType.image,
+        userAvatar: 'assets/images/Eleanor_Pena.png',
+        imageFile: imageFile,
+      ),
+    );
+
+    // Clear the selected image
+    image.value = null;
+
+    update();
+  }
+
   // Send text message
   void sendTextMessage(String text) {
     if (text.trim().isEmpty) return;
+
+    // Add haptic feedback
+    HapticFeedback.lightImpact();
 
     messages.add(
       Message(
@@ -164,6 +198,9 @@ class ConversationController extends GetxController {
   // Send audio message
   void sendAudioMessage(String audioPath) {
     if (audioPath.isEmpty) return;
+
+    // Add haptic feedback
+    HapticFeedback.mediumImpact();
 
     messages.add(
       Message(

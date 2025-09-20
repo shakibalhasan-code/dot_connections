@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:dot_connections/app/core/utils/app_colors.dart';
 import 'package:dot_connections/app/models/conversation_model.dart';
 import 'package:dot_connections/app/views/screens/parent/chat/widgets/audio_player_widget.dart';
@@ -41,21 +42,13 @@ class MessageBubble extends StatelessWidget {
           ),
         Container(
           constraints: BoxConstraints(maxWidth: 0.7.sw),
-          padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
+          padding: EdgeInsets.symmetric(
+            vertical: message.type == MessageType.image ? 4.h : 12.h,
+            horizontal: message.type == MessageType.image ? 4.w : 16.w,
+          ),
           margin: EdgeInsets.symmetric(vertical: 4.h),
           decoration: BoxDecoration(color: color, borderRadius: borderRadius),
-          child: message.type == MessageType.text
-              ? Text(
-                  message.text!,
-                  style: TextStyle(
-                    color: textColor,
-                    fontSize: 16.sp,
-                  ), //TODO: add font family
-                )
-              : AudioPlayerWidget(
-                  audioAsset: 'assets/audio/audio_test.mp3',
-                  isMe: isMe,
-                ),
+          child: _buildMessageContent(message, textColor, isMe),
         ),
         if (isMe)
           Padding(
@@ -67,5 +60,68 @@ class MessageBubble extends StatelessWidget {
           ),
       ],
     );
+  }
+
+  Widget _buildMessageContent(Message message, Color textColor, bool isMe) {
+    switch (message.type) {
+      case MessageType.text:
+        return Text(
+          message.text!,
+          style: TextStyle(color: textColor, fontSize: 16.sp),
+        );
+      case MessageType.audio:
+        return AudioPlayerWidget(
+          audioAsset: 'assets/audio/audio_test.mp3',
+          isMe: isMe,
+        );
+      case MessageType.image:
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(16.r),
+          child: message.imageFile != null
+              ? Image.file(
+                  File(message.imageFile!.path),
+                  width: 200.w,
+                  height: 200.h,
+                  fit: BoxFit.cover,
+                )
+              : message.imageUrl != null
+              ? Image.network(
+                  message.imageUrl!,
+                  width: 200.w,
+                  height: 200.h,
+                  fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Container(
+                      width: 200.w,
+                      height: 200.h,
+                      color: Colors.grey[300],
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                              : null,
+                        ),
+                      ),
+                    );
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      width: 200.w,
+                      height: 200.h,
+                      color: Colors.grey[300],
+                      child: Icon(Icons.error),
+                    );
+                  },
+                )
+              : Container(
+                  width: 200.w,
+                  height: 200.h,
+                  color: Colors.grey[300],
+                  child: Icon(Icons.image),
+                ),
+        );
+    }
   }
 }

@@ -2,6 +2,7 @@ import 'package:dot_connections/app/core/helper/widget_helper.dart';
 import 'package:dot_connections/app/models/user_profile_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:get/get.dart';
 
@@ -71,6 +72,9 @@ class FindController extends GetxController {
     required int previousIndex,
     required CardSwiperDirection direction,
   }) {
+    // Add haptic feedback
+    HapticFeedback.lightImpact();
+
     activeProfile.value = currentIndex;
     update();
     if (direction == CardSwiperDirection.left) {
@@ -98,6 +102,9 @@ class FindController extends GetxController {
 
   //user ingore profile action's logic
   void swipeByActions(CardSwiperDirection direction) async {
+    // Add haptic feedback
+    HapticFeedback.mediumImpact();
+
     ///set the default active image value
     activeProfileImage.value = 0;
     debugPrint('>>>>>>>>>>>>ignore button clicked');

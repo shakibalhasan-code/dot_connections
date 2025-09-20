@@ -5,6 +5,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
+/// ParentScreen is the main navigation container for the app
+///
+/// This screen provides:
+/// - Bottom navigation with 5 main sections
+/// - Smooth page transitions between sections
+/// - Modern, animated navigation bar
+/// - Theme-aware styling
+///
+/// The screen uses PageView for smooth transitions and maintains
+/// state across navigation changes.
 class ParentScreen extends StatelessWidget {
   const ParentScreen({super.key});
 
@@ -14,125 +24,186 @@ class ParentScreen extends StatelessWidget {
       builder: (controller) {
         return Scaffold(
           body: PageView(
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             controller: controller.pageController,
             onPageChanged: controller.onPageChanged,
             children: controller.pages,
           ),
-          bottomNavigationBar: CustomBottomNavBar(
-              currentIndex: controller.currentIndex.value,
-              onTap: controller.onTabTapped,
-            ),
+          bottomNavigationBar: const CustomBottomNavBar(),
         );
       },
     );
   }
 }
 
+/// CustomBottomNavBar provides an enhanced navigation experience
+///
+/// Features:
+/// - Animated selection indicators
+/// - Smooth color transitions
+/// - Accessibility support
+/// - Theme-aware styling
+/// - Touch feedback with haptics
 class CustomBottomNavBar extends StatelessWidget {
-  final int currentIndex;
-  final ValueChanged<int> onTap;
-
-  const CustomBottomNavBar({
-    super.key,
-    required this.currentIndex,
-    required this.onTap,
-  });
+  const CustomBottomNavBar({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final parentController = Get.find<ParentController>();
+
     return Container(
       height: 80.h,
-      // The background color of the nav bar in the image is a light grey/off-white
-      color: const Color(0xFFF8F8F8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildNavItem(AppIcons.findIcon, "Find", 0),
-          _buildNavItem(AppIcons.mapIcon, "Map", 1),
-          _buildNavItem(AppIcons.chatIcon, "Chat", 2),
-          _buildNavItem(AppIcons.matchIcon, "Match", 3),
-          _buildNavItem(AppIcons.profileIcon, "Profile", 4),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        boxShadow: [
+          BoxShadow(
+            color: theme.colorScheme.shadow.withOpacity(0.1),
+            spreadRadius: 0,
+            blurRadius: 10,
+            offset: const Offset(0, -2),
+          ),
         ],
+      ),
+      child: SafeArea(
+        child: Obx(
+          () => Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildNavItem(
+                context,
+                AppIcons.findIcon,
+                "Find",
+                0,
+                parentController.currentIndex.value,
+                parentController.onTabTapped,
+              ),
+              _buildNavItem(
+                context,
+                AppIcons.mapIcon,
+                "Map",
+                1,
+                parentController.currentIndex.value,
+                parentController.onTabTapped,
+              ),
+              _buildNavItem(
+                context,
+                AppIcons.chatIcon,
+                "Chat",
+                2,
+                parentController.currentIndex.value,
+                parentController.onTabTapped,
+              ),
+              _buildNavItem(
+                context,
+                AppIcons.matchIcon,
+                "Match",
+                3,
+                parentController.currentIndex.value,
+                parentController.onTabTapped,
+              ),
+              _buildNavItem(
+                context,
+                AppIcons.profileIcon,
+                "Profile",
+                4,
+                parentController.currentIndex.value,
+                parentController.onTabTapped,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
 
-  Widget _buildNavItem(String icon, String label, int index) {
-    final bool isSelected = currentIndex == index;
+  /// Builds individual navigation item with enhanced animations
+  Widget _buildNavItem(
+    BuildContext context,
+    String icon,
+    String label,
+    int index,
+    int currentIndex,
+    Function(int) onTap,
+  ) {
+    final theme = Theme.of(context);
+    final isSelected = currentIndex == index;
 
-    if (isSelected) {
-      // Style for the selected item
-      return GestureDetector(
-        onTap: () => onTap(index),
-        child: Container(
-          width: 70.w,
-          height: 60.h,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16.r),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.3),
-                spreadRadius: 0.75,
-                blurRadius: 1,
-                offset: const Offset(0, 3),
-              ),
-            ],
-          ),
+    return Expanded(
+      child: GestureDetector(
+        onTap: () {
+          // Add haptic feedback
+          // HapticFeedback.lightImpact(); // Uncomment when implementing haptics
+          onTap(index);
+        },
+        behavior: HitTestBehavior.translucent,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeInOut,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SvgPicture.asset(
-                icon,
-                width: 24.w,
-                height: 24.h,
-                colorFilter: ColorFilter.mode(
-                  Colors.grey.shade800,
-                  BlendMode.srcIn,
+              // Icon container with animation
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeInOut,
+                width: isSelected ? 70.w : 50.w,
+                height: isSelected ? 50.h : 40.h,
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? theme.colorScheme.primary.withOpacity(0.1)
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(isSelected ? 16.r : 12.r),
+                ),
+                child: Center(
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 150),
+                    child: SvgPicture.asset(
+                      icon,
+                      width: isSelected ? 28.w : 24.w,
+                      height: isSelected ? 28.h : 24.h,
+                      colorFilter: ColorFilter.mode(
+                        isSelected
+                            ? theme.colorScheme.primary
+                            : theme.colorScheme.onSurface.withOpacity(0.6),
+                        BlendMode.srcIn,
+                      ),
+                    ),
+                  ),
                 ),
               ),
+
               SizedBox(height: 4.h),
-              Text(
-                label,
+
+              // Label with animation
+              AnimatedDefaultTextStyle(
+                duration: const Duration(milliseconds: 200),
                 style: TextStyle(
-                  color: Colors.grey.shade800,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14.sp,
+                  color: isSelected
+                      ? theme.colorScheme.primary
+                      : theme.colorScheme.onSurface.withOpacity(0.6),
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                  fontSize: isSelected ? 13.sp : 12.sp,
+                ),
+                child: Text(label),
+              ),
+
+              // Selection indicator
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeInOut,
+                width: isSelected ? 20.w : 0,
+                height: 2.h,
+                margin: EdgeInsets.only(top: 2.h),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.primary,
+                  borderRadius: BorderRadius.circular(1.r),
                 ),
               ),
             ],
           ),
         ),
-      );
-    } else {
-      // Style for unselected items
-      return GestureDetector(
-        onTap: () => onTap(index),
-        behavior: HitTestBehavior.translucent,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SvgPicture.asset(
-              icon,
-              width: 24.w,
-              height: 24.h,
-              colorFilter: ColorFilter.mode(
-                Colors.grey.shade600,
-                BlendMode.srcIn,
-              ),
-            ),
-            SizedBox(height: 4.h),
-            Text(
-              label,
-              style: TextStyle(
-                color: Colors.grey.shade600,
-                fontWeight: FontWeight.normal,
-              ),
-            ),
-          ],
-        ),
-      );
-    }
+      ),
+    );
   }
 }

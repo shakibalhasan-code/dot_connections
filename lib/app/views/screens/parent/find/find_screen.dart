@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dot_connections/app/controllers/find_controller.dart';
+import 'package:dot_connections/app/controllers/parent_controller.dart';
+import 'package:dot_connections/app/core/localization/localization_service.dart';
 import 'package:dot_connections/app/core/utils/app_colors.dart';
 import 'package:dot_connections/app/core/utils/app_icons.dart';
 import 'package:dot_connections/app/core/utils/app_routes.dart';
@@ -75,23 +77,44 @@ class FindScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             ///ignore action button
-                            _buildActionButton(
+                            _buildAccessibleActionButton(
                               AppIcons.crossIcon,
                               Colors.black,
                               () => controller.swipeByActions(
                                 CardSwiperDirection.left,
                               ),
+                              LocalizationService.instance.getText(
+                                'pass_button',
+                              ),
+                              LocalizationService.instance.getText(
+                                'pass_button_hint',
+                              ),
                             ),
-                            _buildActionButton(
+                            _buildAccessibleActionButton(
                               AppIcons.mapIcon,
                               Colors.blue,
-                              () {},
+                              () {
+                                // Navigate to map tab to show user locations
+                                final ParentController parentController =
+                                    Get.find();
+                                parentController.onTabTapped(
+                                  1,
+                                ); // Map screen is at index 1
+                              },
+                              'Show on map',
+                              'Double tap to view user locations on map',
                             ),
-                            _buildActionButton(
+                            _buildAccessibleActionButton(
                               AppIcons.loveIcon,
                               Colors.red,
                               () => controller.swipeByActions(
                                 CardSwiperDirection.right,
+                              ),
+                              LocalizationService.instance.getText(
+                                'like_button',
+                              ),
+                              LocalizationService.instance.getText(
+                                'like_button_hint',
                               ),
                             ),
                           ],
@@ -161,6 +184,46 @@ class FindScreen extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  /// Accessible action button widget with enhanced semantics
+  Widget _buildAccessibleActionButton(
+    String icon,
+    Color color,
+    VoidCallback onTap,
+    String semanticLabel,
+    String semanticHint,
+  ) {
+    return Semantics(
+      label: semanticLabel,
+      hint: semanticHint,
+      button: true,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                blurRadius: 1,
+                blurStyle: BlurStyle.normal,
+                color: Colors.grey,
+              ),
+            ],
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(50.r),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SvgPicture.asset(
+              icon,
+              width: 43.56.w,
+              height: 43.56.h,
+              color: color,
+            ),
+          ),
+        ),
       ),
     );
   }

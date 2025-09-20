@@ -1,4 +1,6 @@
-enum MessageType { text, audio }
+import 'package:image_picker/image_picker.dart';
+
+enum MessageType { text, audio, image }
 
 class Message {
   final String? text;
@@ -7,6 +9,8 @@ class Message {
   final String userAvatar;
   final String? audioUrl; // For network audio
   final String? audioPath; // For local audio files
+  final XFile? imageFile; // For local image files
+  final String? imageUrl; // For network images
 
   Message({
     this.text,
@@ -15,5 +19,7 @@ class Message {
     required this.userAvatar,
     this.audioUrl,
     this.audioPath,
+    this.imageFile,
+    this.imageUrl,
   });
 }
