@@ -74,7 +74,6 @@ class FindController extends GetxController {
     activeProfile.value = currentIndex;
     update();
     if (direction == CardSwiperDirection.left) {
-
       ///set the default active image value
       activeProfileImage.value = 0;
 
@@ -85,7 +84,7 @@ class FindController extends GetxController {
         toastContext: Get.context!,
       );
     } else if (direction == CardSwiperDirection.right) {
-       ///set the default active image value
+      ///set the default active image value
       activeProfileImage.value = 0;
 
       // TODO: ACTION WHEN USER SWIPE PROFILE TO THE right
@@ -97,19 +96,43 @@ class FindController extends GetxController {
     }
   }
 
-
   //user ingore profile action's logic
   void swipeByActions(CardSwiperDirection direction) async {
-     ///set the default active image value
-      activeProfileImage.value = 0;
+    ///set the default active image value
+    activeProfileImage.value = 0;
     debugPrint('>>>>>>>>>>>>ignore button clicked');
     cardSwipeController.swipe(direction);
     update();
   }
 
-  /// change the current image 
+  /// change the current image
   void onProfileImageChanged(int index) {
     activeProfileImage.value = index;
     update();
   }
+
+  // void increaseImageIndex() {
+  //   if (activeProfileImage.value <
+  //       cardList[activeProfile.value].images.length - 1) {
+  //     activeProfileImage.value++;
+  //     pageviewProfileImage.animateToPage(
+  //       activeProfileImage.value,
+  //       duration: const Duration(milliseconds: 300),
+  //       curve: Curves.easeIn,
+  //     );
+  //     update();
+  //   }
+  // }
+
+  // void decreaseImageIndex() {
+  //   if (activeProfileImage.value > 0) {
+  //     activeProfileImage.value--;
+  //     pageviewProfileImage.animateToPage(
+  //       activeProfileImage.value,
+  //       duration: const Duration(milliseconds: 300),
+  //       curve: Curves.easeIn,
+  //     );
+  //     update();
+  //   }
+  // }
 }

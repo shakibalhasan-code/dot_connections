@@ -141,19 +141,22 @@ class FindScreen extends StatelessWidget {
             ),
           ),
           SizedBox(width: 8.w),
-          Container(
-            width: 40.w,
-            height: 40.h,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20.r),
-              border: Border.all(width: 0.75, color: Colors.grey),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SvgPicture.asset(
-                AppIcons.notification,
-                color: AppColors.primaryColor,
+          InkWell(
+            onTap: () => Get.toNamed(AppRoutes.notification),
+            child: Container(
+              width: 40.w,
+              height: 40.h,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20.r),
+                border: Border.all(width: 0.75, color: Colors.grey),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SvgPicture.asset(
+                  AppIcons.notification,
+                  color: AppColors.primaryColor,
+                ),
               ),
             ),
           ),

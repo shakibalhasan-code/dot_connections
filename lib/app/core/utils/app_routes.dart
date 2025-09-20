@@ -32,6 +32,8 @@ import 'package:dot_connections/app/views/screens/parent/profile/sub_screens/ter
 import 'package:get/get_navigation/get_navigation.dart';
 
 import '../../views/screens/initial/hometown_view.dart';
+import '../../views/screens/parent/notification/notification_screen.dart'
+    show NotificationScreen;
 
 class AppRoutes {
   static String initial = '/initial';
@@ -39,7 +41,7 @@ class AppRoutes {
   static String otp = '/otp';
   static String name = '/name';
   static String dob = '/dob';
-  static String notifications = '/notifications';
+  static String enableNotifications = '/enableNotifications';
   static String howTall = '/how-tall';
   static String whoToDate = '/who-to-date';
   static String iAmA = '/i-am-a';
@@ -70,15 +72,7 @@ class AppRoutes {
   static String blockedUser = '/blockedUser';
   static String subscription = '/subscription';
   static String termCondition = '/termCondition';
-
-
-
-
-
-
-
-
-
+  static String notification = '/notification';
 
   static List<GetPage> pages = [
     GetPage(name: initial, page: () => const InitialScreen()),
@@ -86,7 +80,10 @@ class AppRoutes {
     GetPage(name: otp, page: () => const OtpView()),
     GetPage(name: name, page: () => const WhatsNameView()),
     GetPage(name: dob, page: () => const WhatsDobView()),
-    GetPage(name: notifications, page: () => const EnableNotificationsView()),
+    GetPage(
+      name: enableNotifications,
+      page: () => const EnableNotificationsView(),
+    ),
     GetPage(name: howTall, page: () => const HowTallView()),
     GetPage(name: whoToDate, page: () => const WhoToDateView()),
     GetPage(name: iAmA, page: () => const IAmAView()),
@@ -104,17 +101,15 @@ class AppRoutes {
     GetPage(name: addBio, page: () => const AddBioView()),
     GetPage(name: welcome, page: () => const WelcomeView()),
     GetPage(name: parent, page: () => const ParentScreen()),
-    GetPage(name: conversation, page: ()=>   ConversationScreen()),
-    GetPage(name: accountDetails, page: ()=> const  AccountManageScreen()),
-    GetPage(name: editFullName, page: ()=>const UpdateFullNameView()),
-    GetPage(name: updatePhoneView, page: ()=>const UpdatePhoneView()),
-    GetPage(name: personalDetails, page: ()=>const PersonalDetailsScreen()),
-    GetPage(name: photoGallery, page: ()=>const PhotoGalleryScreen()),
-    GetPage(name: blockedUser, page: ()=>const BlockedUserScreen()),
-    GetPage(name: subscription, page: ()=>const SubscriptionScreen()),
-    GetPage(name: termCondition, page: ()=>const TermsConditionScreen()),
-
-
-
+    GetPage(name: conversation, page: () => ConversationScreen()),
+    GetPage(name: accountDetails, page: () => const AccountManageScreen()),
+    GetPage(name: editFullName, page: () => const UpdateFullNameView()),
+    GetPage(name: updatePhoneView, page: () => const UpdatePhoneView()),
+    GetPage(name: personalDetails, page: () => const PersonalDetailsScreen()),
+    GetPage(name: photoGallery, page: () => const PhotoGalleryScreen()),
+    GetPage(name: blockedUser, page: () => const BlockedUserScreen()),
+    GetPage(name: subscription, page: () => const SubscriptionScreen()),
+    GetPage(name: termCondition, page: () => const TermsConditionScreen()),
+    GetPage(name: notification, page: () => const NotificationScreen()),
   ];
 }

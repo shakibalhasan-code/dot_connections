@@ -61,16 +61,14 @@ class WhatsDobView extends StatelessWidget {
                     SizedBox(width: 10.w),
                     Text(
                       "Age can't be changed later",
-                      style: AppTextStyle.primaryTextStyle(
-                        color: Colors.red,
-                      ),
+                      style: AppTextStyle.primaryTextStyle(color: Colors.red),
                     ),
                   ],
                 ),
                 SizedBox(height: 20.h),
                 ElevatedButton(
                   onPressed: () {
-                    Get.toNamed(AppRoutes.notifications);
+                    Get.toNamed(AppRoutes.enableNotifications);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple,
