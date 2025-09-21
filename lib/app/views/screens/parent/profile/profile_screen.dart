@@ -1,15 +1,15 @@
 import 'package:dot_connections/app/controllers/profile_contorller.dart';
+import 'package:dot_connections/app/controllers/language_controller.dart';
 import 'package:dot_connections/app/core/utils/app_colors.dart';
 import 'package:dot_connections/app/core/utils/app_images.dart';
 import 'package:dot_connections/app/core/utils/app_routes.dart';
 import 'package:dot_connections/app/core/utils/text_style.dart';
-import 'package:dot_connections/app/core/localization/localization_service.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:dot_connections/app/core/utils/app_icons.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get.dart' hide Trans;
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -17,6 +17,9 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final LanguageController languageController =
+        Get.find<LanguageController>();
+
     return GetBuilder<ProfileContorller>(
       builder: (controller) {
         return Scaffold(
@@ -24,14 +27,18 @@ class ProfileScreen extends StatelessWidget {
             leading: const SizedBox(),
             elevation: 0,
             centerTitle: true,
-            title: Text(
-              "Your Profile",
-              style: TextStyle(
-                color: theme.colorScheme.onSurface,
-                fontSize: 24.sp,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            title: Obx(() {
+              // Make title reactive to language changes
+              languageController.currentLanguage;
+              return Text(
+                'profile'.tr(),
+                style: TextStyle(
+                  color: theme.colorScheme.onSurface,
+                  fontSize: 24.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+              );
+            }),
           ),
           body: SingleChildScrollView(
             padding: EdgeInsets.symmetric(vertical: 24.h, horizontal: 20.w),
@@ -108,42 +115,42 @@ class ProfileScreen extends StatelessWidget {
                 SizedBox(height: 40.h),
                 ProfileMenu(
                   icon: AppIcons.accountsIcon,
-                  text: "Account",
+                  text: 'account_settings'.tr(),
                   press: () => Get.toNamed(AppRoutes.accountDetails),
                 ),
                 ProfileMenu(
                   icon: AppIcons.personalData,
-                  text: "Personal Details",
+                  text: 'personal_data'.tr(),
                   press: () => Get.toNamed(AppRoutes.personalDetails),
                 ),
                 ProfileMenu(
                   icon: AppIcons.photoGallery,
-                  text: "Photo Gallery",
+                  text: 'photo_gallery'.tr(),
                   press: () => Get.toNamed(AppRoutes.photoGallery),
                 ),
                 ProfileMenu(
                   icon: AppIcons.blockedIcon,
-                  text: "Blocked Users",
+                  text: 'blocked_users'.tr(),
                   press: () => Get.toNamed(AppRoutes.blockedUser),
                 ),
                 ProfileMenu(
                   icon: AppIcons.subscriptionIcon,
-                  text: "Subscription",
+                  text: 'subscription'.tr(),
                   press: () => Get.toNamed(AppRoutes.subscription),
                 ),
                 ProfileMenu(
                   icon: AppIcons.infoIcon, // Using an existing icon for now
-                  text: "Language",
+                  text: 'language'.tr(),
                   press: () => _showLanguageBottomSheet(context),
                 ),
                 ProfileMenu(
                   icon: AppIcons.termsConditionIcon,
-                  text: "Trams & Condition",
+                  text: 'terms_and_conditions'.tr(),
                   press: () => Get.toNamed(AppRoutes.termCondition),
                 ),
                 ProfileMenu(
                   icon: AppIcons.infoIcon,
-                  text: "About Us",
+                  text: 'about'.tr(),
                   press: () {},
                 ),
               ],
@@ -156,7 +163,6 @@ class ProfileScreen extends StatelessWidget {
 
   void _showLanguageBottomSheet(BuildContext context) {
     final theme = Theme.of(context);
-    final localizationService = LocalizationService.instance;
 
     showModalBottomSheet(
       context: context,
@@ -179,7 +185,7 @@ class ProfileScreen extends StatelessWidget {
             ),
             SizedBox(height: 16.h),
             Text(
-              'Select Language',
+              'language'.tr(),
               style: TextStyle(
                 fontSize: 20.sp,
                 fontWeight: FontWeight.bold,
@@ -187,48 +193,53 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 16.h),
-            ConstrainedBox(
-              constraints: BoxConstraints(maxHeight: 400.h),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: localizationService.supportedLanguages.length,
-                itemBuilder: (context, index) {
-                  final languageCode =
-                      localizationService.supportedLanguages[index];
-                  final languageName = localizationService.getLanguageName(
-                    languageCode,
-                  );
-                  final isSelected =
-                      languageCode == localizationService.currentLanguage;
-
-                  return ListTile(
-                    title: Text(
-                      languageName,
-                      style: TextStyle(
-                        color: theme.colorScheme.onSurface,
-                        fontWeight: isSelected
-                            ? FontWeight.bold
-                            : FontWeight.normal,
-                      ),
-                    ),
-                    trailing: isSelected
-                        ? Icon(Icons.check, color: theme.colorScheme.primary)
-                        : null,
-                    onTap: () {
-                      localizationService.changeLanguage(languageCode);
-                      Navigator.pop(context);
-                      Get.snackbar(
-                        'Language Changed',
-                        'Language has been changed to $languageName',
-                        backgroundColor: theme.colorScheme.primary,
-                        colorText: theme.colorScheme.onPrimary,
-                        duration: const Duration(seconds: 2),
+            Flexible(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.5,
+                ),
+                child: GetBuilder<LanguageController>(
+                  builder: (controller) => ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: controller.supportedLanguages.length,
+                    itemBuilder: (context, index) {
+                      final languageCode = controller.supportedLanguages[index];
+                      final languageName = controller.getLanguageName(
+                        languageCode,
                       );
-                      // Note: In a real app, you'd also want to update the app's locale
-                      // and possibly restart the app or rebuild the UI
+                      final languageFlag = controller.getLanguageFlag(
+                        languageCode,
+                      );
+                      final isSelected =
+                          languageCode == controller.currentLanguage;
+
+                      return ListTile(
+                        leading: Text(
+                          languageFlag,
+                          style: TextStyle(fontSize: 24.sp),
+                        ),
+                        title: Text(
+                          languageName,
+                          style: TextStyle(
+                            color: theme.colorScheme.onSurface,
+                            fontWeight: isSelected
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                          ),
+                        ),
+                        trailing: isSelected
+                            ? Icon(
+                                Icons.check,
+                                color: theme.colorScheme.primary,
+                              )
+                            : null,
+                        onTap: () {
+                          _changeLanguage(context, languageCode, languageName);
+                        },
+                      );
                     },
-                  );
-                },
+                  ),
+                ),
               ),
             ),
             SizedBox(height: 20.h),
@@ -236,6 +247,21 @@ class ProfileScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  /// Change app language and update GetX locale
+  void _changeLanguage(
+    BuildContext context,
+    String languageCode,
+    String languageName,
+  ) {
+    final languageController = Get.find<LanguageController>();
+
+    // Use the language controller to change language
+    languageController.changeLanguage(languageCode);
+
+    // Close the bottom sheet
+    Navigator.pop(context);
   }
 }
 

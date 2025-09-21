@@ -1,10 +1,10 @@
 import 'package:dot_connections/app/controllers/conversation_controller.dart';
-import 'package:dot_connections/app/core/localization/localization_service.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:dot_connections/app/core/utils/app_colors.dart';
 import 'package:dot_connections/app/views/screens/parent/chat/widgets/audio_player_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide Trans;
 import 'package:hugeicons/hugeicons.dart';
 
 class MessageInputField extends StatelessWidget {
@@ -29,7 +29,7 @@ class MessageInputField extends StatelessWidget {
             child: Row(
               children: [
                 Semantics(
-                  label: LocalizationService.instance.getText('image_button'),
+                  label: 'image_button'.tr(),
                   hint: 'Double tap to select and send an image',
                   button: true,
                   child: IconButton(
@@ -44,10 +44,10 @@ class MessageInputField extends StatelessWidget {
                 ),
                 Semantics(
                   label: controller.isRecording
-                      ? LocalizationService.instance.getText('recording')
-                      : LocalizationService.instance.getText('record_button'),
+                      ? 'recording'.tr()
+                      : 'record_button'.tr(),
                   hint: controller.isRecording
-                      ? LocalizationService.instance.getText('recording_hint')
+                      ? 'recording_hint'.tr()
                       : 'Double tap to start recording voice message',
                   button: true,
                   child: IconButton(
@@ -130,17 +130,13 @@ class MessageInputField extends StatelessWidget {
                           ],
                         )
                       : Semantics(
-                          label: LocalizationService.instance.getText(
-                            'type_message',
-                          ),
+                          label: 'type_message'.tr(),
                           hint: 'Text field for typing messages',
                           textField: true,
                           child: TextField(
                             controller: controller.messageFeildController,
                             decoration: InputDecoration(
-                              hintText: LocalizationService.instance.getText(
-                                'type_message',
-                              ),
+                              hintText: 'type_message'.tr(),
                               border: InputBorder.none,
                               hintStyle: TextStyle(
                                 fontSize: 14.sp,
@@ -159,7 +155,7 @@ class MessageInputField extends StatelessWidget {
                               .isNotEmpty ||
                           (controller.audioPath != null &&
                               controller.audioPath!.isNotEmpty)
-                      ? LocalizationService.instance.getText('send_button')
+                      ? 'send_button'.tr()
                       : 'Send button disabled',
                   hint:
                       controller.audioPath != null &&

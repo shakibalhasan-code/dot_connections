@@ -1,7 +1,8 @@
 import 'package:dot_connections/app/core/utils/app_bindings.dart';
 import 'package:dot_connections/app/core/utils/app_routes.dart';
 import 'package:dot_connections/app/core/theme/app_theme.dart';
-import 'package:dot_connections/app/core/localization/app_localizations.dart';
+import 'package:dot_connections/app/controllers/language_controller.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -13,6 +14,7 @@ import 'package:get/get.dart';
 /// - Screen adaptation for different device sizes
 /// - Route management and navigation
 /// - Global app settings and bindings
+/// - Reactive language switching with EasyLocalization
 ///
 /// The app uses GetX for state management and routing, providing
 /// excellent performance and developer experience.
@@ -33,44 +35,51 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
 
       builder: (context, child) {
-        return GetMaterialApp(
-          // App configuration
-          title: 'Dot Connections',
-          debugShowCheckedModeBanner: false,
+        // Make the entire GetMaterialApp reactive to language changes
+        return GetBuilder<LanguageController>(
+          // Use a unique tag to avoid conflicts
+          tag: 'main_app',
+          init: Get.find<LanguageController>(),
+          builder: (languageController) {
+            return GetMaterialApp(
+              // App configuration
+              title: 'Dot Connections',
+              debugShowCheckedModeBanner: false,
 
-          // Localization configuration
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          locale: const Locale('en'), // Default locale
-          fallbackLocale: const Locale('en'),
+              // Easy Localization configuration - key for proper rebuilding
+              localizationsDelegates: context.localizationDelegates,
+              supportedLocales: context.supportedLocales,
+              locale: context.locale,
 
-          // Theme configuration
-          theme: AppTheme.lightTheme,
-          darkTheme: AppTheme.darkTheme,
-          themeMode: ThemeMode.system, // Defaults to system theme
-          // Route configuration
-          initialRoute: AppRoutes.initial,
-          getPages: AppRoutes.pages,
+              // Theme configuration
+              theme: AppTheme.lightTheme,
+              darkTheme: AppTheme.darkTheme,
+              themeMode: ThemeMode.system, // Defaults to system theme
+              // Route configuration
+              initialRoute: AppRoutes.initial,
+              getPages: AppRoutes.pages,
 
-          // Global bindings
-          initialBinding: AppBindings(),
+              // Global bindings
+              initialBinding: AppBindings(),
 
-          // Global app settings
-          defaultTransition: Transition.cupertino,
-          transitionDuration: const Duration(milliseconds: 300),
+              // Global app settings
+              defaultTransition: Transition.cupertino,
+              transitionDuration: const Duration(milliseconds: 300),
 
-          // Error handling
-          unknownRoute: GetPage(
-            name: '/unknown',
-            page: () =>
-                const Scaffold(body: Center(child: Text('Page not found'))),
-          ),
+              // Error handling
+              unknownRoute: GetPage(
+                name: '/unknown',
+                page: () =>
+                    const Scaffold(body: Center(child: Text('Page not found'))),
+              ),
 
-          // Performance optimizations
-          enableLog: false, // Disable in production
-          logWriterCallback: (text, {isError = false}) {
-            // Custom logging can be implemented here
-            // For example: Firebase Crashlytics, Sentry, etc.
+              // Performance optimizations
+              enableLog: false, // Disable in production
+              logWriterCallback: (text, {isError = false}) {
+                // Custom logging can be implemented here
+                // For example: Firebase Crashlytics, Sentry, etc.
+              },
+            );
           },
         );
       },

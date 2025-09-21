@@ -8,6 +8,10 @@ class AppInitialController extends GetxController {
   final otpController = TextEditingController();
   final RxString otp = ''.obs;
 
+  // Sign-in bottom sheet properties
+  final pageController = PageController();
+  final RxInt currentStep = 0.obs;
+
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
   final RxString firstName = ''.obs;
@@ -39,9 +43,23 @@ class AppInitialController extends GetxController {
   final locationController = TextEditingController();
 
   final List<String> passions = [
-    'Travel', 'Photography', 'Fitness', 'Cooking', 'Music', 'Art', 'Reading',
-    'Movies', 'Hiking', 'Dancing', 'Gaming', 'Fashion', 'Sports', 'Yoga',
-    'Craft Beer', 'Tango', 'Pets'
+    'Travel',
+    'Photography',
+    'Fitness',
+    'Cooking',
+    'Music',
+    'Art',
+    'Reading',
+    'Movies',
+    'Hiking',
+    'Dancing',
+    'Gaming',
+    'Fashion',
+    'Sports',
+    'Yoga',
+    'Craft Beer',
+    'Tango',
+    'Pets',
   ];
   final RxList<String> selectedPassions = <String>[].obs;
 
@@ -63,14 +81,23 @@ class AppInitialController extends GetxController {
     'High school',
     'Under graduation',
     'Post graduation',
-    'Prefer Not to Say'
+    'Prefer Not to Say',
   ];
   final RxString selectedEducation = ''.obs;
   final RxBool showEducationOnProfile = false.obs;
 
   final List<String> religionOptions = [
-    'Buddhist', 'Catholic', 'Christian', 'Hindu', 'Jewish', 'Muslim',
-    'Spiritual', 'Agnostic', 'Atheist', 'Other', 'Prefer Not to Say'
+    'Buddhist',
+    'Catholic',
+    'Christian',
+    'Hindu',
+    'Jewish',
+    'Muslim',
+    'Spiritual',
+    'Agnostic',
+    'Atheist',
+    'Other',
+    'Prefer Not to Say',
   ];
   final RxString selectedReligion = ''.obs;
   final RxBool showReligionOnProfile = false.obs;
@@ -79,7 +106,7 @@ class AppInitialController extends GetxController {
     'Yes',
     'Occasionally',
     'No',
-    'Prefer Not to Say'
+    'Prefer Not to Say',
   ];
   final RxString selectedDrink = ''.obs;
   final RxBool showDrinkOnProfile = false.obs;
@@ -88,33 +115,67 @@ class AppInitialController extends GetxController {
     'Yes',
     'Occasionally',
     'No',
-    'Prefer Not to Say'
+    'Prefer Not to Say',
   ];
   final RxString selectedSmoke = ''.obs;
   final RxBool showSmokeOnProfile = false.obs;
 
   final bioController = TextEditingController();
 
-  bool get isEmailButtonEnabled =>
-      email.value.isNotEmpty && GetUtils.isEmail(email.value);
-  bool get isOtpButtonEnabled => otp.value.length == 6;
-  bool get isNameButtonEnabled => firstName.value.isNotEmpty;
+  // Reactive button states
+  final RxBool _isEmailButtonEnabled = false.obs;
+  final RxBool _isOtpButtonEnabled = false.obs;
+  final RxBool _isNameButtonEnabled = false.obs;
+
+  bool get isEmailButtonEnabled => _isEmailButtonEnabled.value;
+  bool get isOtpButtonEnabled => _isOtpButtonEnabled.value;
+  bool get isNameButtonEnabled => _isNameButtonEnabled.value;
+
+  RxBool get isEmailButtonEnabledRx => _isEmailButtonEnabled;
+  RxBool get isOtpButtonEnabledRx => _isOtpButtonEnabled;
+  RxBool get isNameButtonEnabledRx => _isNameButtonEnabled;
 
   @override
   void onInit() {
     super.onInit();
     emailController.addListener(() {
       email.value = emailController.text;
+      _updateEmailButtonState();
+      update();
+    });
+    otpController.addListener(() {
+      otp.value = otpController.text;
+      _updateOtpButtonState();
       update();
     });
     firstNameController.addListener(() {
       firstName.value = firstNameController.text;
+      _updateNameButtonState();
       update();
     });
     lastNameController.addListener(() {
       lastName.value = lastNameController.text;
       update();
     });
+
+    // Listen to reactive variables
+    ever(email, (_) => _updateEmailButtonState());
+    ever(otp, (_) => _updateOtpButtonState());
+    ever(firstName, (_) => _updateNameButtonState());
+  }
+
+  // Update button states
+  void _updateEmailButtonState() {
+    _isEmailButtonEnabled.value =
+        email.value.isNotEmpty && GetUtils.isEmail(email.value);
+  }
+
+  void _updateOtpButtonState() {
+    _isOtpButtonEnabled.value = otp.value.length == 6;
+  }
+
+  void _updateNameButtonState() {
+    _isNameButtonEnabled.value = firstName.value.isNotEmpty;
   }
 
   void toggleMarketing(bool? value) {
@@ -225,5 +286,45 @@ class AppInitialController extends GetxController {
   void toggleShowSmoke(bool value) {
     showSmokeOnProfile.value = value;
     update();
+  }
+
+  // Sign-in bottom sheet navigation methods
+  void nextStep() {
+    if (currentStep.value < 1) {
+      currentStep.value++;
+      pageController.nextPage(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+      update();
+    }
+  }
+
+  void previousStep() {
+    if (currentStep.value > 0) {
+      currentStep.value--;
+      pageController.previousPage(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+      update();
+    }
+  }
+
+  @override
+  void onClose() {
+    emailController.dispose();
+    firstNameController.dispose();
+    lastNameController.dispose();
+    otpController.dispose();
+    locationController.dispose();
+    workplaceController.dispose();
+    hometownController.dispose();
+    jobTitleController.dispose();
+    minAgeController.dispose();
+    maxAgeController.dispose();
+    bioController.dispose();
+    pageController.dispose();
+    super.onClose();
   }
 }

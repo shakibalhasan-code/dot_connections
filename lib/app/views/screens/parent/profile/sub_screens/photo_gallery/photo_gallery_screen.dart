@@ -1,10 +1,11 @@
 import 'package:dot_connections/app/controllers/profile_contorller.dart';
 import 'package:dot_connections/app/core/utils/app_colors.dart';
 import 'package:dot_connections/app/core/utils/text_style.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:dot_connections/app/views/screens/parent/profile/sub_screens/photo_gallery/widgets/reordering_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide Trans;
 
 class PhotoGalleryScreen extends StatelessWidget {
   const PhotoGalleryScreen({super.key});
@@ -14,11 +15,7 @@ class PhotoGalleryScreen extends StatelessWidget {
     return GetBuilder<ProfileContorller>(
       builder: (controller) {
         return Scaffold(
-          // backgroundColor: AppColors.scaffoldBg,
-          appBar: AppBar(
-            // backgroundColor: Colors.white
-            
-            ),
+          appBar: AppBar(),
           body: Padding(
             padding: EdgeInsetsGeometry.symmetric(
               horizontal: 16.w,
@@ -29,14 +26,14 @@ class PhotoGalleryScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  'Photo Gallery',
+                  'photo_gallery'.tr(),
                   style: AppTextStyle.primaryTextStyle(
                     fontSize: 20.sp,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
                 Text(
-                  'Upload your best moments and let others get to know you better.',
+                  'add_photos'.tr(),
                   style: AppTextStyle.primaryTextStyle(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w400,

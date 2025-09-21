@@ -1,8 +1,10 @@
 import 'package:dot_connections/app/controllers/chat_controller.dart';
+import 'package:dot_connections/app/controllers/language_controller.dart';
 import 'package:dot_connections/app/views/screens/parent/chat/widgets/chat_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide Trans;
+import 'package:easy_localization/easy_localization.dart';
 
 class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key});
@@ -10,13 +12,19 @@ class ChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ChatController controller = Get.put(ChatController());
+    final LanguageController languageController =
+        Get.find<LanguageController>();
 
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         leading: const SizedBox(),
         centerTitle: true,
-        title: const Text('Chats'),
+        title: Obx(() {
+          // Make title reactive to language changes
+          languageController.currentLanguage;
+          return Text('chat'.tr());
+        }),
         elevation: 0,
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
@@ -27,7 +35,7 @@ class ChatScreen extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
             child: TextField(
               decoration: InputDecoration(
-                hintText: 'Search',
+                hintText: 'search'.tr(),
                 prefixIcon: const Icon(Icons.search),
                 filled: true,
                 fillColor: Colors.grey.shade200,

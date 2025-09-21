@@ -1,5 +1,6 @@
 import 'package:dot_connections/app/controllers/app_initial_controller.dart';
 import 'package:dot_connections/app/controllers/find_controller.dart';
+import 'package:dot_connections/app/controllers/language_controller.dart';
 import 'package:dot_connections/app/controllers/map_screen_contorller.dart';
 import 'package:dot_connections/app/controllers/match_controller.dart';
 import 'package:dot_connections/app/controllers/parent_controller.dart';
@@ -21,6 +22,7 @@ class AppBindings extends Bindings {
     // Core app controllers
     Get.lazyPut(() => ThemeController(), fenix: true);
     Get.lazyPut(() => AppInitialController(), fenix: true);
+    Get.lazyPut(() => LanguageController(), fenix: true);
 
     // Main navigation controllers
     Get.lazyPut(() => ParentController(), fenix: true);

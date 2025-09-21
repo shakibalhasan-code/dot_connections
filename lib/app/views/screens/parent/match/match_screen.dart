@@ -1,4 +1,5 @@
 import 'package:dot_connections/app/controllers/match_controller.dart';
+import 'package:dot_connections/app/controllers/language_controller.dart';
 import 'package:dot_connections/app/core/utils/app_images.dart';
 import 'package:dot_connections/app/models/match_model.dart';
 import 'package:dot_connections/app/views/screens/parent/match/widgets/match_profile_details.dart';
@@ -8,7 +9,8 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_state_manager/src/simple/get_state.dart';
+import 'package:get/get.dart' hide Trans;
+import 'package:easy_localization/easy_localization.dart';
 
 // A data model for our match profiles to keep the code clean.
 
@@ -17,11 +19,18 @@ class MatchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final LanguageController languageController =
+        Get.find<LanguageController>();
+
     return GetBuilder<MatchController>(
       builder: (controller) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Match List'),
+            title: Obx(() {
+              // Make title reactive to language changes
+              languageController.currentLanguage;
+              return Text('matches'.tr());
+            }),
             centerTitle: true,
             leading: SizedBox(),
           ),
