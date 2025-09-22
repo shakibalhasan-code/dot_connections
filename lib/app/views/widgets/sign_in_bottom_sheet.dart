@@ -316,38 +316,33 @@ class SignInBottomSheet extends StatelessWidget {
           // Verify button - Reactive to both button state and language
           SizedBox(
             width: double.infinity,
-            child: GetBuilder<AppInitialController>(
-              builder: (appController) {
-                return GetBuilder<LanguageController>(
-                  builder: (langController) {
-                    return Obx(() {
-                      return ElevatedButton(
-                        onPressed: appController.isOtpButtonEnabledRx.value
-                            ? () => _handleSignInSuccess(context)
-                            : null,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: theme.colorScheme.primary,
-                          disabledBackgroundColor: theme.colorScheme.primary
-                              .withOpacity(0.3),
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        child: Text(
-                          'verify_sign_in'.tr(),
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: theme.colorScheme.onPrimary,
-                          ),
-                        ),
-                      );
-                    });
-                  },
-                );
-              },
-            ),
+            child: Obx(() {
+              // Access the observable directly to trigger rebuilds
+              final isButtonEnabled = controller.isOtpButtonEnabledRx.value;
+
+              return ElevatedButton(
+                onPressed: isButtonEnabled
+                    ? () => _handleSignInSuccess(context)
+                    : null,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: theme.colorScheme.primary,
+                  disabledBackgroundColor: theme.colorScheme.primary
+                      .withOpacity(0.3),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Text(
+                  'verify_sign_in'.tr(),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: theme.colorScheme.onPrimary,
+                  ),
+                ),
+              );
+            }),
           ),
           const SizedBox(height: 40),
         ],

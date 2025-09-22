@@ -8,14 +8,6 @@ import 'package:dot_connections/app/controllers/profile_contorller.dart';
 import 'package:dot_connections/app/controllers/theme_controller.dart';
 import 'package:get/get.dart';
 
-/// AppBindings sets up dependency injection for the entire application
-///
-/// This class initializes all controllers and services that need to be
-/// available globally throughout the app. Using lazy loading ensures
-/// controllers are only created when needed, improving app startup time.
-///
-/// The fenix: true parameter ensures controllers persist across route changes
-/// and are automatically recreated if disposed.
 class AppBindings extends Bindings {
   @override
   void dependencies() {
@@ -32,12 +24,5 @@ class AppBindings extends Bindings {
     Get.lazyPut(() => ProfileContorller(), fenix: true);
     Get.lazyPut(() => FindController(), fenix: true);
     Get.lazyPut(() => MapScreenContorller(), fenix: true);
-
-    // TODO: Add other global services here
-    // Examples:
-    // Get.lazyPut(() => AuthService(), fenix: true);
-    // Get.lazyPut(() => ApiService(), fenix: true);
-    // Get.lazyPut(() => StorageService(), fenix: true);
-    // Get.lazyPut(() => NotificationService(), fenix: true);
   }
 }

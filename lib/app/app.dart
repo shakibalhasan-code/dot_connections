@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
         return GetBuilder<LanguageController>(
           // Use a unique tag to avoid conflicts
           tag: 'main_app',
-          init: Get.find<LanguageController>(),
+          init: Get.put(LanguageController()),
           builder: (languageController) {
             return GetMaterialApp(
               // App configuration
