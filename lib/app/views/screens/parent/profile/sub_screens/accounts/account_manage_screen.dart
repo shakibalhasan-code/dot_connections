@@ -1,12 +1,13 @@
-import 'package:dot_connections/app/core/utils/app_colors.dart';
-import 'package:dot_connections/app/core/utils/app_icons.dart';
-import 'package:dot_connections/app/core/utils/app_routes.dart';
-import 'package:dot_connections/app/core/utils/text_style.dart';
+import 'package:finder/app/core/utils/app_routes.dart';
+import 'package:finder/app/core/utils/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+
+import '../../../../../../core/utils/app_colors.dart';
+import '../../../../../../core/utils/app_icons.dart';
 
 class AccountManageScreen extends StatelessWidget {
   const AccountManageScreen({super.key});

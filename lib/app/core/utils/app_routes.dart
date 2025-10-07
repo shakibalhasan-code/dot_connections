@@ -1,37 +1,41 @@
-import 'package:dot_connections/app/views/screens/initial/add_bio_view.dart';
-import 'package:dot_connections/app/views/screens/initial/drink_status_view.dart';
-import 'package:dot_connections/app/views/screens/initial/education_view.dart';
-import 'package:dot_connections/app/views/screens/initial/enable_notifications_view.dart';
-import 'package:dot_connections/app/views/screens/initial/how_tall_view.dart';
-import 'package:dot_connections/app/views/screens/initial/i_am_a_view.dart';
-import 'package:dot_connections/app/views/screens/initial/initial_screen.dart';
-import 'package:dot_connections/app/views/screens/auth/otp_view.dart';
-import 'package:dot_connections/app/views/screens/initial/job_title_view.dart';
-import 'package:dot_connections/app/views/screens/initial/passions_view.dart';
-import 'package:dot_connections/app/views/screens/initial/preferences_view.dart';
-import 'package:dot_connections/app/views/screens/initial/religious_view.dart';
-import 'package:dot_connections/app/views/screens/initial/share_more_view.dart';
-import 'package:dot_connections/app/views/screens/initial/smoking_status_view.dart';
-import 'package:dot_connections/app/views/screens/initial/welcome_view.dart';
-import 'package:dot_connections/app/views/screens/initial/where_live_view.dart';
-import 'package:dot_connections/app/views/screens/initial/who_to_date_view.dart';
-import 'package:dot_connections/app/views/screens/initial/workplace_view.dart';
-import 'package:dot_connections/app/views/screens/initial/whats_dob_view.dart';
-import 'package:dot_connections/app/views/screens/initial/whats_email_view.dart';
-import 'package:dot_connections/app/views/screens/initial/whats_name_view.dart';
-import 'package:dot_connections/app/views/screens/parent/chat/conversation_screen.dart';
-import 'package:dot_connections/app/views/screens/parent/parent_screen.dart';
-import 'package:dot_connections/app/views/screens/parent/profile/sub_screens/accounts/account_manage_screen.dart';
-import 'package:dot_connections/app/views/screens/parent/profile/sub_screens/accounts/update_full_name_view.dart';
-import 'package:dot_connections/app/views/screens/parent/profile/sub_screens/accounts/update_phone_view.dart';
-import 'package:dot_connections/app/views/screens/parent/profile/sub_screens/blocked_users/blocked_user_screen.dart';
-import 'package:dot_connections/app/views/screens/parent/profile/sub_screens/personal_details/personal_details_screen.dart';
-import 'package:dot_connections/app/views/screens/parent/profile/sub_screens/photo_gallery/photo_gallery_screen.dart';
-import 'package:dot_connections/app/views/screens/parent/profile/sub_screens/subscription/subscription_screen.dart';
-import 'package:dot_connections/app/views/screens/parent/profile/sub_screens/terms_condition_screen.dart';
+import 'package:finder/app/views/screens/auth/otp_view.dart';
+import 'package:finder/app/views/screens/initial/add_bio_view.dart'
+    show AddBioView;
+import 'package:finder/app/views/screens/initial/drink_status_view.dart'
+    show DrinkStatusView;
+import 'package:finder/app/views/screens/initial/enable_notifications_view.dart';
+import 'package:finder/app/views/screens/initial/how_tall_view.dart';
+import 'package:finder/app/views/screens/initial/i_am_a_view.dart';
+import 'package:finder/app/views/screens/initial/initial_screen.dart';
+import 'package:finder/app/views/screens/initial/smoking_status_view.dart'
+    show SmokingStatusView;
+import 'package:finder/app/views/screens/initial/welcome_view.dart';
+import 'package:finder/app/views/screens/initial/whats_dob_view.dart';
+import 'package:finder/app/views/screens/initial/whats_email_view.dart';
+import 'package:finder/app/views/screens/initial/whats_name_view.dart';
+import 'package:finder/app/views/screens/initial/where_live_view.dart';
+import 'package:finder/app/views/screens/initial/who_to_date_view.dart';
+import 'package:finder/app/views/screens/parent/chat/conversation_screen.dart';
+import 'package:finder/app/views/screens/parent/parent_screen.dart';
+import 'package:finder/app/views/screens/parent/profile/sub_screens/accounts/account_manage_screen.dart'
+    show AccountManageScreen;
+import 'package:finder/app/views/screens/parent/profile/sub_screens/accounts/update_full_name_view.dart';
+import 'package:finder/app/views/screens/parent/profile/sub_screens/accounts/update_phone_view.dart';
+import 'package:finder/app/views/screens/parent/profile/sub_screens/blocked_users/blocked_user_screen.dart';
+import 'package:finder/app/views/screens/parent/profile/sub_screens/personal_details/personal_details_screen.dart';
+import 'package:finder/app/views/screens/parent/profile/sub_screens/photo_gallery/photo_gallery_screen.dart';
+import 'package:finder/app/views/screens/parent/profile/sub_screens/subscription/subscription_screen.dart';
+import 'package:finder/app/views/screens/parent/profile/sub_screens/terms_condition_screen.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 
+import '../../views/screens/initial/education_view.dart';
 import '../../views/screens/initial/hometown_view.dart';
+import '../../views/screens/initial/job_title_view.dart' show JobTitleView;
+import '../../views/screens/initial/passions_view.dart' show PassionsView;
+import '../../views/screens/initial/preferences_view.dart';
+import '../../views/screens/initial/religious_view.dart';
+import '../../views/screens/initial/share_more_view.dart' show ShareMoreView;
+import '../../views/screens/initial/workplace_view.dart' show WorkplaceView;
 import '../../views/screens/parent/notification/notification_screen.dart'
     show NotificationScreen;
 

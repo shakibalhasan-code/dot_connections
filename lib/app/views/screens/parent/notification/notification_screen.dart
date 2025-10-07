@@ -1,6 +1,6 @@
-import 'package:dot_connections/app/controllers/notification_controller.dart';
-import 'package:dot_connections/app/core/utils/text_style.dart';
-import 'package:dot_connections/app/core/utils/app_colors.dart';
+import '../../../../controllers/notification_controller.dart';
+import '../../../../core/utils/text_style.dart';
+import '../../../../core/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

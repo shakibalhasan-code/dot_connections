@@ -1,4 +1,4 @@
-import 'package:dot_connections/app/core/helper/widget_helper.dart';
+import 'package:finder/app/core/helper/widget_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';

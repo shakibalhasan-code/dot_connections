@@ -1,10 +1,11 @@
-import 'package:dot_connections/app/controllers/app_initial_controller.dart';
-import 'package:dot_connections/app/core/utils/app_icons.dart';
-import 'package:dot_connections/app/core/utils/app_images.dart' show AppImages;
-import 'package:dot_connections/app/core/utils/app_routes.dart';
-import 'package:dot_connections/app/core/utils/text_style.dart';
+import 'package:finder/app/views/widgets/sign_in_bottom_sheet.dart';
+
+import '../../../controllers/app_initial_controller.dart';
+import '../../../core/utils/app_icons.dart';
+import '../../../core/utils/app_images.dart' show AppImages;
+import '../../../core/utils/app_routes.dart';
+import '../../../core/utils/text_style.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:dot_connections/app/views/widgets/sign_in_bottom_sheet.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

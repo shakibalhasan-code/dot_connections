@@ -1,6 +1,6 @@
-import 'package:dot_connections/app/controllers/app_initial_controller.dart';
-import 'package:dot_connections/app/core/utils/app_routes.dart';
-import 'package:dot_connections/app/core/utils/text_style.dart';
+import 'package:finder/app/controllers/app_initial_controller.dart';
+import 'package:finder/app/core/utils/app_routes.dart';
+import 'package:finder/app/core/utils/text_style.dart' show AppTextStyle;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -54,9 +54,7 @@ class OtpView extends StatelessWidget {
                 SizedBox(height: 20.h),
                 Text(
                   "Resend code in 10:30",
-                  style: AppTextStyle.primaryTextStyle(
-                    color: Colors.grey,
-                  ),
+                  style: AppTextStyle.primaryTextStyle(color: Colors.grey),
                 ),
                 const Spacer(),
                 Obx(
@@ -67,8 +65,9 @@ class OtpView extends StatelessWidget {
                           }
                         : null,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          controller.isOtpButtonEnabled ? Colors.purple : Colors.grey,
+                      backgroundColor: controller.isOtpButtonEnabled
+                          ? Colors.purple
+                          : Colors.grey,
                       minimumSize: Size(double.infinity, 50.h),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(25.r),

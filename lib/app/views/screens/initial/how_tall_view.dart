@@ -1,6 +1,7 @@
-import 'package:dot_connections/app/controllers/app_initial_controller.dart';
-import 'package:dot_connections/app/core/utils/app_routes.dart';
-import 'package:dot_connections/app/core/utils/text_style.dart';
+import 'package:finder/app/controllers/app_initial_controller.dart'
+    show AppInitialController;
+import 'package:finder/app/core/utils/app_routes.dart';
+import 'package:finder/app/core/utils/text_style.dart' show AppTextStyle;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

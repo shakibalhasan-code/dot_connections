@@ -1,9 +1,10 @@
-import 'package:dot_connections/app/controllers/app_initial_controller.dart';
-import 'package:dot_connections/app/core/utils/app_routes.dart';
-import 'package:dot_connections/app/core/utils/text_style.dart';
+import 'package:finder/app/controllers/app_initial_controller.dart';
+import 'package:finder/app/core/utils/text_style.dart' show AppTextStyle;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+
+import '../../../core/utils/app_routes.dart';
 
 class EnableNotificationsView extends StatelessWidget {
   const EnableNotificationsView({super.key});
@@ -34,8 +35,10 @@ class EnableNotificationsView extends StatelessWidget {
                 ),
                 SizedBox(height: 40.h),
                 Container(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16.w,
+                    vertical: 8.h,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.grey[200],
                     borderRadius: BorderRadius.circular(25.r),

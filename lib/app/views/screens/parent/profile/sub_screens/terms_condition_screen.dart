@@ -1,5 +1,5 @@
-import 'package:dot_connections/app/core/utils/app_colors.dart';
-import 'package:dot_connections/app/core/utils/text_style.dart';
+import 'package:finder/app/core/utils/app_colors.dart';
+import 'package:finder/app/core/utils/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -62,7 +62,6 @@ class TermsConditionScreen extends StatelessWidget {
                 color: AppColors.primaryTextColor,
               ),
             ),
-
           ],
         ),
       ),

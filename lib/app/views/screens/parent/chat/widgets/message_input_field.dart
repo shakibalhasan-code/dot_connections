@@ -1,7 +1,8 @@
-import 'package:dot_connections/app/controllers/conversation_controller.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:dot_connections/app/core/utils/app_colors.dart';
-import 'package:dot_connections/app/views/screens/parent/chat/widgets/audio_player_widget.dart';
+import 'package:finder/app/controllers/conversation_controller.dart'
+    show ConversationController;
+import 'package:finder/app/core/utils/app_colors.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart' hide Trans;

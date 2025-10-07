@@ -1,5 +1,5 @@
-import 'package:dot_connections/app/core/utils/app_colors.dart';
-import 'package:dot_connections/app/core/utils/text_style.dart';
+import '../../core/utils/app_colors.dart';
+import '../../core/utils/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -12,7 +12,8 @@ class CommonTextFeild extends StatelessWidget {
     super.key,
     required this.hint,
     required this.isPassword,
-    required this.type, required this.controller,
+    required this.type,
+    required this.controller,
   });
 
   @override
@@ -23,7 +24,7 @@ class CommonTextFeild extends StatelessWidget {
         borderRadius: BorderRadius.circular(10.r),
       ),
       child: Padding(
-        padding:  EdgeInsets.symmetric(horizontal: 8.w),
+        padding: EdgeInsets.symmetric(horizontal: 8.w),
         child: TextField(
           controller: controller,
           decoration: InputDecoration(

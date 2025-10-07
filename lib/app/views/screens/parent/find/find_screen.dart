@@ -1,10 +1,10 @@
-import 'package:dot_connections/app/controllers/find_controller.dart';
-import 'package:dot_connections/app/controllers/parent_controller.dart';
-import 'package:dot_connections/app/core/utils/app_colors.dart';
-import 'package:dot_connections/app/core/utils/app_icons.dart';
-import 'package:dot_connections/app/core/utils/app_routes.dart';
-import 'package:dot_connections/app/core/utils/text_style.dart';
-import 'package:dot_connections/app/views/screens/parent/find/widgets/user_profile_widget.dart';
+import '../../../../controllers/find_controller.dart';
+import '../../../../controllers/parent_controller.dart';
+import '../../../../core/utils/app_colors.dart';
+import '../../../../core/utils/app_icons.dart';
+import '../../../../core/utils/app_routes.dart';
+import '../../../../core/utils/text_style.dart';
+import 'widgets/user_profile_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';

@@ -1,5 +1,5 @@
-import 'package:dot_connections/app/core/utils/app_routes.dart';
-import 'package:dot_connections/app/models/chat_model.dart';
+import 'package:finder/app/core/utils/app_routes.dart';
+import 'package:finder/app/models/chat_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -13,24 +13,18 @@ class ChatItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: ()=> Get.toNamed(AppRoutes.conversation),
+      onTap: () => Get.toNamed(AppRoutes.conversation),
       leading: CircleAvatar(
         radius: 28.r,
         backgroundImage: AssetImage(chat.imageUrl),
       ),
       title: Text(
         chat.name,
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 16.sp,
-        ),
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp),
       ),
       subtitle: Text(
         chat.lastMessage,
-        style: TextStyle(
-          color: Colors.grey.shade600,
-          fontSize: 14.sp,
-        ),
+        style: TextStyle(color: Colors.grey.shade600, fontSize: 14.sp),
         overflow: TextOverflow.ellipsis,
       ),
       trailing: Column(
@@ -39,10 +33,7 @@ class ChatItem extends StatelessWidget {
         children: [
           Text(
             chat.time,
-            style: TextStyle(
-              color: Colors.grey.shade500,
-              fontSize: 12.sp,
-            ),
+            style: TextStyle(color: Colors.grey.shade500, fontSize: 12.sp),
           ),
           // SizedBox(height: 4.h),
           _buildStatusIcon(),

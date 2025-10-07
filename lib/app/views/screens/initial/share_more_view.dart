@@ -1,9 +1,10 @@
-import 'package:dot_connections/app/core/utils/app_routes.dart';
-import 'package:dot_connections/app/core/utils/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+
+import '../../../core/utils/app_routes.dart';
+import '../../../core/utils/text_style.dart' show AppTextStyle;
 
 class ShareMoreView extends StatelessWidget {
   const ShareMoreView({super.key});

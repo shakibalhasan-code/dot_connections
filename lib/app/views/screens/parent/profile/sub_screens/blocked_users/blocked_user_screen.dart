@@ -1,14 +1,15 @@
-import 'package:dot_connections/app/core/helper/widget_helper.dart';
-import 'package:dot_connections/app/core/utils/app_colors.dart';
-import 'package:dot_connections/app/core/utils/app_icons.dart';
-import 'package:dot_connections/app/core/utils/app_images.dart';
-import 'package:dot_connections/app/core/utils/text_style.dart';
+import 'package:finder/app/core/utils/app_colors.dart' show AppColors;
+import 'package:finder/app/core/utils/app_images.dart';
+import 'package:finder/app/core/utils/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/instance_manager.dart';
 import 'package:hugeicons/hugeicons.dart';
+
+import '../../../../../../core/helper/widget_helper.dart';
+import '../../../../../../core/utils/app_icons.dart';
 
 class BlockedUserScreen extends StatelessWidget {
   const BlockedUserScreen({super.key});

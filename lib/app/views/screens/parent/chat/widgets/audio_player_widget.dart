@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/services.dart';
-import 'package:dot_connections/app/core/utils/app_colors.dart';
+import '../../../../../core/utils/app_colors.dart';
 
 class AudioPlayerWidget extends StatefulWidget {
   final String audioAsset;

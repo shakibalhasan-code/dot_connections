@@ -1,16 +1,10 @@
-import 'package:dot_connections/app/controllers/match_controller.dart';
-import 'package:dot_connections/app/controllers/language_controller.dart';
-import 'package:dot_connections/app/core/utils/app_images.dart';
-import 'package:dot_connections/app/models/match_model.dart';
-import 'package:dot_connections/app/views/screens/parent/match/widgets/match_profile_details.dart';
-import 'package:dot_connections/app/views/screens/parent/match/widgets/profile_card_widget.dart'
-    show ProfileCard;
 import 'package:flutter/material.dart';
-import 'dart:ui';
-
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart' hide Trans;
 import 'package:easy_localization/easy_localization.dart';
+
+import '../../../../controllers/match_controller.dart';
+import '../../../../controllers/language_controller.dart';
+import 'widgets/profile_card_widget.dart' show ProfileCard;
 
 // A data model for our match profiles to keep the code clean.
 

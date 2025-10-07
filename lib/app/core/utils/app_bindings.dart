@@ -1,11 +1,12 @@
-import 'package:dot_connections/app/controllers/app_initial_controller.dart';
-import 'package:dot_connections/app/controllers/find_controller.dart';
-import 'package:dot_connections/app/controllers/language_controller.dart';
-import 'package:dot_connections/app/controllers/map_screen_contorller.dart';
-import 'package:dot_connections/app/controllers/match_controller.dart';
-import 'package:dot_connections/app/controllers/parent_controller.dart';
-import 'package:dot_connections/app/controllers/profile_contorller.dart';
-import 'package:dot_connections/app/controllers/theme_controller.dart';
+import 'package:finder/app/controllers/app_initial_controller.dart';
+import 'package:finder/app/controllers/find_controller.dart'
+    show FindController;
+import 'package:finder/app/controllers/language_controller.dart';
+import 'package:finder/app/controllers/map_screen_contorller.dart';
+import 'package:finder/app/controllers/match_controller.dart';
+import 'package:finder/app/controllers/parent_controller.dart';
+import 'package:finder/app/controllers/profile_contorller.dart';
+import 'package:finder/app/controllers/theme_controller.dart';
 import 'package:get/get.dart';
 
 class AppBindings extends Bindings {

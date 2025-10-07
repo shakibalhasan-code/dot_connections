@@ -6,12 +6,6 @@ import 'package:pinput/pinput.dart';
 import '../../controllers/app_initial_controller.dart';
 import '../../controllers/language_controller.dart';
 
-/// GetX SignIn Bottom Sheet Widget
-///
-/// This follows proper GetX architecture:
-/// - StatelessWidget for better performance
-/// - GetBuilder for reactive UI updates
-/// - Rx variables in controller for state management
 class SignInBottomSheet extends StatelessWidget {
   const SignInBottomSheet({super.key});
 

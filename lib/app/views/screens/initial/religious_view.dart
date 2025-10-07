@@ -1,9 +1,10 @@
-import 'package:dot_connections/app/controllers/app_initial_controller.dart';
-import 'package:dot_connections/app/core/utils/app_routes.dart';
-import 'package:dot_connections/app/core/utils/text_style.dart';
+import 'package:finder/app/controllers/app_initial_controller.dart';
+import 'package:finder/app/core/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+
+import '../../../core/utils/text_style.dart' show AppTextStyle;
 
 class ReligiousView extends StatelessWidget {
   const ReligiousView({super.key});
@@ -45,8 +46,9 @@ class ReligiousView extends StatelessWidget {
                         child: Chip(
                           shape: const StadiumBorder(),
                           label: Text(religion),
-                          backgroundColor:
-                              isSelected ? Colors.purple : Colors.grey[200],
+                          backgroundColor: isSelected
+                              ? Colors.purple
+                              : Colors.grey[200],
                           labelStyle: AppTextStyle.primaryTextStyle(
                             color: isSelected ? Colors.white : Colors.black,
                           ),

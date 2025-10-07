@@ -1,8 +1,9 @@
-import 'package:dot_connections/app/controllers/app_initial_controller.dart';
-import 'package:dot_connections/app/core/utils/text_style.dart';
+import 'package:finder/app/controllers/app_initial_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+
+import '../../../core/utils/text_style.dart';
 
 class PreferencesView extends StatelessWidget {
   const PreferencesView({super.key});
@@ -34,9 +35,7 @@ class PreferencesView extends StatelessWidget {
                 SizedBox(height: 10.h),
                 Text(
                   "What do you love?",
-                  style: AppTextStyle.primaryTextStyle(
-                    fontSize: 16,
-                  ),
+                  style: AppTextStyle.primaryTextStyle(fontSize: 16),
                 ),
                 SizedBox(height: 20.h),
                 Text(
@@ -49,17 +48,20 @@ class PreferencesView extends StatelessWidget {
                 Obx(
                   () => DropdownButtonFormField<String>(
                     value: controller.lookingFor.value,
-                    items: [
-                      'What are you looking for?',
-                      'Men',
-                      'Women',
-                      'Everyone'
-                    ]
-                        .map((label) => DropdownMenuItem(
-                              child: Text(label),
-                              value: label,
-                            ))
-                        .toList(),
+                    items:
+                        [
+                              'What are you looking for?',
+                              'Men',
+                              'Women',
+                              'Everyone',
+                            ]
+                            .map(
+                              (label) => DropdownMenuItem(
+                                child: Text(label),
+                                value: label,
+                              ),
+                            )
+                            .toList(),
                     onChanged: (value) {
                       if (value != null) {
                         controller.setLookingFor(value);

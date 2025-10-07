@@ -1,7 +1,7 @@
-import 'package:dot_connections/app/controllers/profile_contorller.dart';
-import 'package:dot_connections/app/core/utils/app_colors.dart';
-import 'package:dot_connections/app/core/utils/text_style.dart';
-import 'package:dot_connections/app/views/widgets/common_textfeild.dart';
+import '../../../../../../controllers/profile_contorller.dart';
+import '../../../../../../core/utils/app_colors.dart';
+import '../../../../../../core/utils/text_style.dart';
+import '../../../../../widgets/common_textfeild.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:dot_connections/app/core/utils/text_style.dart';
+import '../../core/utils/text_style.dart';
 
 /// AppTextField provides consistent, customizable text input throughout the app
 ///

@@ -1,10 +1,11 @@
-import 'package:dot_connections/app/controllers/app_initial_controller.dart';
-import 'package:dot_connections/app/core/utils/app_images.dart';
-import 'package:dot_connections/app/core/utils/app_routes.dart';
-import 'package:dot_connections/app/core/utils/text_style.dart';
+import 'package:finder/app/controllers/app_initial_controller.dart';
+import 'package:finder/app/core/utils/app_images.dart';
+import 'package:finder/app/core/utils/text_style.dart' show AppTextStyle;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+
+import '../../../core/utils/app_routes.dart';
 
 class WhereLiveView extends StatelessWidget {
   const WhereLiveView({super.key});

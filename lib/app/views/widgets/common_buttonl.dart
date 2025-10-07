@@ -1,5 +1,5 @@
-import 'package:dot_connections/app/core/utils/app_colors.dart';
-import 'package:dot_connections/app/core/utils/text_style.dart';
+import '../../core/utils/app_colors.dart';
+import '../../core/utils/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -43,7 +43,11 @@ class CommonRoundedButton extends StatelessWidget {
         onPressed: onPressed,
         child: Text(
           title,
-          style: AppTextStyle.primaryTextStyle(fontSize: fontSize, fontWeight: fontWeight, color:textColor),
+          style: AppTextStyle.primaryTextStyle(
+            fontSize: fontSize,
+            fontWeight: fontWeight,
+            color: textColor,
+          ),
         ),
       ),
     );

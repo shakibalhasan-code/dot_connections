@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dot_connections/app/controllers/find_controller.dart';
-import 'package:dot_connections/app/core/utils/app_colors.dart' show AppColors;
-import 'package:dot_connections/app/core/utils/app_icons.dart';
-import 'package:dot_connections/app/core/utils/app_routes.dart';
-import 'package:dot_connections/app/core/utils/text_style.dart';
-import 'package:dot_connections/app/models/user_profile_model.dart';
+import '../../../../../controllers/find_controller.dart';
+import '../../../../../core/utils/app_colors.dart' show AppColors;
+import '../../../../../core/utils/app_icons.dart';
+import '../../../../../core/utils/app_routes.dart';
+import '../../../../../core/utils/text_style.dart';
+import '../../../../../models/user_profile_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';

@@ -19,6 +19,13 @@ class AppTheme {
   /// Private constructor to prevent instantiation
   AppTheme._();
 
+  /// Primary gradient used throughout the app
+  static LinearGradient get primaryGradient => LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [AppThemeColors.primaryPurple, AppThemeColors.primaryPurpleLight],
+  );
+
   /// Light theme configuration
   static ThemeData get lightTheme {
     return ThemeData(

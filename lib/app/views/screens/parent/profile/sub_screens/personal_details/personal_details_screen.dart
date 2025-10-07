@@ -1,8 +1,7 @@
-import 'package:dot_connections/app/core/utils/app_colors.dart';
-import 'package:dot_connections/app/core/utils/text_style.dart';
+import 'package:finder/app/core/utils/app_colors.dart';
+import 'package:finder/app/core/utils/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 
 class PersonalDetailsScreen extends StatelessWidget {
   const PersonalDetailsScreen({super.key});
@@ -16,7 +15,6 @@ class PersonalDetailsScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: AppColors.scaffoldBg,
         elevation: 0, // Removes the shadow to match the design
-       
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -45,7 +43,6 @@ class PersonalDetailsScreen extends StatelessWidget {
               SizedBox(height: 30.h),
 
               // --- List of Details ---
-
               personalDetailsMethod(
                 title: 'Interests',
                 subWidget: Row(
@@ -136,7 +133,10 @@ class PersonalDetailsScreen extends StatelessWidget {
 
   // --- Reusable method for each list item container ---
 
-  Widget personalDetailsMethod({required String title, required Widget subWidget}) {
+  Widget personalDetailsMethod({
+    required String title,
+    required Widget subWidget,
+  }) {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.fieldBgColor,

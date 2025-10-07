@@ -1,11 +1,9 @@
 import 'dart:math';
 
-import 'package:dot_connections/app/core/utils/app_colors.dart';
-import 'package:dot_connections/app/core/utils/app_icons.dart';
-import 'package:dot_connections/app/core/utils/app_images.dart';
-import 'package:dot_connections/app/core/utils/app_routes.dart';
-import 'package:dot_connections/app/core/utils/text_style.dart';
-import 'package:dot_connections/app/views/widgets/connections_animation.dart';
+import 'package:finder/app/core/utils/app_colors.dart';
+import 'package:finder/app/core/utils/app_images.dart';
+import 'package:finder/app/core/utils/app_routes.dart' show AppRoutes;
+import 'package:finder/app/core/utils/text_style.dart' show AppTextStyle;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';

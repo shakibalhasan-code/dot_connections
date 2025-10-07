@@ -2,7 +2,7 @@
 
 
     <application
-        android:label="dot_connections"
+        android:label="Finder"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

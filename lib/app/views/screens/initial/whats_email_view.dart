@@ -1,9 +1,11 @@
-import 'package:dot_connections/app/controllers/app_initial_controller.dart';
-import 'package:dot_connections/app/core/utils/app_routes.dart';
-import 'package:dot_connections/app/core/utils/text_style.dart';
+import 'package:finder/app/controllers/app_initial_controller.dart'
+    show AppInitialController;
+import 'package:finder/app/core/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+
+import '../../../core/utils/text_style.dart';
 
 class WhatsEmailView extends StatelessWidget {
   const WhatsEmailView({super.key});
@@ -56,9 +58,7 @@ class WhatsEmailView extends StatelessWidget {
                     Expanded(
                       child: Text(
                         'I do not wish to receive marketing communications about peace products & service',
-                        style: AppTextStyle.primaryTextStyle(
-                          fontSize: 14,
-                        ),
+                        style: AppTextStyle.primaryTextStyle(fontSize: 14),
                       ),
                     ),
                   ],
@@ -81,8 +81,9 @@ class WhatsEmailView extends StatelessWidget {
                           }
                         : null,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          controller.isEmailButtonEnabled ? Colors.purple : Colors.grey,
+                      backgroundColor: controller.isEmailButtonEnabled
+                          ? Colors.purple
+                          : Colors.grey,
                       minimumSize: Size(double.infinity, 50.h),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(25.r),

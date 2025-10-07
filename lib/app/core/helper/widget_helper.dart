@@ -1,7 +1,7 @@
-import 'package:dot_connections/app/core/utils/app_colors.dart';
-import 'package:dot_connections/app/core/utils/app_constant.dart';
-import 'package:dot_connections/app/core/utils/text_style.dart';
-import 'package:dot_connections/app/views/widgets/common_buttonl.dart';
+import '../utils/app_colors.dart';
+import '../utils/app_constant.dart';
+import '../utils/text_style.dart';
+import '../../views/widgets/common_buttonl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -106,19 +106,17 @@ class WidgetHelper {
     required Status status,
     required BuildContext toastContext,
   }) {
-    ScaffoldMessenger.of(
-      toastContext,
-    ).showSnackBar(
+    ScaffoldMessenger.of(toastContext).showSnackBar(
       SnackBar(
         duration: Duration(seconds: 2),
         content: Text(message),
-        padding: EdgeInsets.symmetric(
-          horizontal: 10.w,
-          vertical: 5.h
-        ),
-        backgroundColor: status == Status.success ? Colors.green : status == Status.warning ? CupertinoColors.systemYellow : Colors.red,
-        )
-        
-        );
+        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
+        backgroundColor: status == Status.success
+            ? Colors.green
+            : status == Status.warning
+            ? CupertinoColors.systemYellow
+            : Colors.red,
+      ),
+    );
   }
 }

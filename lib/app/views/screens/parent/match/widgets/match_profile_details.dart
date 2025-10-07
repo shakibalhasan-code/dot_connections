@@ -1,10 +1,10 @@
 import 'dart:ui' as ui;
-
-import 'package:dot_connections/app/core/utils/app_icons.dart';
-import 'package:dot_connections/app/core/utils/app_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+
+import 'package:finder/app/core/utils/app_icons.dart';
+import 'package:finder/app/core/utils/app_images.dart';
 
 class ProfileDialog extends StatelessWidget {
   @override

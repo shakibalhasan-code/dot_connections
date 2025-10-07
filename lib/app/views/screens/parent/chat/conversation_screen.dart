@@ -1,8 +1,8 @@
-import 'package:dot_connections/app/controllers/conversation_controller.dart';
-import 'package:dot_connections/app/core/utils/app_colors.dart';
-import 'package:dot_connections/app/core/utils/text_style.dart';
-import 'package:dot_connections/app/views/screens/parent/chat/widgets/message_bubble.dart';
-import 'package:dot_connections/app/views/screens/parent/chat/widgets/message_input_field.dart';
+import '../../../../controllers/conversation_controller.dart';
+import '../../../../core/utils/app_colors.dart';
+import '../../../../core/utils/text_style.dart';
+import 'widgets/message_bubble.dart';
+import 'widgets/message_input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -16,7 +16,6 @@ class ConversationScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Get.back(),
@@ -32,10 +31,19 @@ class ConversationScreen extends StatelessWidget {
                   // Handle menu item selection
                 },
                 itemBuilder: (BuildContext context) {
-                  return {'View Profile', 'Block User', 'Report'}.map((String choice) {
+                  return {'View Profile', 'Block User', 'Report'}.map((
+                    String choice,
+                  ) {
                     return PopupMenuItem<String>(
                       value: choice,
-                      child: Text(choice, style: AppTextStyle.primaryTextStyle(fontSize: 12.sp,color: AppColors.primaryTextColor, fontWeight: FontWeight.w400)),
+                      child: Text(
+                        choice,
+                        style: AppTextStyle.primaryTextStyle(
+                          fontSize: 12.sp,
+                          color: AppColors.primaryTextColor,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
                     );
                   }).toList();
                 },
@@ -43,8 +51,8 @@ class ConversationScreen extends StatelessWidget {
               showMenu(
                 context: context,
                 items: moreActionItems.itemBuilder(context),
-                position: RelativeRect.fromLTRB(1000, 80, 0, 0));
-              
+                position: RelativeRect.fromLTRB(1000, 80, 0, 0),
+              );
             },
           ),
         ],

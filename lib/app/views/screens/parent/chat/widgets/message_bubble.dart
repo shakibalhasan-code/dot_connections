@@ -1,7 +1,7 @@
 import 'dart:io';
-import 'package:dot_connections/app/core/utils/app_colors.dart';
-import 'package:dot_connections/app/models/conversation_model.dart';
-import 'package:dot_connections/app/views/screens/parent/chat/widgets/audio_player_widget.dart';
+import '../../../../../core/utils/app_colors.dart';
+import '../../../../../models/conversation_model.dart';
+import 'audio_player_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

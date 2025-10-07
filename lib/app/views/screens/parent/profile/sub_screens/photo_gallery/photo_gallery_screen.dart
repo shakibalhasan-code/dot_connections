@@ -1,11 +1,12 @@
-import 'package:dot_connections/app/controllers/profile_contorller.dart';
-import 'package:dot_connections/app/core/utils/app_colors.dart';
-import 'package:dot_connections/app/core/utils/text_style.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:dot_connections/app/views/screens/parent/profile/sub_screens/photo_gallery/widgets/reordering_image_widget.dart';
+import 'package:finder/app/controllers/profile_contorller.dart';
+import 'package:finder/app/core/utils/app_colors.dart' show AppColors;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart' hide Trans;
+
+import '../../../../../../core/utils/text_style.dart' show AppTextStyle;
+import 'widgets/reordering_image_widget.dart';
 
 class PhotoGalleryScreen extends StatelessWidget {
   const PhotoGalleryScreen({super.key});

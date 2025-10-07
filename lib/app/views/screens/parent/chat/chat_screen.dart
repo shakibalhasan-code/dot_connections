@@ -1,6 +1,6 @@
-import 'package:dot_connections/app/controllers/chat_controller.dart';
-import 'package:dot_connections/app/controllers/language_controller.dart';
-import 'package:dot_connections/app/views/screens/parent/chat/widgets/chat_item.dart';
+import 'package:finder/app/controllers/chat_controller.dart';
+import 'package:finder/app/controllers/language_controller.dart';
+import 'widgets/chat_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart' hide Trans;
