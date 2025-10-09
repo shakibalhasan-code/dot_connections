@@ -1,5 +1,6 @@
 # Dot Connections
 
+(Only UI is visible to you, because this is an real project and you can get more in depth by switching to another branch)
 A modern dating app built with Flutter that helps users find meaningful connections based on their preferences, interests, and lifestyle choices.
 
 ## Project Overview
