@@ -107,6 +107,10 @@ class AppInitialController extends GetxController {
       email.value = emailController.text;
       update();
     });
+    otpController.addListener(() {
+      otp.value = otpController.text;
+      update();
+    });
     firstNameController.addListener(() {
       firstName.value = firstNameController.text;
       update();

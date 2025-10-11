@@ -1,8 +1,9 @@
 import 'package:dot_connections/app/controllers/match_controller.dart';
 import 'package:dot_connections/app/core/utils/app_images.dart';
-import 'package:dot_connections/app/models/match_model.dart';
+import 'package:dot_connections/app/data/models/match_model.dart';
 import 'package:dot_connections/app/views/screens/parent/match/widgets/match_profile_details.dart';
-import 'package:dot_connections/app/views/screens/parent/match/widgets/profile_card_widget.dart' show ProfileCard;
+import 'package:dot_connections/app/views/screens/parent/match/widgets/profile_card_widget.dart'
+    show ProfileCard;
 import 'package:flutter/material.dart';
 import 'dart:ui';
 
@@ -49,5 +50,3 @@ class MatchScreen extends StatelessWidget {
     );
   }
 }
-
-

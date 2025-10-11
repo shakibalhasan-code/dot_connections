@@ -1,5 +1,5 @@
 import 'package:dot_connections/app/core/helper/widget_helper.dart';
-import 'package:dot_connections/app/models/user_profile_model.dart';
+import 'package:dot_connections/app/data/models/user_profile_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';

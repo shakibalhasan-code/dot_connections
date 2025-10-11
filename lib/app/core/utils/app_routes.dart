@@ -1,3 +1,4 @@
+import 'package:dot_connections/app/core/middleware/auth_middleware.dart';
 import 'package:dot_connections/app/views/screens/initial/add_bio_view.dart';
 import 'package:dot_connections/app/views/screens/initial/drink_status_view.dart';
 import 'package:dot_connections/app/views/screens/initial/education_view.dart';
@@ -74,42 +75,167 @@ class AppRoutes {
   static String termCondition = '/termCondition';
   static String notification = '/notification';
 
+  static final AuthMiddleware authMiddleware = AuthMiddleware();
+
   static List<GetPage> pages = [
     GetPage(name: initial, page: () => const InitialScreen()),
     GetPage(name: email, page: () => const WhatsEmailView()),
     GetPage(name: otp, page: () => const OtpView()),
-    GetPage(name: name, page: () => const WhatsNameView()),
-    GetPage(name: dob, page: () => const WhatsDobView()),
+
+    // User info pages - require authentication
+    GetPage(
+      name: name,
+      page: () => const WhatsNameView(),
+      middlewares: [authMiddleware],
+    ),
+    GetPage(
+      name: dob,
+      page: () => const WhatsDobView(),
+      middlewares: [authMiddleware],
+    ),
     GetPage(
       name: enableNotifications,
       page: () => const EnableNotificationsView(),
+      middlewares: [authMiddleware],
     ),
-    GetPage(name: howTall, page: () => const HowTallView()),
-    GetPage(name: whoToDate, page: () => const WhoToDateView()),
-    GetPage(name: iAmA, page: () => const IAmAView()),
-    GetPage(name: whereLive, page: () => const WhereLiveView()),
-    GetPage(name: shareMore, page: () => const ShareMoreView()),
-    GetPage(name: passions, page: () => const PassionsView()),
-    GetPage(name: workplace, page: () => const WorkplaceView()),
-    GetPage(name: hometown, page: () => const HometownView()),
-    GetPage(name: jobTitle, page: () => const JobTitleView()),
-    GetPage(name: preferences, page: () => const PreferencesView()),
-    GetPage(name: education, page: () => const EducationView()),
-    GetPage(name: religious, page: () => const ReligiousView()),
-    GetPage(name: drinkStatus, page: () => const DrinkStatusView()),
-    GetPage(name: smokingStatus, page: () => const SmokingStatusView()),
-    GetPage(name: addBio, page: () => const AddBioView()),
-    GetPage(name: welcome, page: () => const WelcomeView()),
-    GetPage(name: parent, page: () => const ParentScreen()),
-    GetPage(name: conversation, page: () => ConversationScreen()),
-    GetPage(name: accountDetails, page: () => const AccountManageScreen()),
-    GetPage(name: editFullName, page: () => const UpdateFullNameView()),
-    GetPage(name: updatePhoneView, page: () => const UpdatePhoneView()),
-    GetPage(name: personalDetails, page: () => const PersonalDetailsScreen()),
-    GetPage(name: photoGallery, page: () => const PhotoGalleryScreen()),
-    GetPage(name: blockedUser, page: () => const BlockedUserScreen()),
-    GetPage(name: subscription, page: () => const SubscriptionScreen()),
-    GetPage(name: termCondition, page: () => const TermsConditionScreen()),
-    GetPage(name: notification, page: () => const NotificationScreen()),
+
+    // Profile setup pages - require authentication
+    GetPage(
+      name: howTall,
+      page: () => const HowTallView(),
+      middlewares: [authMiddleware],
+    ),
+    GetPage(
+      name: whoToDate,
+      page: () => const WhoToDateView(),
+      middlewares: [authMiddleware],
+    ),
+    GetPage(
+      name: iAmA,
+      page: () => const IAmAView(),
+      middlewares: [authMiddleware],
+    ),
+    GetPage(
+      name: whereLive,
+      page: () => const WhereLiveView(),
+      middlewares: [authMiddleware],
+    ),
+    GetPage(
+      name: shareMore,
+      page: () => const ShareMoreView(),
+      middlewares: [authMiddleware],
+    ),
+    GetPage(
+      name: passions,
+      page: () => const PassionsView(),
+      middlewares: [authMiddleware],
+    ),
+    GetPage(
+      name: workplace,
+      page: () => const WorkplaceView(),
+      middlewares: [authMiddleware],
+    ),
+    GetPage(
+      name: hometown,
+      page: () => const HometownView(),
+      middlewares: [authMiddleware],
+    ),
+    GetPage(
+      name: jobTitle,
+      page: () => const JobTitleView(),
+      middlewares: [authMiddleware],
+    ),
+    GetPage(
+      name: preferences,
+      page: () => const PreferencesView(),
+      middlewares: [authMiddleware],
+    ),
+    GetPage(
+      name: education,
+      page: () => const EducationView(),
+      middlewares: [authMiddleware],
+    ),
+    GetPage(
+      name: religious,
+      page: () => const ReligiousView(),
+      middlewares: [authMiddleware],
+    ),
+    GetPage(
+      name: drinkStatus,
+      page: () => const DrinkStatusView(),
+      middlewares: [authMiddleware],
+    ),
+    GetPage(
+      name: smokingStatus,
+      page: () => const SmokingStatusView(),
+      middlewares: [authMiddleware],
+    ),
+    GetPage(
+      name: addBio,
+      page: () => const AddBioView(),
+      middlewares: [authMiddleware],
+    ),
+    GetPage(
+      name: welcome,
+      page: () => const WelcomeView(),
+      middlewares: [authMiddleware],
+    ),
+
+    // Main app pages - require authentication
+    GetPage(
+      name: parent,
+      page: () => const ParentScreen(),
+      middlewares: [authMiddleware],
+    ),
+    GetPage(
+      name: conversation,
+      page: () => ConversationScreen(),
+      middlewares: [authMiddleware],
+    ),
+    GetPage(
+      name: accountDetails,
+      page: () => const AccountManageScreen(),
+      middlewares: [authMiddleware],
+    ),
+    GetPage(
+      name: editFullName,
+      page: () => const UpdateFullNameView(),
+      middlewares: [authMiddleware],
+    ),
+    GetPage(
+      name: updatePhoneView,
+      page: () => const UpdatePhoneView(),
+      middlewares: [authMiddleware],
+    ),
+    GetPage(
+      name: personalDetails,
+      page: () => const PersonalDetailsScreen(),
+      middlewares: [authMiddleware],
+    ),
+    GetPage(
+      name: photoGallery,
+      page: () => const PhotoGalleryScreen(),
+      middlewares: [authMiddleware],
+    ),
+    GetPage(
+      name: blockedUser,
+      page: () => const BlockedUserScreen(),
+      middlewares: [authMiddleware],
+    ),
+    GetPage(
+      name: subscription,
+      page: () => const SubscriptionScreen(),
+      middlewares: [authMiddleware],
+    ),
+    GetPage(
+      name: termCondition,
+      page: () => const TermsConditionScreen(),
+      middlewares: [authMiddleware],
+    ),
+    GetPage(
+      name: notification,
+      page: () => const NotificationScreen(),
+      middlewares: [authMiddleware],
+    ),
   ];
 }

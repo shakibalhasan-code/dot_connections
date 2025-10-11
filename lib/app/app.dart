@@ -6,24 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-/// MyApp is the root widget of the application
-///
-/// This widget sets up the main application configuration including:
-/// - Theme management (light/dark modes)
-/// - Screen adaptation for different device sizes
-/// - Route management and navigation
-/// - Global app settings and bindings
-///
-/// The app uses GetX for state management and routing, providing
-/// excellent performance and developer experience.
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      // Design size based on your Figma/design specifications
-      // Adjust these values to match your design mockups
       designSize: const Size(392, 852),
 
       // Enable text scaling adaptation
@@ -47,11 +35,10 @@ class MyApp extends StatelessWidget {
           // Theme configuration
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
-          themeMode: ThemeMode.system, // Defaults to system theme
+          themeMode: ThemeMode.light,
           // Route configuration
           initialRoute: AppRoutes.initial,
           getPages: AppRoutes.pages,
-
           // Global bindings
           initialBinding: AppBindings(),
 
@@ -68,10 +55,7 @@ class MyApp extends StatelessWidget {
 
           // Performance optimizations
           enableLog: false, // Disable in production
-          logWriterCallback: (text, {isError = false}) {
-            // Custom logging can be implemented here
-            // For example: Firebase Crashlytics, Sentry, etc.
-          },
+          logWriterCallback: (text, {isError = false}) {},
         );
       },
     );

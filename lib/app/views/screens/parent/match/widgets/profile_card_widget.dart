@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:dot_connections/app/models/match_model.dart';
+import 'package:dot_connections/app/data/models/match_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

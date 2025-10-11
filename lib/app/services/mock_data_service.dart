@@ -1,6 +1,6 @@
 import 'dart:math';
-import 'package:dot_connections/app/models/user_model.dart';
-import 'package:dot_connections/app/models/notification_model.dart';
+import 'package:dot_connections/app/data/models/user_model.dart';
+import 'package:dot_connections/app/data/models/notification_model.dart';
 import 'package:dot_connections/app/core/utils/app_images.dart';
 
 /// MockDataService provides realistic demo data for the dating app

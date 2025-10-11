@@ -1,5 +1,5 @@
 import 'package:dot_connections/app/controllers/app_initial_controller.dart';
-import 'package:dot_connections/app/core/utils/app_routes.dart';
+import 'package:dot_connections/app/controllers/auth_controller.dart';
 import 'package:dot_connections/app/core/utils/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,7 +10,12 @@ class WhatsNameView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Make sure controller exists
+    final controller = Get.find<AppInitialController>();
+    print('👤 WhatsNameView: Controller found with firstName: ${controller.firstName.value}');
+    
     return GetBuilder<AppInitialController>(
+      init: controller,
       builder: (controller) {
         return Scaffold(
           appBar: AppBar(
@@ -73,8 +78,30 @@ class WhatsNameView extends StatelessWidget {
                 Obx(
                   () => ElevatedButton(
                     onPressed: controller.isNameButtonEnabled
-                        ? () {
-                            Get.toNamed(AppRoutes.dob);
+                        ? () async {
+                            // Get the AuthController
+                            final authController = Get.find<AuthController>();
+                            
+                            try {
+                              // Save user fields with the AuthController
+                              await authController.addUserFields(
+                                firstName: controller.firstName.value,
+                                lastName: controller.lastName.value,
+                                dateOfBirth: DateTime.now(), // We'll update this on the DOB screen
+                                pushNotification: false, // We'll update this on the notifications screen
+                              );
+                              
+                              // Navigation is now handled by AuthController.addUserFields method
+                              // It will navigate to the next screen after saving data successfully
+                            } catch (e) {
+                              print('Error saving name: $e');
+                              Get.snackbar(
+                                'Error',
+                                'Failed to save your name. Please try again.',
+                                backgroundColor: Colors.red,
+                                colorText: Colors.white,
+                              );
+                            }
                           }
                         : null,
                     style: ElevatedButton.styleFrom(

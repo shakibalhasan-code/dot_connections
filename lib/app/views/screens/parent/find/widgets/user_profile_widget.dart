@@ -4,7 +4,7 @@ import 'package:dot_connections/app/core/utils/app_colors.dart' show AppColors;
 import 'package:dot_connections/app/core/utils/app_icons.dart';
 import 'package:dot_connections/app/core/utils/app_routes.dart';
 import 'package:dot_connections/app/core/utils/text_style.dart';
-import 'package:dot_connections/app/models/user_profile_model.dart';
+import 'package:dot_connections/app/data/models/user_profile_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';

@@ -1,4 +1,5 @@
 import 'package:dot_connections/app/controllers/app_initial_controller.dart';
+import 'package:dot_connections/app/controllers/auth_controller.dart';
 import 'package:dot_connections/app/core/utils/app_routes.dart';
 import 'package:dot_connections/app/core/utils/text_style.dart';
 import 'package:flutter/material.dart';
@@ -59,8 +60,29 @@ class EnableNotificationsView extends StatelessWidget {
                 ),
                 const Spacer(),
                 ElevatedButton(
-                  onPressed: () {
-                    Get.toNamed(AppRoutes.howTall);
+                  onPressed: () async {
+                    // Get the AuthController
+                    final authController = Get.find<AuthController>();
+                    
+                    try {
+                      // Save user fields with the AuthController
+                      await authController.addUserFields(
+                        firstName: controller.firstName.value,
+                        lastName: controller.lastName.value,
+                        dateOfBirth: controller.selectedDate.value,
+                        pushNotification: controller.notificationsEnabled.value,
+                      );
+                      
+                      // Navigation will be handled by AuthController.addUserFields
+                    } catch (e) {
+                      print('Error saving notification preference: $e');
+                      Get.snackbar(
+                        'Error',
+                        'Failed to save your notification preference. Please try again.',
+                        backgroundColor: Colors.red,
+                        colorText: Colors.white,
+                      );
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple,

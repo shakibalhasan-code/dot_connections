@@ -1,4 +1,4 @@
-import 'package:dot_connections/app/models/notification_model.dart';
+import 'package:dot_connections/app/data/models/notification_model.dart';
 import 'package:get/get.dart';
 
 /// NotificationController manages notification state and operations

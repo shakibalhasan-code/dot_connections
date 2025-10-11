@@ -1,5 +1,5 @@
 import 'package:dot_connections/app/controllers/app_initial_controller.dart';
-import 'package:dot_connections/app/core/utils/app_routes.dart';
+import 'package:dot_connections/app/controllers/auth_controller.dart';
 import 'package:dot_connections/app/core/utils/text_style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -67,8 +67,29 @@ class WhatsDobView extends StatelessWidget {
                 ),
                 SizedBox(height: 20.h),
                 ElevatedButton(
-                  onPressed: () {
-                    Get.toNamed(AppRoutes.enableNotifications);
+                  onPressed: () async {
+                    // Get the AuthController
+                    final authController = Get.find<AuthController>();
+                    
+                    try {
+                      // Save user fields with the AuthController
+                      await authController.addUserFields(
+                        firstName: controller.firstName.value,
+                        lastName: controller.lastName.value,
+                        dateOfBirth: controller.selectedDate.value,
+                        pushNotification: controller.notificationsEnabled.value,
+                      );
+                      
+                      // Navigation will be handled by the AuthController.addUserFields method
+                    } catch (e) {
+                      print('Error saving DOB: $e');
+                      Get.snackbar(
+                        'Error',
+                        'Failed to save your date of birth. Please try again.',
+                        backgroundColor: Colors.red,
+                        colorText: Colors.white,
+                      );
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple,
