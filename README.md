@@ -1,17 +1,17 @@
-# 💕 Dot Connections - Modern Dating App
+# � Dot Connections - Professional Networking & Communication App
 
-**Dot Connections** is a feature-rich, modern dating application built with Flutter and GetX. It provides all the essential features needed for a successful dating platform, including location-based matching, real-time chat, audio messages, and a comprehensive administrative system.
+**Dot Connections** is a feature-rich, modern networking application built with Flutter and GetX. It provides all the essential features needed for meaningful professional connections, including location-based networking, real-time communication, audio messages, and a comprehensive administrative system.
 
 ## 🌟 Features
 
-### Core Dating Features
+### Core Networking Features
 
-- **🔍 Discovery**: Swipeable user profiles with high-quality images
-- **🗺️ Location-based Matching**: Find people nearby using GPS integration  
-- **💬 Real-time Chat**: Text messages, audio recordings, and image sharing
-- **❤️ Matching System**: Like/pass mechanism with match notifications
-- **📍 Map Integration**: View user locations and nearby matches on map
-- **🔔 Push Notifications**: Real-time alerts for matches, messages, and likes
+- **🔍 Discovery**: Browse professional profiles with comprehensive details
+- **🗺️ Location-based Connections**: Find professionals nearby using GPS integration  
+- **💬 Real-time Communication**: Text messages, audio recordings, and file sharing
+- **🤝 Connection System**: Connect/pass mechanism with connection notifications
+- **📍 Map Integration**: View professional locations and nearby connections on map
+- **🔔 Push Notifications**: Real-time alerts for connections, messages, and updates
 
 ### Advanced Features
 
@@ -148,9 +148,9 @@ static const bool enablePushNotifications = true;
 ### UI Customization
 
 ```dart
-static const Color primaryColor = Color(0xFFFF6B6B);
-static const double cardSwipeThreshold = 100.0;
-static const int maxPhotosPerProfile = 6;
+static const Color primaryColor = Color(0xFF4A86E8);
+static const double cardScrollThreshold = 100.0;
+static const int maxAttachmentsPerProfile = 6;
 ```
 
 ## 🎨 Customization Guide
@@ -262,8 +262,8 @@ class ApiService extends GetConnect {
 
 - User blocking and reporting system
 - Location sharing controls
-- Photo privacy settings
-- Account deletion functionality
+- Profile visibility settings
+- Data export and account deletion functionality
 
 ### Compliance
 
@@ -426,13 +426,13 @@ This project is licensed under the CodeCanyon Standard License.
 - ✅ Initial release with all core features
 - ✅ Complete UI/UX implementation
 - ✅ Audio messaging system
-- ✅ Location-based matching
+- ✅ Location-based professional networking
 - ✅ Multi-language support
 - ✅ Accessibility features
 - ✅ Comprehensive documentation
 
 ---
 
-**Made with ❤️ using Flutter**
+**Made with 🔄 using Flutter**
 
 For more information, contact us at <support@yourcompany.com>
