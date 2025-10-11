@@ -62,7 +62,7 @@ class ProfileScreen extends StatelessWidget {
                         right: -10,
                         child: InkWell(
                           borderRadius: BorderRadius.circular(50.r),
-                          onTap: ()=> controller.pickImage(),
+                          onTap: () => controller.pickImage(),
                           child: Container(
                             height: 40.r,
                             width: 40.r,
@@ -129,7 +129,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 ProfileMenu(
                   icon: AppIcons.termsConditionIcon,
-                  text: "Trams & Condition",
+                  text: "Terms & Condition",
                   press: () => Get.toNamed(AppRoutes.termCondition),
                 ),
                 ProfileMenu(
