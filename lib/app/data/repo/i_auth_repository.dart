@@ -1,4 +1,5 @@
 import 'package:dot_connections/app/data/models/auth_models.dart';
+import 'package:dot_connections/app/data/models/user_personal_data.dart';
 
 abstract class IAuthRepository {
   /// Sends an OTP to the provided email for login or registration
@@ -20,25 +21,7 @@ abstract class IAuthRepository {
 
   /// Adds complete profile information
   Future<AuthResponse> addProfileFields({
-    required Location location,
-    required String gender,
-    required String interestedIn,
-    required int height,
-    required List<String> interests,
-    required String lookingFor,
-    required int ageRangeMin,
-    required int ageRangeMax,
-    required int maxDistance,
-    required String hometown,
-    required String workplace,
-    required String jobTitle,
-    required String school,
-    required String studyLevel,
-    required String religious,
-    required String smokingStatus,
-    required String drinkingStatus,
-    required String bio,
-    required Map<String, bool> hiddenFields,
+    required UserPersonalData profileData,
   });
 
   /// Updates basic user information

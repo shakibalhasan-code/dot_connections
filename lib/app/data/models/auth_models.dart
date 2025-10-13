@@ -1,3 +1,5 @@
+import 'package:dot_connections/app/data/models/user_personal_data.dart';
+
 class AuthResponse {
   final bool success;
   final String message;
@@ -381,50 +383,54 @@ class ProfileFields {
   final String drinkingStatus;
   final String bio;
   final Map<String, bool> hiddenFields;
+  final UserPersonalData profileData;
 
-  ProfileFields({
-    required this.location,
-    required this.gender,
-    required this.interestedIn,
-    required this.height,
-    required this.interests,
-    required this.lookingFor,
-    required this.ageRangeMin,
-    required this.ageRangeMax,
-    required this.maxDistance,
-    required this.hometown,
-    required this.workplace,
-    required this.jobTitle,
-    required this.school,
-    required this.studyLevel,
-    required this.religious,
-    required this.smokingStatus,
-    required this.drinkingStatus,
-    required this.bio,
-    required this.hiddenFields,
-  });
+  ProfileFields({required this.profileData})
+    : location = Location(
+        type: profileData.location.type,
+        coordinates: profileData.location.coordinates,
+        address: profileData.location.address,
+      ),
+      gender = profileData.gender,
+      interestedIn = profileData.interestedIn,
+      height = profileData.height,
+      interests = profileData.interests,
+      lookingFor = profileData.lookingFor,
+      ageRangeMin = profileData.ageRangeMin,
+      ageRangeMax = profileData.ageRangeMax,
+      maxDistance = profileData.maxDistance,
+      hometown = profileData.hometown,
+      workplace = profileData.workplace,
+      jobTitle = profileData.jobTitle,
+      school = profileData.school,
+      studyLevel = profileData.studyLevel,
+      religious = profileData.religious,
+      smokingStatus = profileData.smokingStatus,
+      drinkingStatus = profileData.drinkingStatus,
+      bio = profileData.bio,
+      hiddenFields = Map<String, bool>.from(profileData.hiddenFields.toJson());
 
   Map<String, dynamic> toJson() {
     return {
-      'location': location.toJson(),
-      'gender': gender,
-      'interestedIn': interestedIn,
-      'height': height,
-      'interests': interests,
-      'lookingFor': lookingFor,
-      'ageRangeMin': ageRangeMin,
-      'ageRangeMax': ageRangeMax,
-      'maxDistance': maxDistance,
-      'hometown': hometown,
-      'workplace': workplace,
-      'jobTitle': jobTitle,
-      'school': school,
-      'studyLevel': studyLevel,
-      'religious': religious,
-      'smokingStatus': smokingStatus,
-      'drinkingStatus': drinkingStatus,
-      'bio': bio,
-      'hiddenFields': hiddenFields,
+      'location': profileData.location.toJson(),
+      'gender': profileData.gender,
+      'interestedIn': profileData.interestedIn,
+      'height': profileData.height,
+      'interests': profileData.interests,
+      'lookingFor': profileData.lookingFor,
+      'ageRangeMin': profileData.ageRangeMin,
+      'ageRangeMax': profileData.ageRangeMax,
+      'maxDistance': profileData.maxDistance,
+      'hometown': profileData.hometown,
+      'workplace': profileData.workplace,
+      'jobTitle': profileData.jobTitle,
+      'school': profileData.school,
+      'studyLevel': profileData.studyLevel,
+      'religious': profileData.religious,
+      'smokingStatus': profileData.smokingStatus,
+      'drinkingStatus': profileData.drinkingStatus,
+      'bio': profileData.bio,
+      'hiddenFields': profileData.hiddenFields,
     };
   }
 }

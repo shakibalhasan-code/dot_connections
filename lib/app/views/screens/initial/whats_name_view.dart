@@ -1,6 +1,8 @@
 import 'package:dot_connections/app/controllers/app_initial_controller.dart';
 import 'package:dot_connections/app/controllers/auth_controller.dart';
 import 'package:dot_connections/app/core/utils/text_style.dart';
+import 'package:dot_connections/app/views/screens/initial/enable_notifications_view.dart';
+import 'package:dot_connections/app/views/screens/initial/whats_dob_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -11,11 +13,8 @@ class WhatsNameView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Make sure controller exists
-    final controller = Get.find<AppInitialController>();
-    print('👤 WhatsNameView: Controller found with firstName: ${controller.firstName.value}');
-    
+
     return GetBuilder<AppInitialController>(
-      init: controller,
       builder: (controller) {
         return Scaffold(
           appBar: AppBar(
@@ -81,18 +80,26 @@ class WhatsNameView extends StatelessWidget {
                         ? () async {
                             // Get the AuthController
                             final authController = Get.find<AuthController>();
-                            
+
                             try {
                               // Save user fields with the AuthController
-                              await authController.addUserFields(
-                                firstName: controller.firstName.value,
-                                lastName: controller.lastName.value,
-                                dateOfBirth: DateTime.now(), // We'll update this on the DOB screen
-                                pushNotification: false, // We'll update this on the notifications screen
+                              authController.userData['firstName'] =
+                                  controller.firstNameController.text;
+                              authController.userData['lastName'] =
+                                  controller.lastNameController.text;
+
+                              // Debug - print the values to confirm they're being set
+                              print(
+                                '👤 Setting firstName: ${controller.firstNameController.text}',
                               );
-                              
-                              // Navigation is now handled by AuthController.addUserFields method
-                              // It will navigate to the next screen after saving data successfully
+                              print(
+                                '👤 Setting lastName: ${controller.lastNameController.text}',
+                              );
+                              print(
+                                '👤 AuthController userData: ${authController.userData}',
+                              );
+
+                              Get.to(WhatsDobView());
                             } catch (e) {
                               print('Error saving name: $e');
                               Get.snackbar(

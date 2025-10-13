@@ -1,6 +1,7 @@
 import 'package:dot_connections/app/core/helper/pref_helper.dart';
 import 'package:dot_connections/app/data/api/auth_api_client.dart';
 import 'package:dot_connections/app/data/models/auth_models.dart';
+import 'package:dot_connections/app/data/models/user_personal_data.dart';
 import 'package:dot_connections/app/data/repo/i_auth_repository.dart';
 
 /// Implementation of the Authentication Repository
@@ -58,47 +59,9 @@ class AuthRepository implements IAuthRepository {
 
   @override
   Future<AuthResponse> addProfileFields({
-    required Location location,
-    required String gender,
-    required String interestedIn,
-    required int height,
-    required List<String> interests,
-    required String lookingFor,
-    required int ageRangeMin,
-    required int ageRangeMax,
-    required int maxDistance,
-    required String hometown,
-    required String workplace,
-    required String jobTitle,
-    required String school,
-    required String studyLevel,
-    required String religious,
-    required String smokingStatus,
-    required String drinkingStatus,
-    required String bio,
-    required Map<String, bool> hiddenFields,
+    required UserPersonalData profileData,
   }) async {
-    final profileFields = ProfileFields(
-      location: location,
-      gender: gender,
-      interestedIn: interestedIn,
-      height: height,
-      interests: interests,
-      lookingFor: lookingFor,
-      ageRangeMin: ageRangeMin,
-      ageRangeMax: ageRangeMax,
-      maxDistance: maxDistance,
-      hometown: hometown,
-      workplace: workplace,
-      jobTitle: jobTitle,
-      school: school,
-      studyLevel: studyLevel,
-      religious: religious,
-      smokingStatus: smokingStatus,
-      drinkingStatus: drinkingStatus,
-      bio: bio,
-      hiddenFields: hiddenFields,
-    );
+    final profileFields = ProfileFields(profileData: profileData);
 
     return await _apiClient.addProfileFields(profileFields);
   }

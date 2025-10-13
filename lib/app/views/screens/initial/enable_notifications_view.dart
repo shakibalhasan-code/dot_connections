@@ -35,8 +35,10 @@ class EnableNotificationsView extends StatelessWidget {
                 ),
                 SizedBox(height: 40.h),
                 Container(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16.w,
+                    vertical: 8.h,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.grey[200],
                     borderRadius: BorderRadius.circular(25.r),
@@ -63,16 +65,30 @@ class EnableNotificationsView extends StatelessWidget {
                   onPressed: () async {
                     // Get the AuthController
                     final authController = Get.find<AuthController>();
-                    
+
                     try {
                       // Save user fields with the AuthController
-                      await authController.addUserFields(
-                        firstName: controller.firstName.value,
-                        lastName: controller.lastName.value,
-                        dateOfBirth: controller.selectedDate.value,
-                        pushNotification: controller.notificationsEnabled.value,
+                      authController.userData['notificationsEnabled'] =
+                          controller.notificationsEnabled.value;
+
+                      // Debug - print all user data before submitting
+                      print('👤 Notifications View - Complete userData:');
+                      print(
+                        '👤 firstName: ${authController.userData['firstName']}',
                       );
-                      
+                      print(
+                        '👤 lastName: ${authController.userData['lastName']}',
+                      );
+                      print(
+                        '👤 dateOfBirth: ${authController.userData['dateOfBirth']}',
+                      );
+                      print(
+                        '👤 notificationsEnabled: ${controller.notificationsEnabled.value}',
+                      );
+
+                      // Now call the method to send all the data to the backend
+                      await authController.addUserFields();
+
                       // Navigation will be handled by AuthController.addUserFields
                     } catch (e) {
                       print('Error saving notification preference: $e');

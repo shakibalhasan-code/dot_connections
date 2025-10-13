@@ -1,6 +1,7 @@
 import 'package:dot_connections/app/controllers/app_initial_controller.dart';
 import 'package:dot_connections/app/controllers/auth_controller.dart';
 import 'package:dot_connections/app/core/utils/text_style.dart';
+import 'package:dot_connections/app/views/screens/initial/enable_notifications_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -70,16 +71,28 @@ class WhatsDobView extends StatelessWidget {
                   onPressed: () async {
                     // Get the AuthController
                     final authController = Get.find<AuthController>();
-                    
+
                     try {
                       // Save user fields with the AuthController
-                      await authController.addUserFields(
-                        firstName: controller.firstName.value,
-                        lastName: controller.lastName.value,
-                        dateOfBirth: controller.selectedDate.value,
-                        pushNotification: controller.notificationsEnabled.value,
+                      authController.userData['dateOfBirth'] =
+                          controller.selectedDate.value;
+
+                      // Debug - print to verify the data is being preserved
+                      print(
+                        '👤 DOB View - firstName: ${authController.userData['firstName']}',
                       );
-                      
+                      print(
+                        '👤 DOB View - lastName: ${authController.userData['lastName']}',
+                      );
+                      print(
+                        '👤 DOB View - dateOfBirth: ${controller.selectedDate.value}',
+                      );
+                      print(
+                        '👤 DOB View - userData: ${authController.userData}',
+                      );
+
+                      Get.to(EnableNotificationsView());
+
                       // Navigation will be handled by the AuthController.addUserFields method
                     } catch (e) {
                       print('Error saving DOB: $e');

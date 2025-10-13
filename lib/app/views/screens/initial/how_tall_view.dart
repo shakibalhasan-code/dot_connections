@@ -2,6 +2,7 @@ import 'package:dot_connections/app/controllers/app_initial_controller.dart';
 import 'package:dot_connections/app/controllers/auth_controller.dart';
 import 'package:dot_connections/app/core/utils/app_routes.dart';
 import 'package:dot_connections/app/core/utils/text_style.dart';
+import 'package:dot_connections/app/views/screens/initial/passions_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -51,29 +52,36 @@ class HowTallView extends StatelessWidget {
                   onPressed: () async {
                     // Get the AuthController
                     final authController = Get.find<AuthController>();
-                    
+
                     try {
                       // Extract height in cm from the format "5'6\" (167 cm)"
                       final heightString = controller.selectedHeight.value;
                       final regex = RegExp(r'\((\d+) cm\)');
                       final match = regex.firstMatch(heightString);
-                      final heightInCm = match != null 
-                          ? int.parse(match.group(1)!) 
+                      final heightInCm = match != null
+                          ? int.parse(match.group(1)!)
                           : 167; // Default to 167cm if parsing fails
-                          
-                      print('📏 Selected height: $heightString, parsed to $heightInCm cm');
-                      
+
+                      print(
+                        '📏 Selected height: $heightString, parsed to $heightInCm cm',
+                      );
+
                       // Get current user data
                       final userData = authController.currentUser.value;
                       if (userData == null) {
                         throw Exception('User data not available');
                       }
-                      
-                      // Update profile with height
-                      await authController.updateProfile({'height': heightInCm});
-                      
-                      // Navigate to next screen
-                      Get.toNamed(AppRoutes.passions);
+
+                      // Update local user data with a new instance
+                      authController.currentUserProfile.update((profile) {
+                        profile?.height = heightInCm;
+                      });
+                      debugPrint(
+                        '👤 Updated local profile height: ${authController.currentUserProfile.value.height}',
+                      );
+
+                      ///navigate to the next screen
+                      Get.to(() => PassionsView());
                     } catch (e) {
                       print('Error saving height: $e');
                       Get.snackbar(

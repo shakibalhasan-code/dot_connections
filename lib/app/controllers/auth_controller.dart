@@ -1,8 +1,11 @@
 import 'package:dot_connections/app/core/utils/app_routes.dart';
-import 'package:dot_connections/app/data/models/auth_models.dart';
+import 'package:dot_connections/app/data/models/auth_models.dart' hide Location;
+import 'package:dot_connections/app/data/models/user_personal_data.dart';
+import 'package:dot_connections/app/data/models/user_profile_model.dart';
 import 'package:dot_connections/app/data/repo/auth_repo.dart';
 import 'package:dot_connections/app/data/repo/i_auth_repository.dart';
 import 'package:dot_connections/app/views/screens/initial/how_tall_view.dart';
+import 'package:dot_connections/app/views/screens/initial/whats_dob_view.dart';
 import 'package:dot_connections/app/views/screens/initial/whats_name_view.dart';
 import 'package:dot_connections/app/views/screens/parent/parent_screen.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +34,35 @@ class AuthController extends GetxController {
 
   AuthController({IAuthRepository? authRepository})
     : _authRepository = authRepository ?? AuthRepository();
+
+  var userData = {
+    'firstName': '',
+    'lastName': '',
+    'dateOfBirth': DateTime.now(),
+    'pushNotification': false,
+  }.obs;
+
+  Rx<UserPersonalData> currentUserProfile = UserPersonalData(
+    location: Location(type: '', coordinates: [], address: ''),
+    gender: '',
+    interestedIn: '',
+    height: 0,
+    interests: [],
+    lookingFor: '',
+    ageRangeMin: 0,
+    ageRangeMax: 0,
+    maxDistance: 0,
+    hometown: '',
+    workplace: '',
+    jobTitle: '',
+    school: '',
+    studyLevel: '',
+    religious: '',
+    smokingStatus: '',
+    drinkingStatus: '',
+    bio: '',
+    hiddenFields: HiddenFields(religious: false, smokingStatus: false),
+  ).obs;
 
   @override
   void onInit() {
@@ -122,14 +154,16 @@ class AuthController extends GetxController {
       errorMessage.value = '';
 
       print('🔑 Verifying OTP for email: ${emailController.text.trim()}');
-      
+
       final response = await _authRepository.verifyOtp(
         emailController.text.trim(),
         otpController.text.trim(),
       );
 
-      print('🔑 OTP verification response: ${response.success}, message: ${response.message}');
-      
+      print(
+        '🔑 OTP verification response: ${response.success}, message: ${response.message}',
+      );
+
       if (response.success) {
         isAuthenticated.value = true;
 
@@ -137,7 +171,7 @@ class AuthController extends GetxController {
         if (response.data != null && response.data['user'] != null) {
           final userData = response.data['user'];
           print('🔑 User data received: $userData');
-          
+
           // Make sure the token was saved by repository
           if (response.data['accessToken'] != null) {
             print('🔑 Access token exists in response');
@@ -145,20 +179,24 @@ class AuthController extends GetxController {
             await _authRepository.saveAuthToken(response.data['accessToken']);
             print('🔑 Access token saved explicitly');
           }
-          
+
           // Create user object
           currentUser.value = UserDto.fromJson(userData);
           print('🔑 User object created: ${currentUser.value?.id}');
-          print('🔑 allUserFieldsFilled: ${currentUser.value?.allUserFieldsFilled}');
-          print('🔑 allProfileFieldsFilled: ${currentUser.value?.allProfileFieldsFilled}');
-          
+          print(
+            '🔑 allUserFieldsFilled: ${currentUser.value?.allUserFieldsFilled}',
+          );
+          print(
+            '🔑 allProfileFieldsFilled: ${currentUser.value?.allProfileFieldsFilled}',
+          );
+
           // Navigate based on user profile status
           print('🔑 Navigating based on profile completion status');
-          _handleNavigation();
+          Get.to(() => WhatsNameView());
         } else {
           print('🔑 No user data in response, navigating to name input screen');
           // If no user data, still navigate to profile setup
-          Get.offAllNamed(AppRoutes.name);
+          Get.to(() => WhatsNameView());
         }
       } else {
         errorMessage.value = response.message;
@@ -192,46 +230,58 @@ class AuthController extends GetxController {
   }
 
   /// Adds basic user fields (first name, last name, date of birth)
-  Future<void> addUserFields({
-    required String firstName,
-    required String lastName,
-    required DateTime dateOfBirth,
-    required bool pushNotification,
-  }) async {
+  Future<void> addUserFields() async {
     try {
       isLoading.value = true;
       errorMessage.value = '';
 
-      print('👤 Adding user fields: firstName=$firstName, lastName=$lastName');
-      
+      print('👤 Adding user fields: $userData');
+
+      // Convert dateOfBirth to DateTime if it's not already
+      final dateOfBirth = userData['dateOfBirth'] is DateTime
+          ? userData['dateOfBirth'] as DateTime
+          : DateTime.now();
+
+      // Set default for pushNotification if missing
+      final pushNotification = userData['pushNotification'] ?? false;
+
+      // Set default for notificationsEnabled if missing
+      final notificationsEnabled =
+          userData['notificationsEnabled'] as bool? ?? true;
+
+      print(
+        '👤 Formatted user fields: firstName=${userData['firstName']}, lastName=${userData['lastName']}, dateOfBirth=$dateOfBirth, pushNotification=$pushNotification',
+      );
+
       final response = await _authRepository.addUserFields(
-        firstName: firstName,
-        lastName: lastName,
+        firstName: userData['firstName'].toString(),
+        lastName: userData['lastName'].toString(),
         dateOfBirth: dateOfBirth,
-        pushNotification: pushNotification,
+        pushNotification: notificationsEnabled,
       );
 
       if (response.success) {
         print('👤 Successfully added user fields');
-        
-        // Refresh user profile
-        await fetchUserProfile();
+        Get.to(() => HowTallView());
 
-        // Check which step we should navigate to next based on where we are in the flow
-        if (Get.currentRoute == AppRoutes.name) {
-          print('👤 Navigating from Name view to DOB view');
-          Get.offAllNamed(AppRoutes.dob);
-        } else if (Get.currentRoute == AppRoutes.dob) {
-          print('👤 Navigating from DOB view to enableNotifications');
-          Get.offAllNamed(AppRoutes.enableNotifications);
-        } else if (Get.currentRoute == AppRoutes.enableNotifications) {
-          print('👤 Navigating from enableNotifications to howTall');
-          Get.offAllNamed(AppRoutes.howTall);
-        } else {
-          // Default navigation if the route is unknown
-          print('👤 Default navigation to howTall from ${Get.currentRoute}');
-          Get.offAllNamed(AppRoutes.howTall);
-        }
+        // // Refresh user profile
+        // await fetchUserProfile();
+
+        // // Check which step we should navigate to next based on where we are in the flow
+        // if (Get.currentRoute == AppRoutes.name) {
+        //   print('👤 Navigating from Name view to DOB view');
+        //   Get.offAllNamed(AppRoutes.dob);
+        // } else if (Get.currentRoute == AppRoutes.dob) {
+        //   print('👤 Navigating from DOB view to enableNotifications');
+        //   Get.offAllNamed(AppRoutes.enableNotifications);
+        // } else if (Get.currentRoute == AppRoutes.enableNotifications) {
+        //   print('👤 Navigating from enableNotifications to howTall');
+        //   Get.to(() => HowTallView());
+        // } else {
+        //   // Default navigation if the route is unknown
+        //   print('👤 Default navigation to howTall from ${Get.currentRoute}');
+        //   Get.to(() => HowTallView());
+        // }
       } else {
         print('👤 Failed to add user fields: ${response.message}');
         errorMessage.value = response.message;
@@ -245,56 +295,18 @@ class AuthController extends GetxController {
   }
 
   /// Adds profile fields to complete the user's profile
-  Future<void> addProfileFields({
-    required Location location,
-    required String gender,
-    required String interestedIn,
-    required int height,
-    required List<String> interests,
-    required String lookingFor,
-    required int ageRangeMin,
-    required int ageRangeMax,
-    required int maxDistance,
-    required String hometown,
-    required String workplace,
-    required String jobTitle,
-    required String school,
-    required String studyLevel,
-    required String religious,
-    required String smokingStatus,
-    required String drinkingStatus,
-    required String bio,
-    required Map<String, bool> hiddenFields,
-  }) async {
+  Future<void> addProfileFields() async {
     try {
       isLoading.value = true;
       errorMessage.value = '';
 
       final response = await _authRepository.addProfileFields(
-        location: location,
-        gender: gender,
-        interestedIn: interestedIn,
-        height: height,
-        interests: interests,
-        lookingFor: lookingFor,
-        ageRangeMin: ageRangeMin,
-        ageRangeMax: ageRangeMax,
-        maxDistance: maxDistance,
-        hometown: hometown,
-        workplace: workplace,
-        jobTitle: jobTitle,
-        school: school,
-        studyLevel: studyLevel,
-        religious: religious,
-        smokingStatus: smokingStatus,
-        drinkingStatus: drinkingStatus,
-        bio: bio,
-        hiddenFields: hiddenFields,
+        profileData: currentUserProfile.value,
       );
 
       if (response.success) {
         // Refresh user profile
-        await fetchUserProfile();
+        // await fetchUserProfile();
 
         // Navigate to main app
         Get.offAllNamed(AppRoutes.parent);
@@ -341,10 +353,10 @@ class AuthController extends GetxController {
 
       if (response.success) {
         print('👤 Successfully updated profile');
-        
+
         // Refresh user profile
         await fetchUserProfile();
-        
+
         // Only show snackbar if we're not in the onboarding flow
         if (![
           AppRoutes.name,
@@ -442,14 +454,16 @@ class AuthController extends GetxController {
   /// Handles navigation based on profile completion status
   void _handleNavigation() {
     print('🧭 Handling navigation after authentication');
-    
+
     // Close any open dialogs or bottom sheets first
     if (Get.isDialogOpen ?? false) {
       Get.back();
     }
-    
+
     if (currentUser.value == null) {
-      print('🧭 Current user is null, navigating to name input: ${AppRoutes.name}');
+      print(
+        '🧭 Current user is null, navigating to name input: ${AppRoutes.name}',
+      );
       // Clear all previous screens and go to name input
       Get.offAll(() => const WhatsNameView(), transition: Transition.fadeIn);
       return;
@@ -457,11 +471,15 @@ class AuthController extends GetxController {
 
     print('🧭 User data: ${currentUser.value!.toJson()}');
     print('🧭 allUserFieldsFilled: ${currentUser.value!.allUserFieldsFilled}');
-    print('🧭 allProfileFieldsFilled: ${currentUser.value!.allProfileFieldsFilled}');
+    print(
+      '🧭 allProfileFieldsFilled: ${currentUser.value!.allProfileFieldsFilled}',
+    );
 
     // Check if user fields are filled
     if (!currentUser.value!.allUserFieldsFilled) {
-      print('🧭 User fields not filled, navigating to name input: ${AppRoutes.name}');
+      print(
+        '🧭 User fields not filled, navigating to name input: ${AppRoutes.name}',
+      );
       // Clear all previous screens and go to name input
       Get.offAll(() => const WhatsNameView(), transition: Transition.fadeIn);
       return;
@@ -469,7 +487,9 @@ class AuthController extends GetxController {
 
     // Check if profile fields are filled
     if (!currentUser.value!.allProfileFieldsFilled) {
-      print('🧭 Profile fields not filled, navigating to height input: ${AppRoutes.howTall}');
+      print(
+        '🧭 Profile fields not filled, navigating to height input: ${AppRoutes.howTall}',
+      );
       // Clear all previous screens and go to how tall view
       Get.offAll(() => const HowTallView(), transition: Transition.fadeIn);
       return;
