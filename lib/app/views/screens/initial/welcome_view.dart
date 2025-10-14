@@ -1,10 +1,12 @@
 import 'dart:math';
 
+import 'package:dot_connections/app/controllers/auth_controller.dart';
 import 'package:dot_connections/app/core/utils/app_colors.dart';
 import 'package:dot_connections/app/core/utils/app_icons.dart';
 import 'package:dot_connections/app/core/utils/app_images.dart';
 import 'package:dot_connections/app/core/utils/app_routes.dart';
 import 'package:dot_connections/app/core/utils/text_style.dart';
+import 'package:dot_connections/app/views/screens/parent/parent_screen.dart';
 import 'package:dot_connections/app/views/widgets/connections_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -48,9 +50,9 @@ class WelcomeView extends StatelessWidget {
             ),
             const Spacer(),
             ElevatedButton(
-              onPressed: () {
-                // TODO: Navigate to the main app screen
-                Get.toNamed(AppRoutes.parent);
+              onPressed: () async {
+                final authController = Get.find<AuthController>();
+                await authController.addProfileFields();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primaryColor,

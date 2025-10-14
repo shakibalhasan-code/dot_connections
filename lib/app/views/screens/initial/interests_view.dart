@@ -2,12 +2,13 @@ import 'package:dot_connections/app/controllers/app_initial_controller.dart';
 import 'package:dot_connections/app/controllers/auth_controller.dart';
 import 'package:dot_connections/app/core/utils/app_routes.dart';
 import 'package:dot_connections/app/core/utils/text_style.dart';
+import 'package:dot_connections/app/views/screens/initial/preferences_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class PassionsView extends StatelessWidget {
-  const PassionsView({super.key});
+class InterestsView extends StatelessWidget {
+  const InterestsView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -67,9 +68,31 @@ class PassionsView extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    // final authController = Get.find<AuthController>();
-                    // authController.currentUserProfile.value.jobTitle =
-                    //     controller.selectedPassions;
+                    final authController = Get.find<AuthController>();
+
+                    // Update the interests using the update method for consistency and convert to API format
+                    authController.currentUserProfile.update((profile) {
+                      // Convert display passions to API format (lowercase with underscores)
+                      List<String> apiPassions = [];
+                      for (String passion in controller.selectedPassions) {
+                        int index = controller.passions.indexOf(passion);
+                        if (index >= 0) {
+                          apiPassions.add(controller.passionsApiValues[index]);
+                        }
+                      }
+                      profile?.interests = apiPassions;
+
+                      // Ensure we have at least one interest if nothing selected
+                      if (profile?.interests.isEmpty ?? true) {
+                        profile?.interests = ['travel']; // Default interest
+                      }
+                    });
+                    authController.currentUserProfile.refresh();
+
+                    debugPrint(
+                      '👤 Updated profile interests: ${authController.currentUserProfile.value.interests}',
+                    );
+                    Get.to(() => PreferencesView());
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple,

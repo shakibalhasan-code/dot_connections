@@ -1,4 +1,5 @@
 import 'package:dot_connections/app/controllers/app_initial_controller.dart';
+import 'package:dot_connections/app/controllers/auth_controller.dart';
 import 'package:dot_connections/app/core/utils/app_routes.dart';
 import 'package:dot_connections/app/core/utils/text_style.dart';
 import 'package:flutter/material.dart';
@@ -68,6 +69,25 @@ class IAmAView extends StatelessWidget {
                 const Spacer(),
                 ElevatedButton(
                   onPressed: () {
+                    // Get the AuthController
+                    final authController = Get.find<AuthController>();
+
+                    // Update the gender value in the current profile with API format (lowercase)
+                    authController.currentUserProfile.update((profile) {
+                      // Convert display gender to API format (lowercase)
+                      final int index = controller.genderOptions.indexOf(
+                        controller.gender.value,
+                      );
+                      profile?.gender = controller.genderApiValues[index];
+                      profile?.hiddenFields.gender =
+                          !controller.showGenderOnProfile.value;
+                    });
+                    authController.currentUserProfile.refresh();
+
+                    debugPrint(
+                      '👤 Updated profile gender: ${authController.currentUserProfile.value.gender}, hidden: ${authController.currentUserProfile.value.hiddenFields.gender}',
+                    );
+
                     Get.toNamed(AppRoutes.whoToDate);
                   },
                   style: ElevatedButton.styleFrom(

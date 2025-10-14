@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:dot_connections/app/core/constants/api_endpoints.dart';
 import 'package:dot_connections/app/data/models/auth_models.dart';
+import 'package:dot_connections/app/data/models/user_personal_data.dart';
 import 'package:dot_connections/app/services/api_services.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 /// Auth API client that handles all authentication-related API calls
@@ -76,8 +78,10 @@ class AuthApiClient {
   }
 
   /// Adds profile fields to complete user profile
-  Future<AuthResponse> addProfileFields(ProfileFields profileFields) async {
+  Future<AuthResponse> addProfileFields(UserPersonalData profileFields) async {
     try {
+      debugPrint('🚀 Adding profile fields: ${profileFields.toJson()}');
+
       final response = await ApiServices.updateData(
         ApiEndpoints.addProfileFields,
         profileFields.toJson(),

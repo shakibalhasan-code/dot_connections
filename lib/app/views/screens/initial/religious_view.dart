@@ -1,6 +1,8 @@
 import 'package:dot_connections/app/controllers/app_initial_controller.dart';
+import 'package:dot_connections/app/controllers/auth_controller.dart';
 import 'package:dot_connections/app/core/utils/app_routes.dart';
 import 'package:dot_connections/app/core/utils/text_style.dart';
+import 'package:dot_connections/app/views/screens/initial/drink_status_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -45,8 +47,9 @@ class ReligiousView extends StatelessWidget {
                         child: Chip(
                           shape: const StadiumBorder(),
                           label: Text(religion),
-                          backgroundColor:
-                              isSelected ? Colors.purple : Colors.grey[200],
+                          backgroundColor: isSelected
+                              ? Colors.purple
+                              : Colors.grey[200],
                           labelStyle: AppTextStyle.primaryTextStyle(
                             color: isSelected ? Colors.white : Colors.black,
                           ),
@@ -74,8 +77,31 @@ class ReligiousView extends StatelessWidget {
                 ),
                 const Spacer(),
                 ElevatedButton(
-                  onPressed: () {
-                    Get.toNamed(AppRoutes.drinkStatus);
+                  onPressed: () async {
+                    final authController = Get.find<AuthController>();
+
+                    // Convert to API format
+                    int index = controller.religionOptions.indexOf(
+                      controller.selectedReligion.value,
+                    );
+                    String religionValue = index >= 0
+                        ? controller.religionApiValues[index]
+                        : "prefer_not_to_say"; // Default
+
+                    authController.currentUserProfile.value.religious =
+                        religionValue;
+                    authController
+                            .currentUserProfile
+                            .value
+                            .hiddenFields
+                            .religious =
+                        controller.showReligionOnProfile.value;
+                    authController.currentUserProfile.refresh();
+
+                    debugPrint(
+                      'Religion: ${controller.selectedReligion.value}. && Show on profile: ${controller.showReligionOnProfile.value}',
+                    );
+                    Get.to(() => DrinkStatusView());
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple,

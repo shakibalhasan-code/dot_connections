@@ -1,6 +1,8 @@
 import 'package:dot_connections/app/controllers/app_initial_controller.dart';
+import 'package:dot_connections/app/controllers/auth_controller.dart';
 import 'package:dot_connections/app/core/utils/app_routes.dart';
 import 'package:dot_connections/app/core/utils/text_style.dart';
+import 'package:dot_connections/app/views/screens/initial/job_title_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -61,8 +63,25 @@ class WorkplaceView extends StatelessWidget {
                 ),
                 const Spacer(),
                 ElevatedButton(
-                  onPressed: () {
-                    Get.toNamed(AppRoutes.jobTitle);
+                  onPressed: () async {
+                    final authController = Get.find<AuthController>();
+                    final workplace = controller.workplaceController.text
+                        .trim();
+                    authController.currentUserProfile.value.workplace =
+                        workplace;
+
+                    authController
+                            .currentUserProfile
+                            .value
+                            .hiddenFields
+                            .workplace =
+                        controller.showWorkplaceOnProfile.value;
+                    authController.currentUserProfile.refresh();
+
+                    debugPrint(
+                      'Workplace: $workplace. && Show on profile: ${controller.showWorkplaceOnProfile.value}',
+                    );
+                    Get.to(() => JobTitleView());
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple,

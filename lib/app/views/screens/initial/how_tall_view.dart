@@ -2,7 +2,7 @@ import 'package:dot_connections/app/controllers/app_initial_controller.dart';
 import 'package:dot_connections/app/controllers/auth_controller.dart';
 import 'package:dot_connections/app/core/utils/app_routes.dart';
 import 'package:dot_connections/app/core/utils/text_style.dart';
-import 'package:dot_connections/app/views/screens/initial/passions_view.dart';
+import 'package:dot_connections/app/views/screens/initial/interests_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -67,21 +67,23 @@ class HowTallView extends StatelessWidget {
                       );
 
                       // Get current user data
-                      final userData = authController.currentUser.value;
-                      if (userData == null) {
-                        throw Exception('User data not available');
-                      }
+                      // final userData = authController.currentUser.value;
+                      // if (userData == null) {
+                      //   throw Exception('User data not available');
+                      // }
 
                       // Update local user data with a new instance
                       authController.currentUserProfile.update((profile) {
                         profile?.height = heightInCm;
                       });
+                      authController.currentUserProfile.refresh();
+
                       debugPrint(
                         '👤 Updated local profile height: ${authController.currentUserProfile.value.height}',
                       );
 
                       ///navigate to the next screen
-                      Get.to(() => PassionsView());
+                      Get.to(() => InterestsView());
                     } catch (e) {
                       print('Error saving height: $e');
                       Get.snackbar(

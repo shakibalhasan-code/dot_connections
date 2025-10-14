@@ -1,6 +1,8 @@
 import 'package:dot_connections/app/controllers/app_initial_controller.dart';
+import 'package:dot_connections/app/controllers/auth_controller.dart';
 import 'package:dot_connections/app/core/utils/app_routes.dart';
 import 'package:dot_connections/app/core/utils/text_style.dart';
+import 'package:dot_connections/app/views/screens/initial/education_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -61,8 +63,25 @@ class JobTitleView extends StatelessWidget {
                 ),
                 const Spacer(),
                 ElevatedButton(
-                  onPressed: () {
-                    Get.toNamed(AppRoutes.education);
+                  onPressed: () async {
+                    final authController = Get.find<AuthController>();
+                    final jobTitle = controller.jobTitleController.text.trim();
+                    final showOnProfile =
+                        controller.showJobTitleOnProfile.value;
+                    authController.currentUserProfile.value.jobTitle = jobTitle;
+
+                    authController
+                            .currentUserProfile
+                            .value
+                            .hiddenFields
+                            .jobTitle =
+                        showOnProfile;
+                    authController.currentUserProfile.refresh();
+
+                    debugPrint(
+                      'Job Title: $jobTitle. && Show on profile: $showOnProfile',
+                    );
+                    Get.to(() => EducationView());
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple,

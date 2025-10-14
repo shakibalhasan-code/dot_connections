@@ -161,19 +161,53 @@ class Location {
 }
 
 class HiddenFields {
-  final bool religious;
-  final bool smokingStatus;
+  bool gender;
+  bool hometown;
+  bool workplace;
+  bool jobTitle;
+  bool school;
+  bool studyLevel;
+  bool religious;
+  bool drinkingStatus;
+  bool smokingStatus;
 
-  HiddenFields({required this.religious, required this.smokingStatus});
+  HiddenFields({
+    required this.gender,
+    required this.hometown,
+    required this.workplace,
+    required this.jobTitle,
+    required this.school,
+    required this.studyLevel,
+    required this.religious,
+    required this.drinkingStatus,
+    required this.smokingStatus,
+  });
 
   factory HiddenFields.fromJson(Map<String, dynamic> json) {
     return HiddenFields(
+      gender: json['gender'] ?? false,
+      hometown: json['hometown'] ?? false,
+      workplace: json['workplace'] ?? false,
+      jobTitle: json['jobTitle'] ?? false,
+      school: json['school'] ?? false,
+      studyLevel: json['studyLevel'] ?? false,
       religious: json['religious'] ?? false,
+      drinkingStatus: json['drinkingStatus'] ?? false,
       smokingStatus: json['smokingStatus'] ?? false,
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {'religious': religious, 'smokingStatus': smokingStatus};
+    return {
+      'gender': gender,
+      'hometown': hometown,
+      'workplace': workplace,
+      'jobTitle': jobTitle,
+      'school': school,
+      'studyLevel': studyLevel,
+      'religious': religious,
+      'drinkingStatus': drinkingStatus,
+      'smokingStatus': smokingStatus,
+    };
   }
 }

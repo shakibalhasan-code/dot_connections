@@ -8,7 +8,7 @@ import 'package:dot_connections/app/views/screens/initial/i_am_a_view.dart';
 import 'package:dot_connections/app/views/screens/initial/initial_screen.dart';
 import 'package:dot_connections/app/views/screens/auth/otp_view.dart';
 import 'package:dot_connections/app/views/screens/initial/job_title_view.dart';
-import 'package:dot_connections/app/views/screens/initial/passions_view.dart';
+import 'package:dot_connections/app/views/screens/initial/interests_view.dart';
 import 'package:dot_connections/app/views/screens/initial/preferences_view.dart';
 import 'package:dot_connections/app/views/screens/initial/religious_view.dart';
 import 'package:dot_connections/app/views/screens/initial/share_more_view.dart';
@@ -127,7 +127,7 @@ class AppRoutes {
     ),
     GetPage(
       name: passions,
-      page: () => const PassionsView(),
+      page: () => const InterestsView(),
       middlewares: [authMiddleware],
     ),
     GetPage(

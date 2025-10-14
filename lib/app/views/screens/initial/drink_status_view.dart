@@ -1,6 +1,8 @@
 import 'package:dot_connections/app/controllers/app_initial_controller.dart';
+import 'package:dot_connections/app/controllers/auth_controller.dart';
 import 'package:dot_connections/app/core/utils/app_routes.dart';
 import 'package:dot_connections/app/core/utils/text_style.dart';
+import 'package:dot_connections/app/views/screens/initial/smoking_status_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -45,8 +47,9 @@ class DrinkStatusView extends StatelessWidget {
                         child: Chip(
                           shape: const StadiumBorder(),
                           label: Text(drink),
-                          backgroundColor:
-                              isSelected ? Colors.purple : Colors.grey[200],
+                          backgroundColor: isSelected
+                              ? Colors.purple
+                              : Colors.grey[200],
                           labelStyle: AppTextStyle.primaryTextStyle(
                             color: isSelected ? Colors.white : Colors.black,
                           ),
@@ -74,8 +77,22 @@ class DrinkStatusView extends StatelessWidget {
                 ),
                 const Spacer(),
                 ElevatedButton(
-                  onPressed: () {
-                    Get.toNamed(AppRoutes.smokingStatus);
+                  onPressed: () async {
+                    final authController = Get.find<AuthController>();
+                    authController.currentUserProfile.value.drinkingStatus =
+                        controller.selectedDrink.value;
+                    authController
+                            .currentUserProfile
+                            .value
+                            .hiddenFields
+                            .drinkingStatus =
+                        controller.showDrinkOnProfile.value;
+                    authController.currentUserProfile.refresh();
+
+                    debugPrint(
+                      'Drink: ${controller.selectedDrink.value}. && Show on profile: ${controller.showDrinkOnProfile.value}',
+                    );
+                    Get.to(() => SmokingStatusView());
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple,

@@ -43,25 +43,39 @@ class AuthController extends GetxController {
   }.obs;
 
   Rx<UserPersonalData> currentUserProfile = UserPersonalData(
-    location: Location(type: '', coordinates: [], address: ''),
-    gender: '',
-    interestedIn: '',
-    height: 0,
-    interests: [],
-    lookingFor: '',
-    ageRangeMin: 0,
-    ageRangeMax: 0,
-    maxDistance: 0,
-    hometown: '',
-    workplace: '',
-    jobTitle: '',
-    school: '',
-    studyLevel: '',
-    religious: '',
-    smokingStatus: '',
-    drinkingStatus: '',
-    bio: '',
-    hiddenFields: HiddenFields(religious: false, smokingStatus: false),
+    location: Location(
+      type: 'Point',
+      coordinates: [-74.006, 40.7128],
+      address: 'Mohakhali, Dhaka, Bangladesh',
+    ),
+    gender: 'male', // Using API format
+    interestedIn: 'everyone', // Using API format with default
+    height: 167, // Default height
+    interests: ['travel'], // Initialize with at least one default interest
+    lookingFor: 'dating', // Default
+    ageRangeMin: 18, // Default min age
+    ageRangeMax: 60, // Default max age
+    maxDistance: 25, // Default distance
+    hometown: 'Not specified', // Default
+    workplace: 'Not specified',
+    jobTitle: 'Not specified',
+    school: 'highSchool', // Using API format
+    studyLevel: 'underGraduation', // Default
+    religious: 'prefer_not_to_say', // Using API format with default
+    smokingStatus: 'Prefer Not to Say', // Default
+    drinkingStatus: 'Prefer Not to Say', // Default
+    bio: 'About me', // Default
+    hiddenFields: HiddenFields(
+      religious: false,
+      smokingStatus: false,
+      gender: false,
+      hometown: false,
+      workplace: false,
+      jobTitle: false,
+      school: false,
+      studyLevel: false,
+      drinkingStatus: false,
+    ),
   ).obs;
 
   @override
@@ -72,8 +86,8 @@ class AuthController extends GetxController {
     emailController.addListener(_validateEmail);
     otpController.addListener(_validateOtp);
 
-    // Check if user is already logged in
-    checkAuthStatus();
+    // // Check if user is already logged in
+    // checkAuthStatus();
   }
 
   @override
@@ -300,16 +314,19 @@ class AuthController extends GetxController {
       isLoading.value = true;
       errorMessage.value = '';
 
+      // Validate and set defaults for any empty values
+      validateAndNormalizeProfileData();
+
+      debugPrint(
+        '👤 Adding profile fields: ${currentUserProfile.value.toJson()}',
+      );
+
       final response = await _authRepository.addProfileFields(
         profileData: currentUserProfile.value,
       );
 
       if (response.success) {
-        // Refresh user profile
-        // await fetchUserProfile();
-
-        // Navigate to main app
-        Get.offAllNamed(AppRoutes.parent);
+        Get.to(() => ParentScreen());
       } else {
         errorMessage.value = response.message;
       }
@@ -424,6 +441,92 @@ class AuthController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  /// Validates and ensures all profile fields have proper values before submitting
+  void validateAndNormalizeProfileData() {
+    // Create a local reference to avoid null issues
+    var profile = currentUserProfile.value;
+
+    // Ensure gender has a valid value
+    if (profile.gender.isEmpty) {
+      profile.gender = 'male';
+    }
+
+    // Ensure interestedIn has a valid value
+    if (profile.interestedIn.isEmpty) {
+      profile.interestedIn = 'everyone';
+    }
+
+    // Ensure height has a reasonable default
+    if (profile.height < 100) {
+      profile.height = 167;
+    }
+
+    // Ensure interests has at least one value
+    if (profile.interests.isEmpty) {
+      profile.interests = ['travel'];
+    }
+
+    // Ensure lookingFor has a valid value
+    if (profile.lookingFor.isEmpty) {
+      profile.lookingFor = 'dating';
+    }
+
+    // Ensure age range has reasonable defaults
+    if (profile.ageRangeMin < 18) {
+      profile.ageRangeMin = 18;
+    }
+
+    if (profile.ageRangeMax < profile.ageRangeMin) {
+      profile.ageRangeMax = profile.ageRangeMin + 20; // Default 20-year range
+    }
+
+    // Ensure maxDistance has a reasonable default
+    if (profile.maxDistance <= 0) {
+      profile.maxDistance = 25;
+    }
+
+    // Ensure other profile fields have defaults
+    if (profile.hometown.isEmpty) {
+      profile.hometown = 'Not specified';
+    }
+
+    if (profile.workplace.isEmpty) {
+      profile.workplace = 'Not specified';
+    }
+
+    if (profile.jobTitle.isEmpty) {
+      profile.jobTitle = 'Not specified';
+    }
+
+    if (profile.school.isEmpty) {
+      profile.school = 'highSchool';
+    }
+
+    if (profile.studyLevel.isEmpty) {
+      profile.studyLevel = 'underGraduation';
+    }
+
+    if (profile.religious.isEmpty) {
+      profile.religious = 'prefer_not_to_say';
+    }
+
+    if (profile.smokingStatus.isEmpty) {
+      profile.smokingStatus = 'Prefer Not to Say';
+    }
+
+    if (profile.drinkingStatus.isEmpty) {
+      profile.drinkingStatus = 'Prefer Not to Say';
+    }
+
+    if (profile.bio.isEmpty) {
+      profile.bio = 'About me';
+    }
+
+    // Update the profile
+    currentUserProfile.value = profile;
+    currentUserProfile.refresh();
   }
 
   /// Deletes the user's account

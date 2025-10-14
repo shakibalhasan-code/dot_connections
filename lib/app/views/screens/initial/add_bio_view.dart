@@ -1,6 +1,8 @@
 import 'package:dot_connections/app/controllers/app_initial_controller.dart';
+import 'package:dot_connections/app/controllers/auth_controller.dart';
 import 'package:dot_connections/app/core/utils/app_routes.dart';
 import 'package:dot_connections/app/core/utils/text_style.dart';
+import 'package:dot_connections/app/views/screens/initial/welcome_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -48,8 +50,16 @@ class AddBioView extends StatelessWidget {
                 ),
                 const Spacer(),
                 ElevatedButton(
-                  onPressed: () {
-                    Get.toNamed(AppRoutes.welcome);
+                  onPressed: () async {
+                    final authController = Get.find<AuthController>();
+                    authController.currentUserProfile.value.bio = controller
+                        .bioController
+                        .text
+                        .trim();
+                    authController.currentUserProfile.refresh();
+
+                    debugPrint('Bio: ${controller.bioController.text.trim()}');
+                    Get.to(() => WelcomeView());
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple,

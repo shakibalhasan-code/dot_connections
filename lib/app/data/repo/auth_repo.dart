@@ -61,9 +61,7 @@ class AuthRepository implements IAuthRepository {
   Future<AuthResponse> addProfileFields({
     required UserPersonalData profileData,
   }) async {
-    final profileFields = ProfileFields(profileData: profileData);
-
-    return await _apiClient.addProfileFields(profileFields);
+    return await _apiClient.addProfileFields(profileData);
   }
 
   @override

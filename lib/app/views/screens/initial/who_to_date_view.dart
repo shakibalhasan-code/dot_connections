@@ -1,4 +1,5 @@
 import 'package:dot_connections/app/controllers/app_initial_controller.dart';
+import 'package:dot_connections/app/controllers/auth_controller.dart';
 import 'package:dot_connections/app/core/utils/app_routes.dart';
 import 'package:dot_connections/app/core/utils/text_style.dart';
 import 'package:flutter/material.dart';
@@ -51,6 +52,23 @@ class WhoToDateView extends StatelessWidget {
                 const Spacer(),
                 ElevatedButton(
                   onPressed: () {
+                    // Get the AuthController
+                    final authController = Get.find<AuthController>();
+
+                    // Update the interestedIn value in the current profile with API format
+                    authController.currentUserProfile.update((profile) {
+                      // Convert display preference to API format
+                      final int index = controller.datingOptions.indexOf(
+                        controller.datingPreference.value,
+                      );
+                      profile?.interestedIn = controller.datingApiValues[index];
+                    });
+                    authController.currentUserProfile.refresh();
+
+                    debugPrint(
+                      '👤 Updated profile interestedIn: ${authController.currentUserProfile.value.interestedIn}',
+                    );
+
                     Get.toNamed(AppRoutes.howTall);
                   },
                   style: ElevatedButton.styleFrom(

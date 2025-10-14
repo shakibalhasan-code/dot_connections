@@ -1,6 +1,8 @@
 import 'package:dot_connections/app/controllers/app_initial_controller.dart';
+import 'package:dot_connections/app/controllers/auth_controller.dart';
 import 'package:dot_connections/app/core/utils/app_routes.dart';
 import 'package:dot_connections/app/core/utils/text_style.dart';
+import 'package:dot_connections/app/views/screens/initial/religious_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -45,8 +47,9 @@ class EducationView extends StatelessWidget {
                         child: Chip(
                           shape: const StadiumBorder(),
                           label: Text(education),
-                          backgroundColor:
-                              isSelected ? Colors.purple : Colors.grey[200],
+                          backgroundColor: isSelected
+                              ? Colors.purple
+                              : Colors.grey[200],
                           labelStyle: AppTextStyle.primaryTextStyle(
                             color: isSelected ? Colors.white : Colors.black,
                           ),
@@ -74,8 +77,32 @@ class EducationView extends StatelessWidget {
                 ),
                 const Spacer(),
                 ElevatedButton(
-                  onPressed: () {
-                    Get.toNamed(AppRoutes.religious);
+                  onPressed: () async {
+                    final authController = Get.find<AuthController>();
+
+                    // Convert to API format
+                    int index = controller.educationOptions.indexOf(
+                      controller.selectedEducation.value,
+                    );
+                    String educationValue = index >= 0
+                        ? controller.educationApiValues[index]
+                        : "highSchool"; // Default
+
+                    authController.currentUserProfile.value.school =
+                        educationValue;
+
+                    authController
+                            .currentUserProfile
+                            .value
+                            .hiddenFields
+                            .school =
+                        controller.showEducationOnProfile.value;
+                    authController.currentUserProfile.refresh();
+
+                    debugPrint(
+                      'Education: ${controller.selectedEducation.value}. && Show on profile: ${controller.showEducationOnProfile.value}',
+                    );
+                    Get.to(() => ReligiousView());
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple,

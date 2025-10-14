@@ -53,7 +53,8 @@ class CustomBottomNavBar extends StatelessWidget {
     final parentController = Get.find<ParentController>();
 
     return Container(
-      height: 80.h,
+      // Increased height to accommodate all content and prevent overflow
+      height: 90.h,
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         boxShadow: [
@@ -66,6 +67,9 @@ class CustomBottomNavBar extends StatelessWidget {
         ],
       ),
       child: SafeArea(
+        top: false, // We don't need top padding in the bottom nav bar
+        maintainBottomViewPadding:
+            true, // Maintain proper bottom padding for devices with bottom system UI
         child: Obx(
           () => Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -137,71 +141,65 @@ class CustomBottomNavBar extends StatelessWidget {
           onTap(index);
         },
         behavior: HitTestBehavior.translucent,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.easeInOut,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Icon container with animation
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.easeInOut,
-                width: isSelected ? 70.w : 50.w,
-                height: isSelected ? 50.h : 40.h,
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? theme.colorScheme.primary.withOpacity(0.1)
-                      : Colors.transparent,
-                  borderRadius: BorderRadius.circular(isSelected ? 16.r : 12.r),
-                ),
-                child: Center(
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 150),
-                    child: SvgPicture.asset(
-                      icon,
-                      width: isSelected ? 28.w : 24.w,
-                      height: isSelected ? 28.h : 24.h,
-                      colorFilter: ColorFilter.mode(
-                        isSelected
-                            ? theme.colorScheme.primary
-                            : theme.colorScheme.onSurface.withOpacity(0.6),
-                        BlendMode.srcIn,
-                      ),
-                    ),
+        child: Column(
+          mainAxisSize:
+              MainAxisSize.min, // Make column take minimum required space
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Icon container with animation
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeInOut,
+              width: isSelected ? 60.w : 48.w, // Slightly reduced width
+              height: isSelected ? 40.h : 36.h, // Slightly reduced height
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? theme.colorScheme.primary.withOpacity(0.1)
+                    : Colors.transparent,
+                borderRadius: BorderRadius.circular(isSelected ? 16.r : 12.r),
+              ),
+              child: Center(
+                child: SvgPicture.asset(
+                  icon,
+                  width: isSelected ? 26.w : 22.w, // Reduced icon size
+                  height: isSelected ? 26.h : 22.h, // Reduced icon size
+                  colorFilter: ColorFilter.mode(
+                    isSelected
+                        ? theme.colorScheme.primary
+                        : theme.colorScheme.onSurface.withOpacity(0.6),
+                    BlendMode.srcIn,
                   ),
                 ),
               ),
+            ),
 
-              SizedBox(height: 4.h),
-
-              // Label with animation
-              AnimatedDefaultTextStyle(
-                duration: const Duration(milliseconds: 200),
-                style: TextStyle(
-                  color: isSelected
-                      ? theme.colorScheme.primary
-                      : theme.colorScheme.onSurface.withOpacity(0.6),
-                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                  fontSize: isSelected ? 13.sp : 12.sp,
-                ),
-                child: Text(label),
+            SizedBox(height: 3.h), // Reduced spacing
+            // Label with animation
+            AnimatedDefaultTextStyle(
+              duration: const Duration(milliseconds: 200),
+              style: TextStyle(
+                color: isSelected
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.onSurface.withOpacity(0.6),
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                fontSize: 11.sp, // Slightly smaller font
               ),
+              child: Text(label),
+            ),
 
-              // Selection indicator
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.easeInOut,
-                width: isSelected ? 20.w : 0,
-                height: 2.h,
-                margin: EdgeInsets.only(top: 2.h),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.primary,
-                  borderRadius: BorderRadius.circular(1.r),
-                ),
+            // Selection indicator with reduced margin
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeInOut,
+              width: isSelected ? 18.w : 0,
+              height: 2.h,
+              margin: EdgeInsets.only(top: 1.h), // Reduced top margin
+              decoration: BoxDecoration(
+                color: theme.colorScheme.primary,
+                borderRadius: BorderRadius.circular(1.r),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

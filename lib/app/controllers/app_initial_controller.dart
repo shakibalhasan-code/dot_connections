@@ -29,19 +29,59 @@ class AppInitialController extends GetxController {
   ];
   final RxString selectedHeight = "5'6\" (167 cm)".obs;
 
+  // Updated to match API format - lowercase
   final List<String> datingOptions = ['Men', 'Women', 'Everyone'];
+  final List<String> datingApiValues = ['male', 'female', 'everyone'];
   final RxString datingPreference = 'Everyone'.obs;
 
+  // Updated to match API format - lowercase
   final List<String> genderOptions = ['Male', 'Female', 'Other'];
+  final List<String> genderApiValues = ['male', 'female', 'other'];
   final RxString gender = 'Male'.obs;
   final RxBool showGenderOnProfile = false.obs;
 
   final locationController = TextEditingController();
 
+  // Updated display values for passions
   final List<String> passions = [
-    'Travel', 'Photography', 'Fitness', 'Cooking', 'Music', 'Art', 'Reading',
-    'Movies', 'Hiking', 'Dancing', 'Gaming', 'Fashion', 'Sports', 'Yoga',
-    'Craft Beer', 'Tango', 'Pets'
+    'Travel',
+    'Photography',
+    'Fitness',
+    'Cooking',
+    'Music',
+    'Art',
+    'Reading',
+    'Movies',
+    'Hiking',
+    'Dancing',
+    'Gaming',
+    'Fashion',
+    'Sports',
+    'Yoga',
+    'Craft Beer',
+    'Tango',
+    'Pets',
+  ];
+
+  // API format values for passions (lowercase with underscores)
+  final List<String> passionsApiValues = [
+    'travel',
+    'photography',
+    'fitness',
+    'cooking',
+    'music',
+    'art',
+    'reading',
+    'movies',
+    'hiking',
+    'dancing',
+    'gaming',
+    'fashion',
+    'sports',
+    'yoga',
+    'craft_beer',
+    'tango',
+    'pets',
   ];
   final RxList<String> selectedPassions = <String>[].obs;
 
@@ -54,6 +94,21 @@ class AppInitialController extends GetxController {
   final jobTitleController = TextEditingController();
   final RxBool showJobTitleOnProfile = false.obs;
 
+  // Updated lookingFor options and default value
+  final List<String> lookingForOptions = [
+    'What are you looking for?',
+    'Friendship',
+    'Dating',
+    'Relationship',
+    'Networking',
+  ];
+  final List<String> lookingForApiValues = [
+    'dating',
+    'friendship',
+    'dating',
+    'relationship',
+    'networking',
+  ];
   final RxString lookingFor = 'What are you looking for?'.obs;
   final minAgeController = TextEditingController();
   final maxAgeController = TextEditingController();
@@ -63,14 +118,44 @@ class AppInitialController extends GetxController {
     'High school',
     'Under graduation',
     'Post graduation',
-    'Prefer Not to Say'
+    'Prefer Not to Say',
+  ];
+
+  final List<String> educationApiValues = [
+    'highSchool',
+    'underGraduation',
+    'postGraduation',
+    'preferNotToSay',
   ];
   final RxString selectedEducation = ''.obs;
   final RxBool showEducationOnProfile = false.obs;
 
   final List<String> religionOptions = [
-    'Buddhist', 'Catholic', 'Christian', 'Hindu', 'Jewish', 'Muslim',
-    'Spiritual', 'Agnostic', 'Atheist', 'Other', 'Prefer Not to Say'
+    'Buddhist',
+    'Catholic',
+    'Christian',
+    'Hindu',
+    'Jewish',
+    'Muslim',
+    'Spiritual',
+    'Agnostic',
+    'Atheist',
+    'Other',
+    'Prefer Not to Say',
+  ];
+
+  final List<String> religionApiValues = [
+    'buddhist',
+    'catholic',
+    'christian',
+    'hindu',
+    'jewish',
+    'muslim',
+    'spiritual',
+    'agnostic',
+    'atheist',
+    'other',
+    'prefer_not_to_say',
   ];
   final RxString selectedReligion = ''.obs;
   final RxBool showReligionOnProfile = false.obs;
@@ -79,8 +164,10 @@ class AppInitialController extends GetxController {
     'Yes',
     'Occasionally',
     'No',
-    'Prefer Not to Say'
+    'Prefer Not to Say',
   ];
+
+  // No conversion needed as API values match display values
   final RxString selectedDrink = ''.obs;
   final RxBool showDrinkOnProfile = false.obs;
 
@@ -88,8 +175,10 @@ class AppInitialController extends GetxController {
     'Yes',
     'Occasionally',
     'No',
-    'Prefer Not to Say'
+    'Prefer Not to Say',
   ];
+
+  // No conversion needed as API values match display values
   final RxString selectedSmoke = ''.obs;
   final RxBool showSmokeOnProfile = false.obs;
 

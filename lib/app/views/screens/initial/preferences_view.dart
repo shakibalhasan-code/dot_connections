@@ -1,5 +1,7 @@
 import 'package:dot_connections/app/controllers/app_initial_controller.dart';
+import 'package:dot_connections/app/controllers/auth_controller.dart';
 import 'package:dot_connections/app/core/utils/text_style.dart';
+import 'package:dot_connections/app/views/screens/initial/where_live_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -34,9 +36,7 @@ class PreferencesView extends StatelessWidget {
                 SizedBox(height: 10.h),
                 Text(
                   "What do you love?",
-                  style: AppTextStyle.primaryTextStyle(
-                    fontSize: 16,
-                  ),
+                  style: AppTextStyle.primaryTextStyle(fontSize: 16),
                 ),
                 SizedBox(height: 20.h),
                 Text(
@@ -49,16 +49,13 @@ class PreferencesView extends StatelessWidget {
                 Obx(
                   () => DropdownButtonFormField<String>(
                     value: controller.lookingFor.value,
-                    items: [
-                      'What are you looking for?',
-                      'Men',
-                      'Women',
-                      'Everyone'
-                    ]
-                        .map((label) => DropdownMenuItem(
-                              child: Text(label),
-                              value: label,
-                            ))
+                    items: controller.lookingForOptions
+                        .map(
+                          (label) => DropdownMenuItem(
+                            child: Text(label),
+                            value: label,
+                          ),
+                        )
                         .toList(),
                     onChanged: (value) {
                       if (value != null) {
@@ -134,8 +131,46 @@ class PreferencesView extends StatelessWidget {
                 ),
                 const Spacer(),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     // TODO: Navigate to the next screen
+                    final authController = Get.find<AuthController>();
+
+                    debugPrint(
+                      "selected looking for: ${controller.lookingFor.value}",
+                    );
+
+                    // Convert to API format
+                    int index = controller.lookingForOptions.indexOf(
+                      controller.lookingFor.value,
+                    );
+                    String lookingForValue =
+                        index >= 0 &&
+                            index < controller.lookingForApiValues.length
+                        ? controller.lookingForApiValues[index]
+                        : "dating"; // Default value
+
+                    authController.currentUserProfile.value.lookingFor =
+                        lookingForValue;
+
+                    debugPrint(
+                      "selected looking for: ${authController.currentUserProfile.value.lookingFor}",
+                    );
+
+                    authController.currentUserProfile.value.ageRangeMin =
+                        int.tryParse(controller.minAgeController.text) ?? 18;
+
+                    authController.currentUserProfile.value.ageRangeMax =
+                        int.tryParse(controller.maxAgeController.text) ?? 100;
+
+                    authController.currentUserProfile.value.maxDistance =
+                        int.tryParse(
+                          controller.maxDistance.value.toInt().toString(),
+                        ) ??
+                        50;
+                    authController.currentUserProfile.refresh();
+
+                    // Navigate to the next screen
+                    Get.to(() => const WhereLiveView());
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple,

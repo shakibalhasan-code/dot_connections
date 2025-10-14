@@ -1,7 +1,11 @@
 import 'package:dot_connections/app/controllers/app_initial_controller.dart';
+import 'package:dot_connections/app/controllers/auth_controller.dart';
 import 'package:dot_connections/app/core/utils/app_images.dart';
 import 'package:dot_connections/app/core/utils/app_routes.dart';
 import 'package:dot_connections/app/core/utils/text_style.dart';
+import 'package:dot_connections/app/data/models/user_personal_data.dart';
+import 'package:dot_connections/app/views/screens/initial/interests_view.dart';
+import 'package:dot_connections/app/views/screens/initial/workplace_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -62,7 +66,15 @@ class WhereLiveView extends StatelessWidget {
                 SizedBox(height: 20.h),
                 ElevatedButton(
                   onPressed: () {
-                    Get.toNamed(AppRoutes.passions);
+                    final authController = Get.find<AuthController>();
+                    final locationData = Location(
+                      type: 'Point',
+                      coordinates: [],
+                      address: 'Mohakhali, Dhaka, Bangladesh',
+                    );
+                    debugPrint('>>>>>>>>>>>>>>>>>Location Data: $locationData');
+
+                    Get.to(() => WorkplaceView());
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple,
