@@ -5,6 +5,7 @@ import 'package:dot_connections/app/controllers/map_screen_contorller.dart';
 import 'package:dot_connections/app/controllers/match_controller.dart';
 import 'package:dot_connections/app/controllers/parent_controller.dart';
 import 'package:dot_connections/app/controllers/profile_contorller.dart';
+import 'package:dot_connections/app/controllers/splash_controller.dart';
 import 'package:dot_connections/app/controllers/theme_controller.dart';
 import 'package:dot_connections/app/data/repo/auth_repo.dart';
 import 'package:get/get.dart';
@@ -28,6 +29,13 @@ class AppBindings extends Bindings {
     Get.lazyPut(() => AppInitialController(), fenix: true);
     Get.lazyPut(
       () => AuthController(authRepository: Get.find<AuthRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut(
+      () => SplashController(
+        authRepository: Get.find<AuthRepository>(),
+        authController: Get.find<AuthController>(),
+      ),
       fenix: true,
     );
 

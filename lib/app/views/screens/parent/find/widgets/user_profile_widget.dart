@@ -4,6 +4,7 @@ import 'package:dot_connections/app/core/utils/app_colors.dart' show AppColors;
 import 'package:dot_connections/app/core/utils/app_icons.dart';
 import 'package:dot_connections/app/core/utils/app_routes.dart';
 import 'package:dot_connections/app/core/utils/text_style.dart';
+import 'package:dot_connections/app/data/models/user_model.dart';
 import 'package:dot_connections/app/data/models/user_profile_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -15,7 +16,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 
 class UserProfileWidget extends StatelessWidget {
-  final UserProfile userProfile;
+  final UserModel userProfile;
   const UserProfileWidget({super.key, required this.userProfile});
 
   @override
@@ -139,24 +140,24 @@ class UserProfileWidget extends StatelessWidget {
                         size: 18.h,
                       ),
                       SizedBox(width: 8.w),
-                      Text(
-                        userProfile.distance,
-                        style: AppTextStyle.primaryTextStyle(
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white,
-                        ),
-                      ),
+                      // Text(
+                      //   userProfile.distance,
+                      //   style: AppTextStyle.primaryTextStyle(
+                      //     fontSize: 18.sp,
+                      //     fontWeight: FontWeight.w400,
+                      //     color: Colors.white,
+                      //   ),
+                      // ),
                     ],
                   ),
                   SizedBox(height: 5.h),
-                  Wrap(
-                    spacing: 5.w,
-                    runSpacing: 5.h,
-                    children: userProfile.interested.map((item) {
-                      return _buildInterestChip(item);
-                    }).toList(),
-                  ),
+                  // Wrap(
+                  //   spacing: 5.w,
+                  //   runSpacing: 5.h,
+                  //   children: userProfile.interested.map((item) {
+                  //     return _buildInterestChip(item);
+                  //   }).toList(),
+                  // ),
                 ],
               ),
             ),
@@ -196,30 +197,30 @@ class UserProfileWidget extends StatelessWidget {
               top: 10.h,
               child: SizedBox(
                 height: 3.h,
-                child: Row(
-                  children: userProfile.images.asMap().entries.map((item) {
-                    final index = item.key;
-                    //final imageUrl = item.value;
+                // child: Row(
+                //   children: userProfile.images.asMap().entries.map((item) {
+                //     final index = item.key;
+                //     //final imageUrl = item.value;
 
-                    return Flexible(
-                      child: Padding(
-                        padding: EdgeInsetsGeometry.only(left: 5.w),
-                        child: Container(
-                          height: 3.h,
-                          width:
-                              MediaQuery.of(context).size.width /
-                              userProfile.images.length,
-                          decoration: BoxDecoration(
-                            color: controller.activeProfileImage.value == index
-                                ? Colors.white
-                                : Colors.white.withOpacity(0.5),
-                            borderRadius: BorderRadius.circular(50.r),
-                          ),
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
+                //     return Flexible(
+                //       child: Padding(
+                //         padding: EdgeInsetsGeometry.only(left: 5.w),
+                //         child: Container(
+                //           height: 3.h,
+                //           width:
+                //               MediaQuery.of(context).size.width /
+                //               userProfile.images.length,
+                //           decoration: BoxDecoration(
+                //             color: controller.activeProfileImage.value == index
+                //                 ? Colors.white
+                //                 : Colors.white.withOpacity(0.5),
+                //             borderRadius: BorderRadius.circular(50.r),
+                //           ),
+                //         ),
+                //       ),
+                //     );
+                //   }).toList(),
+                // ),
               ),
             ),
           ],
@@ -233,13 +234,13 @@ class UserProfileWidget extends StatelessWidget {
     return Positioned.fill(
       child: ClipRRect(
         borderRadius: BorderRadius.circular(24.r),
-        child: PageView(
-          controller: controller.pageviewProfileImage,
-          onPageChanged: (value) => controller.onProfileImageChanged(value),
-          children: userProfile.images.map((item) {
-            return CachedNetworkImage(imageUrl: item, fit: BoxFit.cover);
-          }).toList(),
-        ),
+        // child: PageView(
+        //   controller: controller.pageviewProfileImage,
+        //   onPageChanged: (value) => controller.onProfileImageChanged(value),
+        //   children: userProfile.images.map((item) {
+        //     return CachedNetworkImage(imageUrl: item, fit: BoxFit.cover);
+        //   }).toList(),
+        // ),
       ),
     );
   }

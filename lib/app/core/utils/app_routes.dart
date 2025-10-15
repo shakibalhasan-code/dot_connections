@@ -20,6 +20,7 @@ import 'package:dot_connections/app/views/screens/initial/workplace_view.dart';
 import 'package:dot_connections/app/views/screens/initial/whats_dob_view.dart';
 import 'package:dot_connections/app/views/screens/initial/whats_email_view.dart';
 import 'package:dot_connections/app/views/screens/initial/whats_name_view.dart';
+import 'package:dot_connections/app/views/screens/splash/splash_screen.dart';
 import 'package:dot_connections/app/views/screens/parent/chat/conversation_screen.dart';
 import 'package:dot_connections/app/views/screens/parent/parent_screen.dart';
 import 'package:dot_connections/app/views/screens/parent/profile/sub_screens/accounts/account_manage_screen.dart';
@@ -37,6 +38,7 @@ import '../../views/screens/parent/notification/notification_screen.dart'
     show NotificationScreen;
 
 class AppRoutes {
+  static String splash = '/splash';
   static String initial = '/initial';
   static String email = '/email';
   static String otp = '/otp';
@@ -78,6 +80,7 @@ class AppRoutes {
   static final AuthMiddleware authMiddleware = AuthMiddleware();
 
   static List<GetPage> pages = [
+    GetPage(name: splash, page: () => const SplashScreen()),
     GetPage(name: initial, page: () => const InitialScreen()),
     GetPage(name: email, page: () => const WhatsEmailView()),
     GetPage(name: otp, page: () => const OtpView()),

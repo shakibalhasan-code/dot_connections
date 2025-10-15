@@ -1,5 +1,7 @@
 import 'package:dot_connections/app/core/helper/widget_helper.dart';
+import 'package:dot_connections/app/data/models/user_model.dart';
 import 'package:dot_connections/app/data/models/user_profile_model.dart';
+import 'package:dot_connections/app/data/repo/match_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -7,51 +9,10 @@ import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:get/get.dart';
 
 class FindController extends GetxController {
+  final matchRepo = Get.find<MatchRepo>();
+
   // List of UserProfile models
-  var cardList = <UserProfile>[
-    UserProfile(
-      images: [
-        'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg',
-        'https://images.pexels.com/photos/1181690/pexels-photo-1181690.jpeg',
-        'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg',
-        'https://images.pexels.com/photos/1181690/pexels-photo-1181690.jpeg',
-      ],
-      name: 'John Neha',
-      age: 25,
-      interested: ['Online shopping', 'Amateur cook', 'Anime'],
-      distance: '0.5 mi. away from you',
-    ),
-    UserProfile(
-      images: [
-        'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg',
-        'https://images.pexels.com/photos/1181690/pexels-photo-1181690.jpeg',
-      ],
-      name: 'Neha Johni',
-      age: 25,
-      interested: ['Online shopping', 'Amateur cook', 'Anime'],
-      distance: '0.5 mi. away from you',
-    ),
-    UserProfile(
-      images: [
-        'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg',
-        'https://images.pexels.com/photos/1181690/pexels-photo-1181690.jpeg',
-      ],
-      name: 'Rakiba Jogn',
-      age: 25,
-      interested: ['Online shopping', 'Amateur cook', 'Anime'],
-      distance: '0.5 mi. away from you',
-    ),
-    UserProfile(
-      images: [
-        'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg',
-        'https://images.pexels.com/photos/1181690/pexels-photo-1181690.jpeg',
-      ],
-      name: 'Rifa Haque',
-      age: 25,
-      interested: ['Online shopping', 'Amateur cook', 'Anime'],
-      distance: '0.5 mi. away from you',
-    ),
-  ].obs; // make it observable
+  var cardList = <UserModel>[].obs; // make it observable
 
   ///varibales
   RxInt activeProfile = 0.obs;
@@ -64,6 +25,23 @@ class FindController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+  }
+
+  Future<void> fetchProfiles() async {
+    try {
+      final profiles = await matchRepo.fetchMatches();
+      cardList.assignAll(profiles);
+    } catch (e) {
+      debugPrint('Error fetching profiles: $e');
+      WidgetHelper.showToast(
+        message: 'Error fetching profiles',
+        status: Status.failed,
+        toastContext: Get.context!,
+      );
+    } finally {
+      Get.back(); // Close loading dialog
+    }
+    update();
   }
 
   //// Do the action when card swipe

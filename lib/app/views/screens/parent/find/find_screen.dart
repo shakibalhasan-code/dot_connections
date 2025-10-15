@@ -7,6 +7,7 @@ import 'package:dot_connections/app/core/utils/app_icons.dart';
 import 'package:dot_connections/app/core/utils/app_routes.dart';
 import 'package:dot_connections/app/core/utils/text_style.dart';
 import 'package:dot_connections/app/views/screens/parent/find/widgets/user_profile_widget.dart';
+import 'package:dot_connections/app/views/screens/parent/profile/sub_screens/subscription/subscription_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -141,7 +142,7 @@ class FindScreen extends StatelessWidget {
           SvgPicture.asset(AppIcons.appIcons, height: 44.h, width: 44.w),
           const Spacer(),
           InkWell(
-            onTap: () => Get.toNamed(AppRoutes.subscription),
+            onTap: () => Get.to(() => SubscriptionScreen()),
             child: Container(
               decoration: BoxDecoration(
                 color: AppColors.primaryColor,

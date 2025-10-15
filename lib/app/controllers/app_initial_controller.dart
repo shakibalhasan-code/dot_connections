@@ -109,6 +109,7 @@ class AppInitialController extends GetxController {
     'relationship',
     'networking',
   ];
+
   final RxString lookingFor = 'What are you looking for?'.obs;
   final minAgeController = TextEditingController();
   final maxAgeController = TextEditingController();

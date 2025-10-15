@@ -1,14 +1,3 @@
-/// UserModel represents a user in the dating app
-///
-/// This model contains all user information including profile details,
-/// preferences, photos, and matching data. It's designed to be easily
-/// serializable for API communication and local storage.
-///
-/// Customization points:
-/// - Add more profile fields as needed
-/// - Extend with premium features data
-/// - Include social media integration fields
-/// - Add verification status fields
 class UserModel {
   /// Unique user identifier
   final String id;
