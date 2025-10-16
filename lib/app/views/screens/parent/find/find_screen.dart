@@ -33,97 +33,146 @@ class FindScreen extends StatelessWidget {
               children: [
                 _headerWidget(),
                 // SizedBox(height: 10.h),
-                Expanded(
-                  child: Stack(
-                    children: [
-                      ///>>>>>>>>> profile container<<<<<<<<<<<<<<<
-                      Positioned.fill(
-                        child: CardSwiper(
-                          backCardOffset: Offset(0, 10),
-                          controller: controller.cardSwipeController,
-                          padding: EdgeInsetsGeometry.symmetric(
-                            horizontal: 5.w,
-                            vertical: 16.h,
-                          ),
-                          initialIndex: controller.activeProfile.value,
-                          onSwipe: (previousIndex, currentIndex, direction) {
-                            if (currentIndex != null) {
-                              controller.cardSwipe(
-                                currentIndex: currentIndex,
-                                previousIndex: previousIndex,
-                                direction: direction,
-                              );
-                            }
-                            return true;
-                          },
-                          cardsCount: controller.cardList.length,
-                          allowedSwipeDirection: AllowedSwipeDirection.only(
-                            left: true,
-                            right: true,
-                          ),
-                          cardBuilder: (context, index, x, y) {
-                            return UserProfileWidget(
-                              userProfile: controller.cardList[index],
-                            );
-                          },
-                        ),
-                      ),
-
-                      ///>>>>>>>> BOTTOM ACTIONS<<<<<<<<
-                      Positioned(
-                        left: 15.w,
-                        right: 15.h,
-                        bottom: 0.h,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                controller.cardList.isNotEmpty
+                    ? Expanded(
+                        child: Stack(
                           children: [
-                            ///ignore action button
-                            _buildAccessibleActionButton(
-                              AppIcons.crossIcon,
-                              Colors.black,
-                              () => controller.swipeByActions(
-                                CardSwiperDirection.left,
-                              ),
-                              LocalizationService.instance.getText(
-                                'pass_button',
-                              ),
-                              LocalizationService.instance.getText(
-                                'pass_button_hint',
+                            ///>>>>>>>>> profile container<<<<<<<<<<<<<<<
+                            Positioned.fill(
+                              child: CardSwiper(
+                                backCardOffset: const Offset(0, 10),
+                                controller: controller.cardSwipeController,
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 5.w,
+                                  vertical: 16.h,
+                                ),
+                                initialIndex: controller.activeProfile.value,
+                                onSwipe: (previousIndex, currentIndex, direction) {
+                                  if (currentIndex != null) {
+                                    // Schedule the callback to run after the build is complete
+                                    WidgetsBinding.instance
+                                        .addPostFrameCallback((_) {
+                                          controller.cardSwipe(
+                                            currentIndex: currentIndex,
+                                            previousIndex: previousIndex,
+                                            direction: direction,
+                                          );
+                                        });
+                                  }
+                                  return true;
+                                },
+                                cardsCount: controller.cardList.length,
+                                allowedSwipeDirection:
+                                    AllowedSwipeDirection.only(
+                                      left: true,
+                                      right: true,
+                                    ),
+                                cardBuilder: (context, index, x, y) {
+                                  if (index < controller.cardList.length) {
+                                    return UserProfileWidget(
+                                      userProfile: controller.cardList[index],
+                                    );
+                                  } else {
+                                    // Fallback widget if index is out of bounds
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[300],
+                                        borderRadius: BorderRadius.circular(
+                                          24.r,
+                                        ),
+                                      ),
+                                      child: const Center(
+                                        child: Text('No profile available'),
+                                      ),
+                                    );
+                                  }
+                                },
                               ),
                             ),
-                            _buildAccessibleActionButton(
-                              AppIcons.mapIcon,
-                              Colors.blue,
-                              () {
-                                // Navigate to map tab to show user locations
-                                final ParentController parentController =
-                                    Get.find();
-                                parentController.onTabTapped(
-                                  1,
-                                ); // Map screen is at index 1
-                              },
-                              'Show on map',
-                              'Double tap to view user locations on map',
-                            ),
-                            _buildAccessibleActionButton(
-                              AppIcons.loveIcon,
-                              Colors.red,
-                              () => controller.swipeByActions(
-                                CardSwiperDirection.right,
-                              ),
-                              LocalizationService.instance.getText(
-                                'like_button',
-                              ),
-                              LocalizationService.instance.getText(
-                                'like_button_hint',
+
+                            ///>>>>>>>> BOTTOM ACTIONS<<<<<<<<
+                            Positioned(
+                              left: 15.w,
+                              right: 15.h,
+                              bottom: 0.h,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  ///ignore action button
+                                  _buildAccessibleActionButton(
+                                    AppIcons.crossIcon,
+                                    Colors.black,
+                                    () {
+                                      // Schedule action to occur after the current frame
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback((_) {
+                                            controller.swipeByActions(
+                                              CardSwiperDirection.left,
+                                            );
+                                          });
+                                    },
+                                    LocalizationService.instance.getText(
+                                      'pass_button',
+                                    ),
+                                    LocalizationService.instance.getText(
+                                      'pass_button_hint',
+                                    ),
+                                  ),
+                                  _buildAccessibleActionButton(
+                                    AppIcons.mapIcon,
+                                    Colors.blue,
+                                    () {
+                                      // Schedule navigation to occur after the current frame
+                                      WidgetsBinding.instance.addPostFrameCallback((
+                                        _,
+                                      ) {
+                                        // Navigate to map tab to show user locations
+                                        final ParentController
+                                        parentController = Get.find();
+                                        parentController.onTabTapped(
+                                          1,
+                                        ); // Map screen is at index 1
+                                      });
+                                    },
+                                    'Show on map',
+                                    'Double tap to view user locations on map',
+                                  ),
+                                  _buildAccessibleActionButton(
+                                    AppIcons.loveIcon,
+                                    Colors.red,
+                                    () {
+                                      // Schedule action to occur after the current frame
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback((_) {
+                                            controller.swipeByActions(
+                                              CardSwiperDirection.right,
+                                            );
+                                          });
+                                    },
+                                    LocalizationService.instance.getText(
+                                      'like_button',
+                                    ),
+                                    LocalizationService.instance.getText(
+                                      'like_button_hint',
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
+                      )
+                    : Center(
+                        child: Text(
+                          'No profiles available',
+                          style: AppTextStyle.primaryTextStyle(
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey,
+                          ),
+                        ),
                       ),
-                    ],
-                  ),
-                ),
                 SizedBox(height: 20.h),
               ],
             ),
@@ -229,32 +278,6 @@ class FindScreen extends StatelessWidget {
     );
   }
 
-  /// action button widget
-  Widget _buildActionButton(String icon, Color color, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              blurRadius: 1,
-              blurStyle: BlurStyle.normal,
-              color: Colors.grey,
-            ),
-          ],
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(50.r),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SvgPicture.asset(
-            icon,
-            width: 43.56.w,
-            height: 43.56.h,
-            color: color,
-          ),
-        ),
-      ),
-    );
-  }
+  // This method has been replaced by the _buildAccessibleActionButton method
+  // Removed unused method
 }

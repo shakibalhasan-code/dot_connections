@@ -1,177 +1,107 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dot_connections/app/controllers/find_controller.dart';
-import 'package:dot_connections/app/core/utils/app_colors.dart' show AppColors;
-import 'package:dot_connections/app/core/utils/app_icons.dart';
-import 'package:dot_connections/app/core/utils/app_routes.dart';
 import 'package:dot_connections/app/core/utils/text_style.dart';
 import 'package:dot_connections/app/data/models/user_model.dart';
-import 'package:dot_connections/app/data/models/user_profile_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 
 class UserProfileWidget extends StatelessWidget {
   final UserModel userProfile;
-  const UserProfileWidget({super.key, required this.userProfile});
+
+  const UserProfileWidget({Key? key, required this.userProfile})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<FindController>(
-      builder: (controller) {
-        return SizedBox(
-          height: Get.height,
-          child: Container(
-            height: Get.height,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(24.r),
-            ),
-            child: SizedBox(
-              height: Get.height,
-              child: Stack(
-                children: [
-                  _imageWidget(controller),
+    return Container(
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(24.r)),
+      child: Stack(
+        children: [
+          // Profile Image
+          _buildProfileImage(),
 
-                  /// current index of container as like facebook story
-                  _buildImageStoryProgress(context, controller),
+          // Gradient overlay at top
+          _buildTopGradient(),
 
-                  _buildProfileData(),
-
-                  ///leftside click event
-                  // Positioned(
-                  //   left: 0,
-                  //   top: 0,
-                  //   bottom: 50.h,
-                  //   child: InkWell(
-                  //     onTap: () {
-                  //       controller.decreaseImageIndex();
-                  //       debugPrint("Profile Clicked");
-                  //     },
-                  //     child: SizedBox(width: 50.w, height: Get.height),
-                  //   ),
-                  // ),
-
-                  /// right side click event
-                  // Positioned(
-                  //   right: 0,
-                  //   top: 0,
-                  //   bottom: 50.h,
-                  //   child: InkWell(
-                  //     onTap: () {
-                  //       controller.increaseImageIndex();
-                  //       debugPrint("Profile Clicked");
-                  //     },
-                  //     child: SizedBox(width: 50.w, height: Get.height),
-                  //   ),
-                  // ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  ///profile data view
-  Positioned _buildProfileData() {
-    return Positioned(
-      bottom: 0.h,
-      right: 0.w,
-      left: 0.w,
-      child: SizedBox(
-        height: 250.h,
-
-        child: Stack(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.black, Colors.black.withOpacity(0.0)],
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
-                ),
-                borderRadius: BorderRadius.circular(20.r),
-              ),
-            ),
-
-            Positioned(
-              left: 10.w,
-              right: 10.w,
-              bottom: 50.h,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        userProfile.name,
-                        style: AppTextStyle.primaryTextStyle(
-                          fontSize: 28.sp,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Icon(Icons.female, color: Colors.white, size: 22.h),
-                      Text(
-                        userProfile.age.toString(),
-                        style: AppTextStyle.primaryTextStyle(
-                          fontSize: 22.sp,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(width: 16.w),
-                      Icon(Icons.verified, color: Colors.blue),
-                    ],
-                  ),
-                  SizedBox(height: 5.h),
-
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.location_on_rounded,
-                        color: Colors.white,
-                        size: 18.h,
-                      ),
-                      SizedBox(width: 8.w),
-                      // Text(
-                      //   userProfile.distance,
-                      //   style: AppTextStyle.primaryTextStyle(
-                      //     fontSize: 18.sp,
-                      //     fontWeight: FontWeight.w400,
-                      //     color: Colors.white,
-                      //   ),
-                      // ),
-                    ],
-                  ),
-                  SizedBox(height: 5.h),
-                  // Wrap(
-                  //   spacing: 5.w,
-                  //   runSpacing: 5.h,
-                  //   children: userProfile.interested.map((item) {
-                  //     return _buildInterestChip(item);
-                  //   }).toList(),
-                  // ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          // Profile Data at bottom
+          _buildProfileData(),
+        ],
       ),
     );
   }
 
-  ///image story progressview
-  Positioned _buildImageStoryProgress(
-    BuildContext context,
-    FindController controller,
-  ) {
+  /// Profile image view
+  Widget _buildProfileImage() {
+    // Determine the image URL
+    String? imageUrl;
+
+    // First try to use profile photo URL
+    if (userProfile.profilePhotoUrl != null &&
+        userProfile.profilePhotoUrl!.isNotEmpty) {
+      imageUrl = userProfile.profilePhotoUrl;
+    }
+    // Otherwise use the first photo from photoUrls if available
+    else if (userProfile.photoUrls.isNotEmpty) {
+      imageUrl = userProfile.photoUrls[0];
+    }
+
+    return Positioned.fill(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(24.r),
+        child: imageUrl != null
+            ? CachedNetworkImage(
+                imageUrl: imageUrl.startsWith('http')
+                    ? imageUrl
+                    : 'https://api.dotconnections.xyz$imageUrl', // Add base URL if needed
+                fit: BoxFit.cover,
+                placeholder: (context, url) => Container(
+                  color: Colors.grey[300],
+                  child: const Center(child: CircularProgressIndicator()),
+                ),
+                errorWidget: (context, url, error) => Container(
+                  color: Colors.grey[300],
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.person, size: 80, color: Colors.grey[600]),
+                      const SizedBox(height: 10),
+                      Text(
+                        'Image not available',
+                        style: TextStyle(color: Colors.grey[600]),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            : Container(
+                color: Colors.grey[300],
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      userProfile.gender.toLowerCase() == 'female'
+                          ? Icons.female
+                          : Icons.male,
+                      size: 80,
+                      color: Colors.grey[600],
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      userProfile.name,
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+      ),
+    );
+  }
+
+  /// Gradient overlay at top
+  Widget _buildTopGradient() {
     return Positioned(
       top: 0,
       right: 0,
@@ -184,76 +114,125 @@ class UserProfileWidget extends StatelessWidget {
             topRight: Radius.circular(20.r),
           ),
           gradient: LinearGradient(
-            colors: [Colors.black, Colors.transparent],
+            colors: [Colors.black.withOpacity(0.7), Colors.transparent],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
         ),
-        child: Stack(
-          children: [
-            Positioned(
-              left: 10.w,
-              right: 10.w,
-              top: 10.h,
-              child: SizedBox(
-                height: 3.h,
-                // child: Row(
-                //   children: userProfile.images.asMap().entries.map((item) {
-                //     final index = item.key;
-                //     //final imageUrl = item.value;
+      ),
+    );
+  }
 
-                //     return Flexible(
-                //       child: Padding(
-                //         padding: EdgeInsetsGeometry.only(left: 5.w),
-                //         child: Container(
-                //           height: 3.h,
-                //           width:
-                //               MediaQuery.of(context).size.width /
-                //               userProfile.images.length,
-                //           decoration: BoxDecoration(
-                //             color: controller.activeProfileImage.value == index
-                //                 ? Colors.white
-                //                 : Colors.white.withOpacity(0.5),
-                //             borderRadius: BorderRadius.circular(50.r),
-                //           ),
-                //         ),
-                //       ),
-                //     );
-                //   }).toList(),
-                // ),
-              ),
+  /// Profile data view
+  Widget _buildProfileData() {
+    return Positioned(
+      bottom: 0.h,
+      right: 0.w,
+      left: 0.w,
+      child: Container(
+        height: 250.h,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.black.withOpacity(0.8), Colors.transparent],
+            begin: Alignment.bottomCenter,
+            end: Alignment.topCenter,
+          ),
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(24.r),
+            bottomRight: Radius.circular(24.r),
+          ),
+        ),
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Name, Age and Verification
+            Row(
+              children: [
+                Text(
+                  userProfile.name,
+                  style: AppTextStyle.primaryTextStyle(
+                    fontSize: 28.sp,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(width: 8.w),
+                Icon(
+                  userProfile.gender.toLowerCase() == 'female'
+                      ? Icons.female
+                      : Icons.male,
+                  color: Colors.white,
+                  size: 22.h,
+                ),
+                SizedBox(width: 4.w),
+                Text(
+                  userProfile.age.toString(),
+                  style: AppTextStyle.primaryTextStyle(
+                    fontSize: 22.sp,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(width: 12.w),
+                if (userProfile.isVerified)
+                  Icon(Icons.verified, color: Colors.blue),
+              ],
             ),
+            SizedBox(height: 8.h),
+
+            // Location
+            if (userProfile.displayLocation.isNotEmpty)
+              Row(
+                children: [
+                  Icon(
+                    Icons.location_on_rounded,
+                    color: Colors.white,
+                    size: 18.h,
+                  ),
+                  SizedBox(width: 8.w),
+                  Text(
+                    userProfile.displayLocation,
+                    style: AppTextStyle.primaryTextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            SizedBox(height: 8.h),
+
+            // Interests tags
+            if (userProfile.interests.isNotEmpty)
+              Wrap(
+                spacing: 8.w,
+                runSpacing: 8.h,
+                children: userProfile.interests
+                    .take(5) // Limit to 5 interests
+                    .map((interest) => _buildInterestChip(interest))
+                    .toList(),
+              ),
+            SizedBox(height: 16.h),
           ],
         ),
       ),
     );
   }
 
-  ///profile image view
-  Positioned _imageWidget(FindController controller) {
-    return Positioned.fill(
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(24.r),
-        // child: PageView(
-        //   controller: controller.pageviewProfileImage,
-        //   onPageChanged: (value) => controller.onProfileImageChanged(value),
-        //   children: userProfile.images.map((item) {
-        //     return CachedNetworkImage(imageUrl: item, fit: BoxFit.cover);
-        //   }).toList(),
-        // ),
-      ),
-    );
-  }
-
-  /// interest list item
+  /// Interest list item
   Widget _buildInterestChip(String text) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
       decoration: BoxDecoration(
-        color: Colors.grey[800],
-        borderRadius: BorderRadius.circular(16.0),
+        color: Colors.white.withOpacity(0.2),
+        borderRadius: BorderRadius.circular(16.r),
       ),
-      child: Text(text, style: TextStyle(color: Colors.white)),
+      child: Text(
+        text,
+        style: TextStyle(color: Colors.white, fontSize: 12.sp),
+      ),
     );
   }
 }

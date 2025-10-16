@@ -9,7 +9,7 @@ import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:get/get.dart';
 
 class FindController extends GetxController {
-  final matchRepo = Get.find<MatchRepo>();
+  final matchRepo = Get.put(MatchRepo());
 
   // List of UserProfile models
   var cardList = <UserModel>[].obs; // make it observable
@@ -23,14 +23,50 @@ class FindController extends GetxController {
   final pageviewProfileImage = PageController();
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
+    await fetchProfiles();
   }
 
   Future<void> fetchProfiles() async {
+    // Show loading dialog
     try {
+      // Clear current list
+      cardList.clear();
+
+      // Fetch new profiles
       final profiles = await matchRepo.fetchMatches();
-      cardList.assignAll(profiles);
+
+      // Check if any valid profiles were returned
+      if (profiles.isNotEmpty) {
+        // Filter out profiles with missing required data
+        final validProfiles = profiles
+            .where(
+              (profile) => profile.id.isNotEmpty && profile.name.isNotEmpty,
+            )
+            .toList();
+
+        if (validProfiles.isNotEmpty) {
+          cardList.assignAll(validProfiles);
+          debugPrint(
+            'Successfully loaded ${validProfiles.length} valid profiles',
+          );
+        } else {
+          debugPrint('No valid profiles returned from the API');
+          WidgetHelper.showToast(
+            message: 'No valid profiles found',
+            status: Status.warning,
+            toastContext: Get.context!,
+          );
+        }
+      } else {
+        debugPrint('No profiles returned from the API');
+        WidgetHelper.showToast(
+          message: 'No profiles found',
+          status: Status.warning,
+          toastContext: Get.context!,
+        );
+      }
     } catch (e) {
       debugPrint('Error fetching profiles: $e');
       WidgetHelper.showToast(
@@ -39,7 +75,10 @@ class FindController extends GetxController {
         toastContext: Get.context!,
       );
     } finally {
-      Get.back(); // Close loading dialog
+      // Make sure loading dialog is closed
+      if (Get.isDialogOpen ?? false) {
+        Get.back(); // Close loading dialog
+      }
     }
     update();
   }
@@ -78,16 +117,20 @@ class FindController extends GetxController {
     }
   }
 
-  //user ingore profile action's logic
-  void swipeByActions(CardSwiperDirection direction) async {
+  //user ignore profile action's logic
+  void swipeByActions(CardSwiperDirection direction) {
     // Add haptic feedback
     HapticFeedback.mediumImpact();
 
     ///set the default active image value
     activeProfileImage.value = 0;
     debugPrint('>>>>>>>>>>>>ignore button clicked');
-    cardSwipeController.swipe(direction);
-    update();
+
+    // Schedule the swipe operation to happen after the current frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      cardSwipeController.swipe(direction);
+      update();
+    });
   }
 
   /// change the current image

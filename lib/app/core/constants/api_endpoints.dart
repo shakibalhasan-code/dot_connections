@@ -21,6 +21,12 @@ class ApiEndpoints {
   static String get updateUserStatus =>
       '$baseUrl/user'; // Append user ID + /status
   static String get deleteAccount => '$baseUrl/user/delete';
-  static String get getAllUsers => '$baseUrl/user';
+
+  ///get users for matching
+  ///GET /api/v1/match/potential
+  static String get getAllUsers => '$baseUrl/match/potential';
+
+  ///get potential matches with better formatting
+  static String get getPotentialMatches => '$baseUrl/match/potential';
   static String get updateUserRole => '$baseUrl/user'; // Append user ID + /role
 }
