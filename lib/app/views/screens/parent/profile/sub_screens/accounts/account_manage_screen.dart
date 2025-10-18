@@ -1,3 +1,4 @@
+import 'package:dot_connections/app/controllers/profile_contorller.dart';
 import 'package:dot_connections/app/core/utils/app_colors.dart';
 import 'package:dot_connections/app/core/utils/app_icons.dart';
 import 'package:dot_connections/app/core/utils/app_routes.dart';
@@ -6,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class AccountManageScreen extends StatelessWidget {
   const AccountManageScreen({super.key});
@@ -37,25 +37,34 @@ class AccountManageScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 30.h),
-            data_edit_item(
-              title: 'Full Name',
-              subtitle: 'Shakib Al Hasan',
-              onTap: ()=> Get.toNamed(AppRoutes.editFullName),
-              isEditable: true,
-            ),
-            SizedBox(height: 10.h),
-            data_edit_item(
-              title: 'Phone Number',
-              subtitle: '+8801857895107',
-              onTap: () => Get.toNamed(AppRoutes.updatePhoneView),
-              isEditable: true
-            ),
-            SizedBox(height: 10.h),
-            data_edit_item(
-              title: 'E-mail',
-              subtitle: 'example.sah@gmail.com',
-              onTap: () {},
-              isEditable: false
+            GetBuilder<ProfileContorller>(
+              init: Get.find<ProfileContorller>(),
+              builder: (controller) {
+                return Column(
+                  children: [
+                    data_edit_item(
+                      title: 'Full Name',
+                      subtitle: controller.getFullName(),
+                      onTap: () => Get.toNamed(AppRoutes.editFullName),
+                      isEditable: true,
+                    ),
+                    SizedBox(height: 10.h),
+                    data_edit_item(
+                      title: 'Phone Number',
+                      subtitle: controller.getPhoneNumber(),
+                      onTap: () => Get.toNamed(AppRoutes.updatePhoneView),
+                      isEditable: true,
+                    ),
+                    SizedBox(height: 10.h),
+                    data_edit_item(
+                      title: 'E-mail',
+                      subtitle: controller.getEmail(),
+                      onTap: () {},
+                      isEditable: false,
+                    ),
+                  ],
+                );
+              },
             ),
           ],
         ),
@@ -67,7 +76,7 @@ class AccountManageScreen extends StatelessWidget {
     required String title,
     required String subtitle,
     required VoidCallback onTap,
-    required bool isEditable
+    required bool isEditable,
   }) {
     return Row(
       children: [
@@ -96,10 +105,12 @@ class AccountManageScreen extends StatelessWidget {
           ),
         ),
         SizedBox(width: 10.w),
-        isEditable  ? IconButton(
-          onPressed: onTap,
-          icon: SvgPicture.asset(AppIcons.penIcon, color: Colors.black),
-        ) : const SizedBox()
+        isEditable
+            ? IconButton(
+                onPressed: onTap,
+                icon: SvgPicture.asset(AppIcons.penIcon, color: Colors.black),
+              )
+            : const SizedBox(),
       ],
     );
   }

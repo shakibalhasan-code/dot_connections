@@ -232,11 +232,14 @@ class AuthController extends GetxController {
       final response = await _authRepository.getMyProfile();
 
       if (response.success && response.data != null) {
+        debugPrint('👤 User profile fetched: ${response.data}');
         currentUser.value = UserDto.fromJson(response.data);
       } else {
         errorMessage.value = response.message;
       }
+      debugPrint('👤 User profile fetched: ${response.data}');
     } catch (e) {
+      debugPrint('👤 Error fetching user profile: $e');
       errorMessage.value = 'Failed to fetch profile: $e';
     } finally {
       isLoading.value = false;
@@ -354,6 +357,221 @@ class AuthController extends GetxController {
       }
     } catch (e) {
       errorMessage.value = 'Failed to update user: $e';
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  /// Updates user information using FormData (for PATCH /user/update-user endpoint)
+  // Future<void> updateUserWithFormData({
+  //   String? firstName,
+  //   String? lastName,
+  //   String? phoneNumber,
+  //   bool? pushNotification,
+  //   DateTime? dateOfBirth,
+  // }) async {
+  //   try {
+  //     isLoading.value = true;
+  //     errorMessage.value = '';
+
+  //     print('👤 Updating user with form data');
+
+  //     final response = await _authRepository.updateUserWithFormData(
+  //       firstName: firstName,
+  //       lastName: lastName,
+  //       phoneNumber: phoneNumber,
+  //       dateOfBirth: dateOfBirth,
+  //     );
+
+  //     if (response.success) {
+  //       print('👤 Successfully updated user data');
+  //       // Refresh user profile to get the latest data
+  //       await fetchUserProfile();
+  //       Get.snackbar('Success', 'User information updated successfully');
+  //     } else {
+  //       print('👤 Failed to update user data: ${response.message}');
+  //       errorMessage.value = response.message;
+  //       Get.snackbar(
+  //         'Error',
+  //         'Failed to update user information: ${response.message}',
+  //       );
+  //     }
+  //   } catch (e) {
+  //     print('👤 Exception when updating user: $e');
+  //     errorMessage.value = 'Failed to update user: $e';
+  //     Get.snackbar('Error', 'Failed to update user information');
+  //   } finally {
+  //     isLoading.value = false;
+  //   }
+  // }
+
+  /// Updates only user's first name and last name and handles navigation
+  Future<void> updateUserName({
+    required String firstName,
+    required String lastName,
+  }) async {
+    try {
+      isLoading.value = true;
+      errorMessage.value = '';
+
+      // Validate inputs first
+      if (firstName.isEmpty) {
+        errorMessage.value = 'First name cannot be empty';
+        Get.snackbar('Error', 'First name cannot be empty');
+        return;
+      }
+
+      print('👤 Updating user name: $firstName $lastName');
+
+      final response = await _authRepository.updateUserName(
+        firstName: firstName,
+        lastName: lastName,
+      );
+
+      if (response.success) {
+        print('👤 Successfully updated user name');
+        // Refresh user profile to get the latest data
+        await fetchUserProfile();
+
+        // Show success snackbar with a callback to navigate back after it completes
+        Get.snackbar(
+          'Success',
+          'Name updated successfully',
+          duration: const Duration(seconds: 1),
+          snackbarStatus: (status) {
+            if (status == SnackbarStatus.CLOSED) {
+              // Only navigate back after snackbar is fully closed
+              Get.back();
+            }
+          },
+        );
+      } else {
+        print('👤 Failed to update user name: ${response.message}');
+        errorMessage.value = response.message;
+        Get.snackbar('Error', 'Failed to update name: ${response.message}');
+      }
+    } catch (e) {
+      print('👤 Exception when updating user name: $e');
+      errorMessage.value = 'Failed to update name: $e';
+      Get.snackbar('Error', 'Failed to update name. Please try again.');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  /// Updates only user's first name and last name without handling navigation
+  /// Returns the AuthResponse for external navigation handling
+  Future<AuthResponse> updateUserNameWithoutNavigation({
+    required String firstName,
+    required String lastName,
+  }) async {
+    try {
+      isLoading.value = true;
+      errorMessage.value = '';
+
+      // Validate inputs first
+      if (firstName.isEmpty) {
+        errorMessage.value = 'First name cannot be empty';
+        return AuthResponse(
+          success: false,
+          message: 'First name cannot be empty',
+        );
+      }
+
+      print('👤 Updating user name: $firstName $lastName');
+
+      final response = await _authRepository.updateUserName(
+        firstName: firstName,
+        lastName: lastName,
+      );
+
+      if (response.success) {
+        print('👤 Successfully updated user name');
+        // Refresh user profile to get the latest data
+        await fetchUserProfile();
+      } else {
+        print('👤 Failed to update user name: ${response.message}');
+        errorMessage.value = response.message;
+      }
+
+      return response;
+    } catch (e) {
+      print('👤 Exception when updating user name: $e');
+      errorMessage.value = 'Failed to update name: $e';
+      return AuthResponse(success: false, message: 'Failed to update name: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  /// Updates only user's phone number
+  Future<AuthResponse> updateUserPhone({required String phoneNumber}) async {
+    try {
+      isLoading.value = true;
+      errorMessage.value = '';
+
+      print('👤 Updating user phone number: $phoneNumber');
+
+      final response = await _authRepository.updateUserPhone(
+        phoneNumber: phoneNumber,
+      );
+
+      if (response.success) {
+        print('👤 Successfully updated phone number');
+        // Refresh user profile to get the latest data
+        await fetchUserProfile();
+      } else {
+        print('👤 Failed to update phone number: ${response.message}');
+        errorMessage.value = response.message;
+      }
+
+      return response;
+    } catch (e) {
+      print('👤 Exception when updating phone: $e');
+      errorMessage.value = 'Failed to update phone number: $e';
+      return AuthResponse(
+        success: false,
+        message: 'Failed to update phone number: $e',
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  /// Updates user's profile image
+  Future<void> updateUserImage({required String imagePath}) async {
+    try {
+      isLoading.value = true;
+      errorMessage.value = '';
+
+      print('👤 Updating user profile image: $imagePath');
+
+      final response = await _authRepository.updateUserImage(
+        imagePath: imagePath,
+      );
+
+      if (response.success) {
+        print('👤 Successfully updated profile image');
+        // Refresh user profile to get the latest data
+        await fetchUserProfile();
+
+        Get.snackbar(
+          'Success',
+          'Profile image updated successfully',
+          duration: const Duration(seconds: 1),
+        );
+      } else {
+        print('👤 Failed to update profile image: ${response.message}');
+        errorMessage.value = response.message;
+        Get.snackbar(
+          'Error',
+          'Failed to update profile image: ${response.message}',
+        );
+      }
+    } catch (e) {
+      print('👤 Exception when updating profile image: $e');
+      errorMessage.value = 'Failed to update profile image: $e';
+      Get.snackbar('Error', 'Failed to update profile image');
     } finally {
       isLoading.value = false;
     }
@@ -555,6 +773,8 @@ class AuthController extends GetxController {
   }
 
   /// Handles navigation based on profile completion status
+  // Note: This method is currently not used but kept for potential future use
+  // ignore: unused_element
   void _handleNavigation() {
     print('🧭 Handling navigation after authentication');
 

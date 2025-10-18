@@ -109,6 +109,131 @@ class AuthApiClient {
     }
   }
 
+  /// Updates user information using FormData (PATCH method)
+  Future<AuthResponse> updateUserWithFormData(
+    Map<String, dynamic> userData,
+  ) async {
+    try {
+      print('🚀 Updating user with FormData: $userData');
+
+      final response = await ApiServices.patchFormData(
+        ApiEndpoints.updateUser,
+        userData,
+      );
+
+      print('📥 Response status code: ${response.statusCode}');
+      print('📥 Response body: ${response.body}');
+
+      final jsonResponse = jsonDecode(response.body);
+      return AuthResponse.fromJson(jsonResponse);
+    } catch (e) {
+      print('❌ Error updating user: $e');
+      throw Exception('Failed to update user: $e');
+    }
+  }
+
+  /// Updates only user's first name and last name
+  Future<AuthResponse> updateUserName(String firstName, String lastName) async {
+    try {
+      print('🚀 Updating user name: $firstName $lastName');
+
+      // Make sure both fields are non-empty strings
+      if (firstName.isEmpty || lastName.isEmpty) {
+        throw Exception('First name and last name cannot be empty');
+      }
+
+      final userData = {'firstName': firstName, 'lastName': lastName};
+
+      // For debugging - show what we're sending
+      print('🚀 Update user data payload: $userData');
+
+      final response = await ApiServices.updateData(ApiEndpoints.updateUser, {
+        'data': userData,
+      });
+
+      print('📥 Response status code: ${response.statusCode}');
+      print('📥 Response body: ${response.body}');
+
+      final jsonResponse = jsonDecode(response.body);
+      return AuthResponse.fromJson(jsonResponse);
+    } catch (e) {
+      print('❌ Error updating user name: $e');
+      throw Exception('Failed to update user name: $e');
+    }
+  }
+
+  /// Updates only user's phone number
+  Future<AuthResponse> updateUserPhone(String phoneNumber) async {
+    try {
+      print('🚀 Updating user phone number: $phoneNumber');
+
+      // Make sure the phone number is not empty
+      if (phoneNumber.isEmpty) {
+        throw Exception('Phone number cannot be empty');
+      }
+
+      final userData = {'phoneNumber': phoneNumber};
+
+      // For debugging - show what we're sending
+      print('🚀 Update phone data payload: $userData');
+
+      // Try using the regular postData method instead of patchFormData
+      // The server might be expecting JSON instead of FormData for this endpoint
+      final response = await ApiServices.updateData(ApiEndpoints.updateUser, {
+        "data": userData,
+      });
+
+      print('📥 Response status code: ${response.statusCode}');
+      print('📥 Response body: ${response.body}');
+
+      final jsonResponse = jsonDecode(response.body);
+      return AuthResponse.fromJson(jsonResponse);
+    } catch (e) {
+      print('❌ Error updating user phone: $e');
+      throw Exception('Failed to update user phone: $e');
+    }
+  }
+
+  /// Updates user's profile image
+  Future<AuthResponse> updateUserImage(String imagePath) async {
+    try {
+      print('🚀 Updating user image from: $imagePath');
+
+      // For image upload, we need to keep using FormData with multipart
+      // Empty fields since we're only sending the image
+      final fields = <String, dynamic>{};
+
+      // File mapping - 'image' is the field name expected by the API
+      final files = {'image': imagePath};
+
+      print('🚀 Uploading image with path: $imagePath');
+
+      final response = await ApiServices.patchFormDataWithFile(
+        ApiEndpoints.updateUser,
+        fields,
+        files,
+      );
+
+      print('📥 Response status code: ${response.statusCode}');
+      print('📥 Response body: ${response.body}');
+
+      // Check if the response body is empty or invalid
+      if (response.body.isEmpty || response.body.trim() == 'undefined') {
+        print('❌ Received empty or invalid response body');
+        return AuthResponse(
+          success: false,
+          message: 'Received empty response from server',
+        );
+      }
+
+      final jsonResponse = jsonDecode(response.body);
+      return AuthResponse.fromJson(jsonResponse);
+    } catch (e) {
+      print('❌ Error updating user image: $e');
+      throw Exception('Failed to update user image: $e');
+    }
+  }
+
   /// Updates profile information
   Future<AuthResponse> updateProfile(Map<String, dynamic> profileData) async {
     try {

@@ -50,17 +50,24 @@ class UpdatePhoneView extends StatelessWidget {
                 SizedBox(height: 5.h),
 
                 CommonTextFeild(
-                  hint: '+8801857895107',
+                  hint: '+1234567890',
                   isPassword: false,
-                  type: TextInputType.text,
-                  controller: controller.editFirstNameController,
+                  type: TextInputType.phone,
+                  controller: controller.phoneController,
                 ),
-               
+
                 SizedBox(height: 20.h),
 
                 ElevatedButton(
-                  onPressed: () {
-                    Get.back();
+                  onPressed: () async {
+                    // Close any existing snackbars to avoid conflicts
+                    if (Get.isSnackbarOpen) {
+                      Get.closeCurrentSnackbar();
+                    }
+
+                    // Update the user's phone number
+                    // Navigation is now handled in the controller
+                    await controller.updatePhoneNumber();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryColor,

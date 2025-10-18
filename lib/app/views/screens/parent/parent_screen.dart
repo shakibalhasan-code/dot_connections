@@ -1,4 +1,6 @@
+import 'package:dot_connections/app/controllers/auth_controller.dart';
 import 'package:dot_connections/app/controllers/parent_controller.dart';
+import 'package:dot_connections/app/controllers/profile_contorller.dart';
 import 'package:dot_connections/app/core/utils/app_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,6 +22,16 @@ class ParentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get the auth controller to fetch the profile
+    final authController = Get.find<AuthController>();
+    final profileController = Get.find<ProfileContorller>();
+
+    // Ensure user profile is loaded when the app starts
+    Future.microtask(() async {
+      await authController.fetchUserProfile();
+      profileController.loadUserData();
+    });
+
     return GetBuilder<ParentController>(
       builder: (controller) {
         return Scaffold(

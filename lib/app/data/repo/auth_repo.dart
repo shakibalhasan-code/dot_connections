@@ -70,6 +70,49 @@ class AuthRepository implements IAuthRepository {
   }
 
   @override
+  Future<AuthResponse> updateUserWithFormData({
+    String? firstName,
+    String? lastName,
+    String? phoneNumber,
+    String? fcmToken,
+    bool? pushNotification,
+    DateTime? dateOfBirth,
+  }) async {
+    final Map<String, dynamic> formData = {};
+
+    if (firstName != null) formData['firstName'] = firstName;
+    if (lastName != null) formData['lastName'] = lastName;
+    if (phoneNumber != null) formData['phoneNumber'] = phoneNumber;
+    if (fcmToken != null) formData['fcmToken'] = fcmToken;
+    if (pushNotification != null)
+      formData['pushNotification'] = pushNotification.toString();
+    if (dateOfBirth != null) {
+      // Format to YYYY-MM-DD as required by the API
+      formData['dateOfBirth'] = dateOfBirth.toIso8601String().split('T')[0];
+    }
+
+    return await _apiClient.updateUserWithFormData(formData);
+  }
+
+  @override
+  Future<AuthResponse> updateUserName({
+    required String firstName,
+    required String lastName,
+  }) async {
+    return await _apiClient.updateUserName(firstName, lastName);
+  }
+
+  @override
+  Future<AuthResponse> updateUserPhone({required String phoneNumber}) async {
+    return await _apiClient.updateUserPhone(phoneNumber);
+  }
+
+  @override
+  Future<AuthResponse> updateUserImage({required String imagePath}) async {
+    return await _apiClient.updateUserImage(imagePath);
+  }
+
+  @override
   Future<AuthResponse> updateProfile(Map<String, dynamic> profileData) async {
     return await _apiClient.updateProfile(profileData);
   }

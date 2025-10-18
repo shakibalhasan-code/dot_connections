@@ -27,6 +27,26 @@ abstract class IAuthRepository {
   /// Updates basic user information
   Future<AuthResponse> updateUser(Map<String, dynamic> userData);
 
+  /// Updates user information with form data (for PATCH /user/update-user endpoint)
+  Future<AuthResponse> updateUserWithFormData({
+    String? firstName,
+    String? lastName,
+    String? phoneNumber,
+    DateTime? dateOfBirth,
+  });
+
+  /// Updates only the user's name (first name and last name)
+  Future<AuthResponse> updateUserName({
+    required String firstName,
+    required String lastName,
+  });
+
+  /// Updates only the user's phone number
+  Future<AuthResponse> updateUserPhone({required String phoneNumber});
+
+  /// Updates only the user's profile image
+  Future<AuthResponse> updateUserImage({required String imagePath});
+
   /// Updates profile information
   Future<AuthResponse> updateProfile(Map<String, dynamic> profileData);
 

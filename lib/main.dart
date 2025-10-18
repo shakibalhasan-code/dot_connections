@@ -1,5 +1,6 @@
 import 'package:dot_connections/app/app.dart';
 import 'package:dot_connections/app/controllers/auth_controller.dart';
+import 'package:dot_connections/app/controllers/profile_contorller.dart';
 import 'package:dot_connections/app/data/repo/auth_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -16,7 +17,13 @@ void main() async {
   // even before GetMaterialApp is created
   final authRepo = AuthRepository();
   Get.put(authRepo);
-  Get.put(AuthController(authRepository: authRepo));
+
+  // Initialize controllers
+  final authController = AuthController(authRepository: authRepo);
+  Get.put(authController);
+
+  // Add profile controller
+  Get.put(ProfileContorller());
 
   // Run the app
   runApp(const MyApp());

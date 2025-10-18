@@ -54,7 +54,7 @@ class UpdateFullNameView extends StatelessWidget {
                   hint: 'first name',
                   isPassword: false,
                   type: TextInputType.text,
-                  controller: controller.editFirstNameController,
+                  controller: controller.firstNameController,
                 ),
                 SizedBox(height: 15.h),
                 Text(
@@ -70,13 +70,20 @@ class UpdateFullNameView extends StatelessWidget {
                   hint: 'last name',
                   isPassword: false,
                   type: TextInputType.text,
-                  controller: controller.editFirstNameController,
+                  controller: controller.lastNameController,
                 ),
                 SizedBox(height: 20.h),
 
                 ElevatedButton(
-                  onPressed: () {
-                    Get.back();
+                  onPressed: () async {
+                    // Close any existing snackbars to avoid conflicts
+                    if (Get.isSnackbarOpen) {
+                      Get.closeCurrentSnackbar();
+                    }
+
+                    // Update the user's name
+                    // Navigation is now handled in the controller
+                    await controller.updateFullName();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryColor,

@@ -1,3 +1,4 @@
+import 'package:dot_connections/app/controllers/auth_controller.dart';
 import 'package:dot_connections/app/controllers/profile_contorller.dart';
 import 'package:dot_connections/app/core/utils/app_colors.dart';
 import 'package:dot_connections/app/core/utils/app_images.dart';
@@ -8,15 +9,32 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:dot_connections/app/core/utils/app_icons.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Ensure profile controller is initialized
+    final profileController = Get.find<ProfileContorller>();
+
+    // Debug current user data
+    debugPrint(
+      '👤 ProfileScreen: Building with user data: ${profileController.getFullName()}, ${profileController.getEmail()}',
+    );
+
+    // Force data reload just in case
+    Future.microtask(() {
+      profileController.refreshUserData();
+    });
+
     return GetBuilder<ProfileContorller>(
       builder: (controller) {
+        // Debug inside the build method
+        debugPrint(
+          '👤 ProfileScreen: Rebuilding with user data: ${controller.getFullName()}, ${controller.getEmail()}',
+        );
+
         return Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
@@ -89,18 +107,24 @@ class ProfileScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 16.h),
-                Text(
-                  "Brooklyn Simmons",
-                  style: TextStyle(
-                    fontSize: 24.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                Obx(() {
+                  final fullName = controller.getFullName();
+                  return Text(
+                    fullName,
+                    style: TextStyle(
+                      fontSize: 24.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  );
+                }),
                 SizedBox(height: 4.h),
-                Text(
-                  "brooklyn.sim@example.com",
-                  style: TextStyle(fontSize: 16.sp, color: Colors.grey[600]),
-                ),
+                Obx(() {
+                  final email = controller.getEmail();
+                  return Text(
+                    email,
+                    style: TextStyle(fontSize: 16.sp, color: Colors.grey[600]),
+                  );
+                }),
                 SizedBox(height: 40.h),
                 ProfileMenu(
                   icon: AppIcons.accountsIcon,
