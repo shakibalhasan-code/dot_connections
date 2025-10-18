@@ -44,8 +44,11 @@ abstract class IAuthRepository {
   /// Updates only the user's phone number
   Future<AuthResponse> updateUserPhone({required String phoneNumber});
 
-  /// Updates only the user's profile image
-  Future<AuthResponse> updateUserImage({required String imagePath});
+  // /// Updates only the user's profile image
+  // Future<AuthResponse> updateUserImage({required String imagePath});
+
+  // /// Upload multiple images to the user's profile gallery
+  // Future<AuthResponse> uploadProfileImages({required List<String> imagePaths});
 
   /// Updates profile information
   Future<AuthResponse> updateProfile(Map<String, dynamic> profileData);

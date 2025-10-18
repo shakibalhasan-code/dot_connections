@@ -1,5 +1,6 @@
 import 'package:dot_connections/app/controllers/auth_controller.dart';
 import 'package:dot_connections/app/controllers/profile_contorller.dart';
+import 'package:dot_connections/app/core/constants/api_endpoints.dart';
 import 'package:dot_connections/app/core/utils/app_colors.dart';
 import 'package:dot_connections/app/core/utils/app_images.dart';
 import 'package:dot_connections/app/core/utils/app_routes.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:dot_connections/app/core/utils/app_icons.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -71,16 +73,89 @@ class ProfileScreen extends StatelessWidget {
                             width: 4,
                           ),
                         ),
-                        child: CircleAvatar(
-                          backgroundImage: AssetImage(AppImages.annetteBlack),
-                        ),
+                        child: Obx(() {
+                          // Use profile image if available
+                          if (controller.user.value?.image != null) {
+                            return CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                '${ApiEndpoints.rootUrl}${controller.user.value!.image!}',
+                              ),
+                              onBackgroundImageError: (_, __) {
+                                debugPrint('Error loading profile image');
+                                return;
+                              },
+                            );
+                          }
+                          // Otherwise, try to use first gallery image
+                          else if (controller.photoGllery.isNotEmpty) {
+                            return CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                '${ApiEndpoints.rootUrl}${controller.photoGllery.first}',
+                              ),
+                              onBackgroundImageError: (_, __) {
+                                debugPrint('Error loading gallery image');
+                                return;
+                              },
+                            );
+                          }
+                          // Fall back to default image
+                          else {
+                            return CircleAvatar(
+                              backgroundImage: AssetImage(
+                                AppImages.annetteBlack,
+                              ),
+                            );
+                          }
+                        }),
                       ),
                       Positioned(
                         bottom: 0,
                         right: -10,
                         child: InkWell(
                           borderRadius: BorderRadius.circular(50.r),
-                          onTap: () => controller.pickImage(),
+                          onTap: () async {
+                            // Pick image from gallery
+                            final imagePicked = await controller.imagePicker
+                                .pickImage(
+                                  source: ImageSource.gallery,
+                                  imageQuality:
+                                      80, // Compress image for faster upload
+                                );
+
+                            if (imagePicked != null) {
+                              // Show loading indicator
+                              Get.dialog(
+                                const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                                barrierDismissible: false,
+                              );
+
+                              try {
+                                // Update both profile image and add to gallery
+                                final authController =
+                                    Get.find<AuthController>();
+                                await controller.uploadMultipleImages(
+                                  imagePaths: [imagePicked.path],
+                                  data: {},
+                                );
+
+                                // Close loading dialog
+                                if (Get.isDialogOpen ?? false) Get.back();
+
+                                // Refresh controller data
+                                await controller.refreshUserData();
+                              } catch (e) {
+                                // Close loading dialog if still showing
+                                if (Get.isDialogOpen ?? false) Get.back();
+                                debugPrint('Error updating profile image: $e');
+                                Get.snackbar(
+                                  'Error',
+                                  'Failed to update profile image',
+                                );
+                              }
+                            }
+                          },
                           child: Container(
                             height: 40.r,
                             width: 40.r,
@@ -131,11 +206,11 @@ class ProfileScreen extends StatelessWidget {
                   text: "Account",
                   press: () => Get.toNamed(AppRoutes.accountDetails),
                 ),
-                ProfileMenu(
-                  icon: AppIcons.personalData,
-                  text: "Personal Details",
-                  press: () => Get.toNamed(AppRoutes.personalDetails),
-                ),
+                // ProfileMenu(
+                //   icon: AppIcons.personalData,
+                //   text: "Personal Details",
+                //   press: () => Get.toNamed(AppRoutes.personalDetails),
+                // ),
                 ProfileMenu(
                   icon: AppIcons.photoGallery,
                   text: "Photo Gallery",

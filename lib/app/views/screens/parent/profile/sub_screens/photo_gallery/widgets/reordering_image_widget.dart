@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dot_connections/app/controllers/profile_contorller.dart';
+import 'package:dot_connections/app/core/constants/api_endpoints.dart';
 import 'package:dot_connections/app/core/utils/app_colors.dart';
 import 'package:dot_connections/app/core/utils/text_style.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,62 @@ class ReorderingImageWidget extends StatelessWidget {
       builder: (controller) {
         ///get the images and show in wrap widget
         return Obx(() {
+          // Show message if no photos
+          if (controller.photoGllery.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.photo_library_outlined,
+                    size: 64.w,
+                    color: AppColors.textColor.withOpacity(0.5),
+                  ),
+                  SizedBox(height: 16.h),
+                  Text(
+                    'No photos yet',
+                    style: AppTextStyle.primaryTextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.textColor,
+                    ),
+                  ),
+                  SizedBox(height: 8.h),
+                  Text(
+                    'Add photos to your gallery',
+                    style: AppTextStyle.primaryTextStyle(
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.textColor.withOpacity(0.7),
+                    ),
+                  ),
+                  SizedBox(height: 32.h),
+                  InkWell(
+                    onTap: () => controller.pickImage(),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 12.h,
+                        horizontal: 24.w,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryColor,
+                        borderRadius: BorderRadius.circular(50.r),
+                      ),
+                      child: Text(
+                        'Add a Photo',
+                        style: AppTextStyle.primaryTextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+
           return ReorderableGridView.count(
             crossAxisCount: 3,
             mainAxisSpacing: 8,
@@ -49,7 +106,7 @@ class ReorderingImageWidget extends StatelessWidget {
                                 '========>>>>>> ERRORR>>>>>>>>>>>>> $value',
                               );
                             },
-                            imageUrl: item,
+                            imageUrl: '${ApiEndpoints.rootUrl}$item',
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -69,7 +126,6 @@ class ReorderingImageWidget extends StatelessWidget {
                             child: Padding(
                               padding: EdgeInsetsGeometry.all(5.dm),
                               child: HugeIcon(
-                                
                                 icon: HugeIcons.strokeRoundedCancel01,
                                 color: AppColors.primaryColor,
                               ),
@@ -86,7 +142,8 @@ class ReorderingImageWidget extends StatelessWidget {
               InkWell(
                 key: ValueKey('add_image'),
                 borderRadius: BorderRadius.circular(10.r),
-                onTap: () => controller.pickImage(),
+                onTap: () =>
+                    controller.pickImage(), // Use multiple image picker
                 child: Container(
                   decoration: BoxDecoration(
                     color: AppColors.primaryTransParentCard,
@@ -102,11 +159,20 @@ class ReorderingImageWidget extends StatelessWidget {
                       ),
                       SizedBox(height: 10.h),
                       Text(
-                        'Add Image',
+                        'Add Images',
                         style: AppTextStyle.primaryTextStyle(
                           fontSize: 16.sp,
                           fontWeight: FontWeight.w600,
                           color: AppColors.textColor,
+                        ),
+                      ),
+                      SizedBox(height: 4.h),
+                      Text(
+                        '(up to 5)',
+                        style: AppTextStyle.primaryTextStyle(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w400,
+                          color: AppColors.textColor.withOpacity(0.7),
                         ),
                       ),
                     ],

@@ -107,10 +107,17 @@ class AuthRepository implements IAuthRepository {
     return await _apiClient.updateUserPhone(phoneNumber);
   }
 
-  @override
-  Future<AuthResponse> updateUserImage({required String imagePath}) async {
-    return await _apiClient.updateUserImage(imagePath);
-  }
+  // @override
+  // Future<AuthResponse> updateUserImage({required String imagePath}) async {
+  //   return await _apiClient.updateUserImage(imagePath);
+  // }
+
+  // @override
+  // Future<AuthResponse> uploadProfileImages({
+  //   required List<String> imagePaths,
+  // }) async {
+  //   return await _apiClient.uploadProfileImages(imagePaths);
+  // }
 
   @override
   Future<AuthResponse> updateProfile(Map<String, dynamic> profileData) async {

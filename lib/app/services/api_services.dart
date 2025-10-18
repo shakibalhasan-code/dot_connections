@@ -191,44 +191,46 @@ class ApiServices {
   static Future<http.Response> patchFormDataWithFile(
     String url,
     Map<String, dynamic> fields,
-    Map<String, String> files, // Map of field name to file path
+    // MODIFICATION 1: Change the type to accept a list of file paths per key.
+    Map<String, List<String>> files,
   ) async {
     try {
       final headers = await _getHeaders(isFormData: true);
-      print('📤 PATCH Request with file to: $url');
+      print('📤 PATCH Request with files to: $url');
       print('📤 Request headers: $headers');
       print('📤 Request form fields: $fields');
       print('📤 Request files: $files');
 
-      // Create multipart request for FormData
       final request = http.MultipartRequest('PATCH', Uri.parse(url));
-
-      // Add headers
       request.headers.addAll(headers);
 
-      // Add form fields
+      // Add form fields (this part is correct)
       fields.forEach((key, value) {
         if (value != null) {
           request.fields[key] = value.toString();
         }
       });
 
-      // Add files
+      // MODIFICATION 2: Add a nested loop to handle multiple files.
+      // This correctly adds multiple files under the same field name (e.g., 'image').
       for (var entry in files.entries) {
         final fieldName = entry.key;
-        final filePath = entry.value;
-        print('📤 Adding file: $fieldName from path: $filePath');
-        try {
-          final file = await http.MultipartFile.fromPath(fieldName, filePath);
-          request.files.add(file);
-          print('📤 Successfully added file: ${file.length} bytes');
-        } catch (fileError) {
-          print('❌ Error adding file $fieldName: $fileError');
-          // Continue with the request even if one file fails
+        final filePaths = entry.value;
+
+        for (final filePath in filePaths) {
+          print('📤 Adding file to field "$fieldName" from path: $filePath');
+          try {
+            request.files.add(
+              await http.MultipartFile.fromPath(fieldName, filePath),
+            );
+          } catch (fileError) {
+            print(
+              '❌ Error adding file $fieldName from path $filePath: $fileError',
+            );
+          }
         }
       }
 
-      // Send request and get response
       final streamedResponse = await request.send();
       final response = await http.Response.fromStream(streamedResponse);
 
@@ -236,11 +238,9 @@ class ApiServices {
       print('📥 Response headers: ${response.headers}');
       print('📥 Response body: ${response.body}');
 
-      // Check for server error and try to extract the actual error message
       if (response.statusCode >= 400) {
         print('❌ Server error: HTTP ${response.statusCode}');
         try {
-          // Try to extract error message from JSON response if possible
           final errorJson = jsonDecode(response.body);
           print('❌ Server error details: $errorJson');
         } catch (_) {
@@ -253,5 +253,52 @@ class ApiServices {
       print('❌ Error in PATCH request with file: $e');
       rethrow;
     }
+  }
+
+  /// Creates a multipart request with multiple image files using the same field name
+  static Future<http.MultipartRequest> createMultiImageRequest(
+    String url, {
+    required Map<String, dynamic> fields,
+    required String imageFieldName,
+    required List<String> imagePaths,
+  }) async {
+    final headers = await _getHeaders(isFormData: true);
+    print('📤 Creating multipart request for multiple images to: $url');
+    print('📤 Request headers: $headers');
+    print('📤 Request form fields: $fields');
+    print('📤 Image paths: $imagePaths');
+
+    // Create multipart request
+    final request = http.MultipartRequest('PATCH', Uri.parse(url));
+
+    // Add headers
+    request.headers.addAll(headers);
+
+    // Add form fields
+    fields.forEach((key, value) {
+      if (value != null) {
+        request.fields[key] = value.toString();
+      }
+    });
+
+    // Add multiple image files with the same field name
+    for (int i = 0; i < imagePaths.length; i++) {
+      final imagePath = imagePaths[i];
+      print('📤 Adding image[$i]: $imagePath with field name: $imageFieldName');
+
+      try {
+        final file = await http.MultipartFile.fromPath(
+          imageFieldName,
+          imagePath,
+        );
+        request.files.add(file);
+        print('📤 Successfully added image[$i]: ${file.length} bytes');
+      } catch (fileError) {
+        print('❌ Error adding image[$i]: $fileError');
+        // Continue with other images if one fails
+      }
+    }
+
+    return request;
   }
 }

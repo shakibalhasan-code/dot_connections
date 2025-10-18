@@ -194,45 +194,66 @@ class AuthApiClient {
     }
   }
 
-  /// Updates user's profile image
-  Future<AuthResponse> updateUserImage(String imagePath) async {
-    try {
-      print('🚀 Updating user image from: $imagePath');
+  // /// Updates user's profile image
+  // Future<AuthResponse> updateUserImage(String imagePath) async {
+  //   try {
+  //     print('🚀 Updating user profile image: $imagePath');
 
-      // For image upload, we need to keep using FormData with multipart
-      // Empty fields since we're only sending the image
-      final fields = <String, dynamic>{};
+  //     // Make sure the image path is not empty
+  //     if (imagePath.isEmpty) {
+  //       throw Exception('Image path cannot be empty');
+  //     }
 
-      // File mapping - 'image' is the field name expected by the API
-      final files = {'image': imagePath};
+  //     // Use the patchFormDataWithFile method to upload the image
+  //     final response = await ApiServices.patchFormDataWithFile(
+  //       ApiEndpoints.updateUser,
+  //       {}, // No additional form fields needed
+  //       {
+  //         'image': [imagePath],
+  //       }, // Use the image field name with the image path in a list
+  //     );
 
-      print('🚀 Uploading image with path: $imagePath');
+  //     print('📥 Response status code: ${response.statusCode}');
+  //     print('📥 Response body: ${response.body}');
 
-      final response = await ApiServices.patchFormDataWithFile(
-        ApiEndpoints.updateUser,
-        fields,
-        files,
-      );
+  //     final jsonResponse = jsonDecode(response.body);
+  //     return AuthResponse.fromJson(jsonResponse);
+  //   } catch (e) {
+  //     print('❌ Error updating user image: $e');
+  //     throw Exception('Failed to update user image: $e');
+  //   }
+  // }
 
-      print('📥 Response status code: ${response.statusCode}');
-      print('📥 Response body: ${response.body}');
+  /// Uploads multiple images to user's profile gallery
+  // Future<AuthResponse> uploadProfileImages(List<String> imagePaths) async {
+  //   try {
+  //     print('🚀 Uploading profile gallery images: $imagePaths');
 
-      // Check if the response body is empty or invalid
-      if (response.body.isEmpty || response.body.trim() == 'undefined') {
-        print('❌ Received empty or invalid response body');
-        return AuthResponse(
-          success: false,
-          message: 'Received empty response from server',
-        );
-      }
+  //     // Make sure there's at least one image path
+  //     if (imagePaths.isEmpty) {
+  //       throw Exception('Image paths list cannot be empty');
+  //     }
 
-      final jsonResponse = jsonDecode(response.body);
-      return AuthResponse.fromJson(jsonResponse);
-    } catch (e) {
-      print('❌ Error updating user image: $e');
-      throw Exception('Failed to update user image: $e');
-    }
-  }
+  //     // Use the endpoint for profile gallery uploads (using updateUser endpoint)
+  //     // and specify the field name as 'data[photos]' for gallery images
+  //     final response = await ApiServices.patchFormDataWithFile(
+  //       ApiEndpoints.updateUser,
+  //       {}, // No additional form fields needed
+  //       {
+  //         'data[photos]': imagePaths,
+  //       }, // Use the correct field name for gallery images
+  //     );
+
+  //     print('📥 Response status code: ${response.statusCode}');
+  //     print('📥 Response body: ${response.body}');
+
+  //     final jsonResponse = jsonDecode(response.body);
+  //     return AuthResponse.fromJson(jsonResponse);
+  //   } catch (e) {
+  //     print('❌ Error uploading profile gallery images: $e');
+  //     throw Exception('Failed to upload profile gallery images: $e');
+  //   }
+  // }
 
   /// Updates profile information
   Future<AuthResponse> updateProfile(Map<String, dynamic> profileData) async {

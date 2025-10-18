@@ -4,6 +4,7 @@ import 'package:dot_connections/app/data/models/user_personal_data.dart';
 import 'package:dot_connections/app/data/models/user_profile_model.dart';
 import 'package:dot_connections/app/data/repo/auth_repo.dart';
 import 'package:dot_connections/app/data/repo/i_auth_repository.dart';
+import 'package:dot_connections/app/services/api_services.dart';
 import 'package:dot_connections/app/views/screens/initial/how_tall_view.dart';
 import 'package:dot_connections/app/views/screens/initial/whats_dob_view.dart';
 import 'package:dot_connections/app/views/screens/initial/whats_name_view.dart';
@@ -538,44 +539,143 @@ class AuthController extends GetxController {
     }
   }
 
-  /// Updates user's profile image
-  Future<void> updateUserImage({required String imagePath}) async {
-    try {
-      isLoading.value = true;
-      errorMessage.value = '';
+  // /// Updates user's profile image
+  // Future<void> updateUserImage({required String imagePath}) async {
+  //   try {
+  //     isLoading.value = true;
+  //     errorMessage.value = '';
 
-      print('👤 Updating user profile image: $imagePath');
+  //     print('👤 Updating user profile image: $imagePath');
 
-      final response = await _authRepository.updateUserImage(
-        imagePath: imagePath,
-      );
+  //     final response = await _authRepository.updateUserImage(
+  //       imagePath: imagePath,
+  //     );
 
-      if (response.success) {
-        print('👤 Successfully updated profile image');
-        // Refresh user profile to get the latest data
-        await fetchUserProfile();
+  //     if (response.success) {
+  //       print('👤 Successfully updated profile image');
+  //       // Refresh user profile to get the latest data
+  //       await fetchUserProfile();
 
-        Get.snackbar(
-          'Success',
-          'Profile image updated successfully',
-          duration: const Duration(seconds: 1),
-        );
-      } else {
-        print('👤 Failed to update profile image: ${response.message}');
-        errorMessage.value = response.message;
-        Get.snackbar(
-          'Error',
-          'Failed to update profile image: ${response.message}',
-        );
-      }
-    } catch (e) {
-      print('👤 Exception when updating profile image: $e');
-      errorMessage.value = 'Failed to update profile image: $e';
-      Get.snackbar('Error', 'Failed to update profile image');
-    } finally {
-      isLoading.value = false;
-    }
-  }
+  //       Get.snackbar(
+  //         'Success',
+  //         'Profile image updated successfully',
+  //         duration: const Duration(seconds: 1),
+  //       );
+  //     } else {
+  //       print('👤 Failed to update profile image: ${response.message}');
+  //       errorMessage.value = response.message;
+  //       Get.snackbar(
+  //         'Error',
+  //         'Failed to update profile image: ${response.message}',
+  //       );
+  //     }
+  //   } catch (e) {
+  //     print('👤 Exception when updating profile image: $e');
+  //     errorMessage.value = 'Failed to update profile image: $e';
+  //     Get.snackbar('Error', 'Failed to update profile image');
+  //   } finally {
+  //     isLoading.value = false;
+  //   }
+  // }
+
+  /// Uploads a single image to the user's profile gallery
+  /// Consider using GalleryController for multiple image uploads
+  // Future<void> uploadProfileGalleryImage({required String imagePath}) async {
+  //   try {
+  //     isLoading.value = true;
+  //     errorMessage.value = '';
+
+  //     print('👤 Uploading image to profile gallery: $imagePath');
+
+  //     // Call the repository method to upload the gallery image
+  //     // Use a list of images even for a single image to use the patch method with file format
+  //     final response = await _authRepository.uploadProfileImages(
+  //       imagePaths: [imagePath],
+  //     );
+
+  //     if (response.success) {
+  //       print('👤 Successfully uploaded gallery image');
+  //       // Refresh user profile to get the latest data including updated photo gallery
+  //       await fetchUserProfile();
+
+  //       // If this is the first image and user doesn't have a profile pic yet, set it as profile pic
+  //       if (currentUser.value != null &&
+  //           currentUser.value!.image == null &&
+  //           currentUser.value!.profile != null &&
+  //           currentUser.value!.profile!.photos != null &&
+  //           currentUser.value!.profile!.photos!.isNotEmpty) {
+  //         print('👤 Setting first gallery image as profile picture');
+  //         await updateUserImage(imagePath: imagePath);
+  //       }
+
+  //       Get.snackbar(
+  //         'Success',
+  //         'Photo added to gallery successfully',
+  //         duration: const Duration(seconds: 1),
+  //       );
+  //     } else {
+  //       print('👤 Failed to upload gallery image: ${response.message}');
+  //       errorMessage.value = response.message;
+  //       Get.snackbar('Error', 'Failed to upload photo: ${response.message}');
+  //     }
+  //   } catch (e) {
+  //     print('👤 Exception when uploading gallery image: $e');
+  //     errorMessage.value = 'Failed to upload photo: $e';
+  //     Get.snackbar('Error', 'Failed to upload photo');
+  //   } finally {
+  //     isLoading.value = false;
+  //   }
+  // }
+
+  /// Uploads multiple images to the user's profile gallery
+  /// This is a convenience method that delegates to the GalleryController
+  // Future<void> uploadMultipleProfileGalleryImages({
+  //   required List<String> imagePaths,
+  // }) async {
+  //   try {
+  //     isLoading.value = true;
+  //     errorMessage.value = '';
+
+  //     print('👤 Uploading multiple images to profile gallery: $imagePaths');
+
+  //     // Call the repository method to upload the gallery images
+  //     final response = await _authRepository.uploadProfileImages(
+  //       imagePaths: imagePaths,
+  //     );
+
+  //     if (response.success) {
+  //       print('👤 Successfully uploaded gallery images');
+  //       // Refresh user profile to get the latest data including updated photo gallery
+  //       await fetchUserProfile();
+
+  //       // If this is the first image and user doesn't have a profile pic yet, set it as profile pic
+  //       if (currentUser.value != null &&
+  //           currentUser.value!.image == null &&
+  //           currentUser.value!.profile != null &&
+  //           currentUser.value!.profile!.photos != null &&
+  //           currentUser.value!.profile!.photos!.isNotEmpty) {
+  //         print('👤 Setting first gallery image as profile picture');
+  //         await updateUserImage(imagePath: imagePaths.first);
+  //       }
+
+  //       Get.snackbar(
+  //         'Success',
+  //         'Photos added to gallery successfully',
+  //         duration: const Duration(seconds: 1),
+  //       );
+  //     } else {
+  //       print('👤 Failed to upload gallery images: ${response.message}');
+  //       errorMessage.value = response.message;
+  //       Get.snackbar('Error', 'Failed to upload photos: ${response.message}');
+  //     }
+  //   } catch (e) {
+  //     print('👤 Exception when uploading gallery images: $e');
+  //     errorMessage.value = 'Failed to upload photos: $e';
+  //     Get.snackbar('Error', 'Failed to upload photos');
+  //   } finally {
+  //     isLoading.value = false;
+  //   }
+  // }
 
   /// Updates profile information
   Future<void> updateProfile(Map<String, dynamic> profileData) async {
