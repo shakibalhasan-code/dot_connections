@@ -15,12 +15,10 @@ class ApiEndpoints {
   static String get updateUser => '$baseUrl/user/update-user';
   static String get updateProfile => '$baseUrl/user/update-profile';
   static String get updateHiddenFields => '$baseUrl/user/update-hidden-fields';
-  static String get deleteProfileImage =>
-      '$baseUrl/user/profile/image'; // Append imageIndex
+  static String get deleteProfileImage => '$baseUrl/user/profile/image';
   static String get nearbyUsers => '$baseUrl/user/nearby';
-  static String get getUserById => '$baseUrl/user'; // Append user ID
-  static String get updateUserStatus =>
-      '$baseUrl/user'; // Append user ID + /status
+  static String get getUserById => '$baseUrl/user';
+  static String get updateUserStatus => '$baseUrl/user';
   static String get deleteAccount => '$baseUrl/user/delete';
 
   ///get users for matching
@@ -29,5 +27,7 @@ class ApiEndpoints {
 
   ///get potential matches with better formatting
   static String get getPotentialMatches => '$baseUrl/match/potential';
-  static String get updateUserRole => '$baseUrl/user'; // Append user ID + /role
+  static String get updateUserRole => '$baseUrl/user';
+
+  static String get doLike => '$baseUrl/match/action';
 }

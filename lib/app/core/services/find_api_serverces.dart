@@ -1,10 +1,13 @@
 import 'dart:convert';
 
 import 'package:dot_connections/app/core/constants/api_endpoints.dart';
+import 'package:dot_connections/app/core/helper/widget_helper.dart';
 import 'package:dot_connections/app/data/models/user_model.dart';
 import 'package:dot_connections/app/services/api_services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 class FindApiServices {
   /// Fetches potential user matches from the API
@@ -77,6 +80,36 @@ class FindApiServices {
     } catch (e) {
       debugPrint('Error in fetchProfiles method: $e');
       return []; // Return empty list instead of rethrowing to prevent app crashes
+    }
+  }
+
+  Future<void> swipeActions({
+    required String toUserId,
+    required bool isLiked,
+    required String profileName,
+  }) async {
+    try {
+      final response = await ApiServices.postData(ApiEndpoints.doLike, {
+        "toUserId": toUserId,
+        "action": isLiked ? "love" : "skip",
+      });
+
+      if (response.statusCode == 200) {
+        WidgetHelper.showToast(
+          message: isLiked
+              ? 'You liked $profileName'
+              : 'You skipped $profileName',
+          status: isLiked ? Status.success : Status.warning,
+          toastContext: Get.context!,
+        );
+        debugPrint('Like action successful: ${response.body}');
+      } else {
+        debugPrint(
+          'Failed to perform like action: ${response.statusCode} - ${response.body}',
+        );
+      }
+    } catch (e) {
+      debugPrint('Error in doLike method: $e');
     }
   }
 }

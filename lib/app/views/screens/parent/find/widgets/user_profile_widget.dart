@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dot_connections/app/core/constants/api_endpoints.dart';
 import 'package:dot_connections/app/core/utils/text_style.dart';
 import 'package:dot_connections/app/data/models/user_model.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,9 @@ class UserProfileWidget extends StatelessWidget {
     // Determine the image URL
     String? imageUrl;
 
+    debugPrint('👤User Profile Photo URL: ${userProfile.profilePhotoUrl}');
+    debugPrint('👤User Photo URLs: ${userProfile.photoUrls}');
+
     // First try to use profile photo URL
     if (userProfile.profilePhotoUrl != null &&
         userProfile.profilePhotoUrl!.isNotEmpty) {
@@ -49,9 +53,7 @@ class UserProfileWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(24.r),
         child: imageUrl != null
             ? CachedNetworkImage(
-                imageUrl: imageUrl.startsWith('http')
-                    ? imageUrl
-                    : 'https://api.dotconnections.xyz$imageUrl', // Add base URL if needed
+                imageUrl: '${ApiEndpoints.rootUrl}$imageUrl',
                 fit: BoxFit.cover,
                 placeholder: (context, url) => Container(
                   color: Colors.grey[300],

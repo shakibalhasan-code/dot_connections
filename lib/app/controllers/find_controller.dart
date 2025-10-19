@@ -1,4 +1,6 @@
 import 'package:dot_connections/app/core/helper/widget_helper.dart';
+import 'package:dot_connections/app/core/services/find_api_serverces.dart'
+    show FindApiServices;
 import 'package:dot_connections/app/data/models/user_model.dart';
 import 'package:dot_connections/app/data/models/user_profile_model.dart';
 import 'package:dot_connections/app/data/repo/match_repo.dart';
@@ -21,6 +23,8 @@ class FindController extends GetxController {
   ///>>>Controllers<<<<<<
   final cardSwipeController = CardSwiperController();
   final pageviewProfileImage = PageController();
+
+  final _findApiServices = Get.put(FindApiServices());
 
   @override
   void onInit() async {
@@ -97,22 +101,26 @@ class FindController extends GetxController {
     if (direction == CardSwiperDirection.left) {
       ///set the default active image value
       activeProfileImage.value = 0;
+      final toUserId = cardList[previousIndex].id;
+      final isLiked = false;
+      _findApiServices.swipeActions(
+        toUserId: toUserId,
+        isLiked: isLiked,
+        profileName: cardList[previousIndex].name,
+      );
 
       // TODO: ACTION WHEN USER SWIPE PROFILE TO THE LEFT
-      WidgetHelper.showToast(
-        message: 'swipe left',
-        status: Status.success,
-        toastContext: Get.context!,
-      );
     } else if (direction == CardSwiperDirection.right) {
       ///set the default active image value
       activeProfileImage.value = 0;
 
       // TODO: ACTION WHEN USER SWIPE PROFILE TO THE right
-      WidgetHelper.showToast(
-        message: 'swipe right',
-        status: Status.warning,
-        toastContext: Get.context!,
+      final toUserId = cardList[previousIndex].id;
+      final isLiked = true;
+      _findApiServices.swipeActions(
+        toUserId: toUserId,
+        isLiked: isLiked,
+        profileName: cardList[previousIndex].name,
       );
     }
   }
