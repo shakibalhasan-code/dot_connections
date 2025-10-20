@@ -29,5 +29,9 @@ class ApiEndpoints {
   static String get getPotentialMatches => '$baseUrl/match/potential';
   static String get updateUserRole => '$baseUrl/user';
 
+  /// do like or dislike action
   static String get doLike => '$baseUrl/match/action';
+
+  ///get match requests
+  static String get getMatches => '$baseUrl/match/requests';
 }
