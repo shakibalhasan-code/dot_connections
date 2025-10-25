@@ -65,14 +65,21 @@ class AuthApiClient {
   /// Adds basic user fields after initial registration
   Future<AuthResponse> addUserFields(UserFields userFields) async {
     try {
-      final response = await ApiServices.updateData(
+      print('🚀 Adding user fields: ${userFields.toJson()}');
+      print('🚀 Using API endpoint: ${ApiEndpoints.addUserFields}');
+
+      final response = await ApiServices.putData(
         ApiEndpoints.addUserFields,
         userFields.toJson(),
       );
 
+      print('📥 Response status code: ${response.statusCode}');
+      print('📥 Response body: ${response.body}');
+
       final jsonResponse = jsonDecode(response.body);
       return AuthResponse.fromJson(jsonResponse);
     } catch (e) {
+      print('❌ Error adding user fields: $e');
       throw Exception('Failed to add user fields: $e');
     }
   }
@@ -82,7 +89,7 @@ class AuthApiClient {
     try {
       debugPrint('🚀 Adding profile fields: ${profileFields.toJson()}');
 
-      final response = await ApiServices.updateData(
+      final response = await ApiServices.putData(
         ApiEndpoints.addProfileFields,
         profileFields.toJson(),
       );

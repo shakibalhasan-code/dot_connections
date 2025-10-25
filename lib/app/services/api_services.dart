@@ -62,6 +62,34 @@ class ApiServices {
     }
   }
 
+  /// Puts data to the given URL (Update operation).
+  static Future<http.Response> putData(
+    String url,
+    Map<String, dynamic> data,
+  ) async {
+    try {
+      final headers = await _getHeaders();
+      print('📤 PUT Request to: $url');
+      print('📤 Request headers: $headers');
+      print('📤 Request JSON body: ${jsonEncode(data)}');
+
+      final response = await http.put(
+        Uri.parse(url),
+        headers: headers,
+        body: jsonEncode(data),
+      );
+
+      print('📥 Response status: ${response.statusCode}');
+      print('📥 Response headers: ${response.headers}');
+      print('📥 Response body: ${response.body}');
+
+      return response;
+    } catch (e) {
+      print('❌ Error in PUT request: $e');
+      rethrow;
+    }
+  }
+
   static Future<http.Response> updateData(
     String url,
     Map<String, dynamic> data,
@@ -82,6 +110,51 @@ class ApiServices {
       if (data.containsKey('data')) {
         request.fields['data'] = jsonEncode(data['data']);
       }
+
+      print('📤 Request fields: ${request.fields}');
+
+      // 4. Send the request.
+      final streamedResponse = await request.send();
+
+      // 5. Convert the response stream back to a standard http.Response.
+      final response = await http.Response.fromStream(streamedResponse);
+
+      print('📥 Response status: ${response.statusCode}');
+      print('📥 Response headers: ${response.headers}');
+      print('📥 Response body: ${response.body}');
+
+      return response;
+    } catch (e) {
+      print('❌ Error in MULTIPART request: $e');
+      rethrow;
+    }
+  }
+
+  static Future<http.Response> updateDataPUT(
+    String url,
+    Map<String, dynamic> data,
+  ) async {
+    try {
+      final headers = await _getHeaders();
+      print('📤 MULTIPART PUT Request to: $url');
+
+      // 1. Create a MultipartRequest instance.
+      // Use 'POST' or 'PATCH' to match your server's required HTTP method.
+      final request = http.MultipartRequest('PUT', Uri.parse(url));
+
+      // 2. Add the headers to the request.
+      request.headers.addAll(headers);
+
+      // // 3. The `updateUserName` function sends a map like: {'data': {'firstName': ..., 'lastName': ...}}
+      // // We need to JSON encode the inner map and add it as a text field.
+      // if (data.containsKey('data')) {
+      //   request.fields['data'] = jsonEncode(data['data']);
+      // }
+
+      // 3. Add all fields from data map
+      request.fields.addAll(
+        data.map((key, value) => MapEntry(key, value.toString())),
+      );
 
       print('📤 Request fields: ${request.fields}');
 
@@ -165,10 +238,10 @@ class ApiServices {
     Map<String, dynamic> data,
   ) async {
     try {
-      final headers = await _getHeaders(isFormData: true);
+      final headers = await _getHeaders(); // Use JSON headers, not form data
       print('📤 PATCH Request to: $url');
       print('📤 Request headers: $headers');
-      print('📤 Request form data: $data');
+      print('📤 Request JSON body: ${jsonEncode(data)}');
 
       final response = await http.patch(
         Uri.parse(url),

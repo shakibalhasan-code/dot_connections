@@ -4,12 +4,6 @@ import 'package:dot_connections/app/data/repo/auth_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-/// Controller for the splash screen
-///
-/// This controller is responsible for:
-/// - Checking authentication status
-/// - Handling initial app loading
-/// - Redirecting to appropriate screen based on auth status
 class SplashController extends GetxController {
   final AuthRepository _authRepository;
   final AuthController _authController;

@@ -154,6 +154,14 @@ class UserModel {
       distance: (json['distance'] as num?)?.toDouble(),
       lastActiveAt: lastActive,
 
+      // Additional profile fields from the API response
+      profession: profile['jobTitle'],
+      education: profile['school'],
+      hometown: profile['hometown'],
+      religion: profile['religious'],
+      drinkingStatus: profile['drinkingStatus'],
+      smokingStatus: profile['smokingStatus'],
+
       // --- Provide sensible defaults for fields NOT in this API response ---
       isVerified: false,
       profileViews: 0,
@@ -161,7 +169,7 @@ class UserModel {
       minAgePreference: 18,
       maxAgePreference: 55,
       maxDistanceKm: 50,
-      interestedIn: 'Any', // Or determine a better default
+      interestedIn: profile['lookingFor'] ?? 'Any',
     );
   }
 

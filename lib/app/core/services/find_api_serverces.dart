@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dot_connections/app/core/constants/api_endpoints.dart';
 import 'package:dot_connections/app/core/helper/widget_helper.dart';
 import 'package:dot_connections/app/data/models/user_model.dart';
+import 'package:dot_connections/app/data/models/potential_matches_response.dart';
 import 'package:dot_connections/app/services/api_services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -13,12 +14,14 @@ class FindApiServices {
   /// Fetches potential user matches from the API
   Future<List<UserModel>> fetchProfiles() async {
     try {
-      final response = await ApiServices.getData(ApiEndpoints.getAllUsers);
+      final response = await ApiServices.getData(
+        ApiEndpoints.getPotentialMatches,
+      );
 
       if (response.statusCode == 200) {
         // Successfully fetched profiles
         debugPrint(
-          'Profiles API response received - status: ${response.statusCode}',
+          'Potential matches API response received - status: ${response.statusCode}',
         );
 
         try {
@@ -26,41 +29,55 @@ class FindApiServices {
 
           if (responseData['success'] == true &&
               responseData.containsKey('data')) {
-            // Handle the data field properly regardless of whether it's a list or single object
-            if (responseData['data'] is List) {
-              // Convert the list of data to UserModel objects
-              List<UserModel> profiles = [];
+            debugPrint('Response meta: ${responseData['meta']}');
+            debugPrint('Response message: ${responseData['message']}');
 
-              for (var userJson in responseData['data']) {
-                try {
-                  if (userJson is Map<String, dynamic>) {
-                    final UserModel user = UserModel.fromJson(userJson);
-                    profiles.add(user);
-                  }
-                } catch (parseError) {
-                  debugPrint('Error parsing individual user: $parseError');
-                }
-              }
+            // Parse using the new PotentialMatchesResponse model
+            final potentialMatchesResponse = PotentialMatchesResponse.fromJson(
+              responseData,
+            );
 
-              debugPrint('Successfully parsed ${profiles[0]} profiles');
-              if (profiles.isNotEmpty) {
-                debugPrint('First profile: ${profiles.first}');
-              }
+            debugPrint(
+              'Total matches found: ${potentialMatchesResponse.meta.total}',
+            );
+            debugPrint('Current page: ${potentialMatchesResponse.meta.page}');
+            debugPrint(
+              'Matches on this page: ${potentialMatchesResponse.data.length}',
+            );
 
-              return profiles;
-            } else if (responseData['data'] is Map<String, dynamic>) {
-              // Handle single user object
+            // Convert PotentialMatch objects to UserModel objects
+            List<UserModel> profiles = [];
+
+            for (var potentialMatch in potentialMatchesResponse.data) {
               try {
-                final user = UserModel.fromJson(
-                  responseData['data'] as Map<String, dynamic>,
+                final UserModel user = potentialMatch.toUserModel();
+                profiles.add(user);
+                debugPrint(
+                  'Successfully converted user: ${user.name}, Age: ${user.age}, Distance: ${user.distance}km',
                 );
-                debugPrint('Single user profile parsed: $user');
-                return [user];
-              } catch (e) {
-                debugPrint('Error parsing single user: $e');
-                return [];
+                debugPrint('User interests: ${user.interests}');
+                debugPrint('User photos: ${user.photoUrls.length} photos');
+              } catch (parseError) {
+                debugPrint(
+                  'Error converting potential match to user model: $parseError',
+                );
+                debugPrint('Potential match: ${potentialMatch.fullName}');
               }
             }
+
+            debugPrint(
+              'Successfully parsed ${profiles.length} profiles from potential matches API',
+            );
+            if (profiles.isNotEmpty) {
+              debugPrint(
+                'First profile: ${profiles.first.name} (${profiles.first.age}), Distance: ${profiles.first.distance}km',
+              );
+              debugPrint('Profile photos: ${profiles.first.photoUrls}');
+              debugPrint('Profile interests: ${profiles.first.interests}');
+              debugPrint('Profile bio: ${profiles.first.bio}');
+            }
+
+            return profiles;
           }
 
           debugPrint(
@@ -69,11 +86,12 @@ class FindApiServices {
           return [];
         } catch (jsonError) {
           debugPrint('Error decoding JSON: $jsonError');
+          debugPrint('Response body: ${response.body}');
           return [];
         }
       } else {
         debugPrint(
-          'Failed to fetch profiles: ${response.statusCode} - ${response.body}',
+          'Failed to fetch potential matches: ${response.statusCode} - ${response.body}',
         );
         return [];
       }
