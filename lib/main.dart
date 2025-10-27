@@ -13,8 +13,7 @@ void main() async {
   // Initialize Flutter bindings
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize dependencies early to ensure they're available
-  // even before GetMaterialApp is created
+  // Initialize repositories
   final authRepo = AuthRepository();
   Get.put(authRepo);
 

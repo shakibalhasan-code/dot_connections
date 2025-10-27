@@ -250,13 +250,13 @@ class _MapScreenState extends State<MapScreen> {
         polylines: controller.polylines,
         myLocationEnabled: false,
         myLocationButtonEnabled: false,
-        mapType: MapType.normal,
+        mapType: MapType.terrain,
         zoomControlsEnabled: false,
         compassEnabled: true,
         rotateGesturesEnabled: true,
         scrollGesturesEnabled: true,
         zoomGesturesEnabled: true,
-        tiltGesturesEnabled: true,
+        tiltGesturesEnabled: false,
         buildingsEnabled: true,
         indoorViewEnabled: true,
         trafficEnabled: false,
@@ -293,6 +293,7 @@ class _MapScreenState extends State<MapScreen> {
   void _showMapSettings(BuildContext context, MapScreenContorller controller) {
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       builder: (context) => Container(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -304,6 +305,153 @@ class _MapScreenState extends State<MapScreen> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
+            
+            // Search Radius Section
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.grey[50],
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.grey[200]!),
+              ),
+              child: GetBuilder<MapScreenContorller>(
+                builder: (controller) => Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(Icons.radar, color: Colors.blue),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Search Radius: ${controller.pendingRadius.toStringAsFixed(1)} km',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        if (controller.hasPendingRadiusChange)
+                          Container(
+                            margin: const EdgeInsets.only(left: 8),
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: Colors.orange,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: const Text(
+                              'Modified',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                    if (controller.hasPendingRadiusChange) ...[
+                      const SizedBox(height: 8),
+                      Text(
+                        'Current: ${controller.searchRadius.toStringAsFixed(1)} km → New: ${controller.pendingRadius.toStringAsFixed(1)} km',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey[600],
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                    ],
+                    const SizedBox(height: 12),
+                    SliderTheme(
+                      data: SliderTheme.of(context).copyWith(
+                        activeTrackColor: controller.hasPendingRadiusChange ? Colors.orange : Colors.blue,
+                        inactiveTrackColor: (controller.hasPendingRadiusChange ? Colors.orange : Colors.blue).withOpacity(0.3),
+                        thumbColor: controller.hasPendingRadiusChange ? Colors.orange : Colors.blue,
+                        overlayColor: (controller.hasPendingRadiusChange ? Colors.orange : Colors.blue).withOpacity(0.2),
+                        trackHeight: 4,
+                        thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
+                      ),
+                      child: Slider(
+                        value: controller.pendingRadius,
+                        min: 1.0,
+                        max: 50.0,
+                        divisions: 49,
+                        label: '${controller.pendingRadius.toStringAsFixed(1)} km',
+                        onChanged: (value) {
+                          controller.setSearchRadius(value);
+                        },
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '1 km',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                        Text(
+                          '50 km',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                      ],
+                    ),
+                    // Show Users Button
+                    if (controller.hasPendingRadiusChange) ...[
+                      const SizedBox(height: 16),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: controller.isLoading
+                              ? null
+                              : () async {
+                                  await controller.applyPendingRadius();
+                                },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: controller.isLoading
+                              ? const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Icon(Icons.search, size: 20),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      'Show Users (${controller.pendingRadius.toStringAsFixed(1)}km)',
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ),
+            
+            const SizedBox(height: 20),
+            
+            // Action buttons
             ListTile(
               leading: const Icon(Icons.refresh),
               title: const Text('Refresh Nearby Users'),
@@ -322,7 +470,11 @@ class _MapScreenState extends State<MapScreen> {
             ),
             ListTile(
               leading: const Icon(Icons.people),
-              title: Text('Show ${controller.nearbyUsers.length} Nearby Users'),
+              title: GetBuilder<MapScreenContorller>(
+                builder: (controller) => Text(
+                  'Showing ${controller.nearbyUsers.length} Nearby Users',
+                ),
+              ),
               onTap: () {
                 Navigator.pop(context);
                 // Could show a list of users
@@ -330,8 +482,10 @@ class _MapScreenState extends State<MapScreen> {
             ),
             ListTile(
               leading: const Icon(Icons.timeline),
-              title: Text(
-                'Connected Users: ${controller.connectedUsers.length}',
+              title: GetBuilder<MapScreenContorller>(
+                builder: (controller) => Text(
+                  'Connected Users: ${controller.connectedUsers.length}',
+                ),
               ),
               onTap: () {
                 Navigator.pop(context);

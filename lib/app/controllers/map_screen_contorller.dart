@@ -1,5 +1,6 @@
 import 'package:dot_connections/app/core/services/map_services.dart';
 import 'package:dot_connections/app/data/models/nearby_user_model.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
@@ -14,6 +15,11 @@ class MapScreenContorller extends GetxController {
   Position? currentLocation;
   List<NearbyUser> nearbyUsers = [];
   List<NearbyUser> connectedUsers = [];
+  
+  // Search radius in kilometers (default 5km)
+  double _searchRadius = 5.0;
+  double _pendingRadius = 5.0;
+  bool _hasPendingRadiusChange = false;
 
   // Map elements
   Set<Marker> markers = <Marker>{};
@@ -21,6 +27,30 @@ class MapScreenContorller extends GetxController {
 
   // Loading state
   bool isLoading = false;
+
+  // Radius getter and setter
+  double get searchRadius => _searchRadius;
+  double get pendingRadius => _pendingRadius;
+  bool get hasPendingRadiusChange => _hasPendingRadiusChange;
+  
+  void setSearchRadius(double radius) {
+    if (_pendingRadius != radius) {
+      _pendingRadius = radius;
+      _hasPendingRadiusChange = (_pendingRadius != _searchRadius);
+      print('🔄 Pending search radius set to ${radius}km');
+      update();
+    }
+  }
+  
+  Future<void> applyPendingRadius() async {
+    if (_hasPendingRadiusChange) {
+      _searchRadius = _pendingRadius;
+      _hasPendingRadiusChange = false;
+      print('✅ Applied search radius: ${_searchRadius}km');
+      update();
+      await refreshNearbyUsers();
+    }
+  }
 
   // Initial camera position (will be updated when location is obtained)
   CameraPosition get initialCameraPosition {
@@ -42,6 +72,8 @@ class MapScreenContorller extends GetxController {
   void onInit() {
     print('🎯 MapScreenController onInit called');
     super.onInit();
+    // Initialize pending radius with current radius
+    _pendingRadius = _searchRadius;
     _initializeMap();
   }
 
@@ -103,15 +135,20 @@ class MapScreenContorller extends GetxController {
 
   Future<void> _fetchNearbyUsers() async {
     try {
-      final users = await _mapServices.getNearbyUsers(radius: 100);
+      final users = await _mapServices.getNearbyUsers(radius: _searchRadius.round());
       nearbyUsers = users;
       connectedUsers = users.where((user) => user.isConnected).toList();
 
       await _updateMapElements();
 
       print(
-        'Fetched ${nearbyUsers.length} nearby users, ${connectedUsers.length} connected',
+        'Fetched ${nearbyUsers.length} nearby users within ${_searchRadius}km radius, ${connectedUsers.length} connected',
       );
+      if (nearbyUsers.isNotEmpty) {
+        print(
+          'First user location: ${nearbyUsers[0].location.latitude}, ${nearbyUsers[0].location.longitude}',
+        );
+      }
       update();
     } catch (e) {
       print('Error fetching nearby users: $e');
@@ -127,6 +164,8 @@ class MapScreenContorller extends GetxController {
     if (currentLocation == null) return;
 
     try {
+      print('🗺️ Updating map elements for ${nearbyUsers.length} nearby users');
+      
       // Clear existing markers and polylines
       markers.clear();
       polylines.clear();
@@ -137,20 +176,27 @@ class MapScreenContorller extends GetxController {
       );
       markers.add(currentLocationMarker);
 
-      // Add user markers
-      final userMarkers = await _mapServices.createUserMarkers(nearbyUsers);
-      markers.addAll(userMarkers);
+      // Add user markers only if we have nearby users
+      if (nearbyUsers.isNotEmpty) {
+        final userMarkers = await _mapServices.createUserMarkers(nearbyUsers);
+        markers.addAll(userMarkers);
+        print('✅ Added ${userMarkers.length} user markers to map');
+      }
 
-      // Add polylines for connected users
-      final userPolylines = _mapServices.createPolylines(
-        currentLocation!,
-        connectedUsers,
-      );
-      polylines.addAll(userPolylines);
+      // Add polylines for connected users only if we have connected users
+      if (connectedUsers.isNotEmpty) {
+        final userPolylines = _mapServices.createPolylines(
+          currentLocation!,
+          connectedUsers,
+        );
+        polylines.addAll(userPolylines);
+        print('✅ Added ${userPolylines.length} polylines for connected users');
+      }
 
+      print('🗺️ Map elements updated: ${markers.length} markers, ${polylines.length} polylines');
       update();
     } catch (e) {
-      print('Error updating map elements: $e');
+      print('❌ Error updating map elements: $e');
     }
   }
 
@@ -199,16 +245,22 @@ class MapScreenContorller extends GetxController {
       // Refresh current location
       await _getCurrentLocation();
 
-      // Fetch nearby users again
+      // Fetch nearby users again with current radius
       await _fetchNearbyUsers();
+
+      // Update camera to fit all markers if we have users
+      if (_mapController != null && nearbyUsers.isNotEmpty) {
+        _fitCameraToBounds();
+      }
 
       Get.snackbar(
         'Success',
-        'Nearby users refreshed',
+        'Found ${nearbyUsers.length} users within ${_searchRadius}km',
         snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 2),
       );
     } catch (e) {
-      print('Error refreshing nearby users: $e');
+      print('❌ Error refreshing nearby users: $e');
       Get.snackbar(
         'Error',
         'Failed to refresh nearby users',
