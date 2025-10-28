@@ -207,11 +207,11 @@ class AuthController extends GetxController {
 
           // Navigate based on user profile status
           print('🔑 Navigating based on profile completion status');
-          Get.to(() => WhatsNameView());
+          _handleNavigation();
         } else {
           print('🔑 No user data in response, navigating to name input screen');
           // If no user data, still navigate to profile setup
-          Get.to(() => WhatsNameView());
+          _handleNavigation();
         }
       } else {
         errorMessage.value = response.message;
@@ -226,7 +226,7 @@ class AuthController extends GetxController {
   }
 
   /// Fetches the user's profile
-  Future<void> fetchUserProfile() async {
+  Future<AuthResponse> fetchUserProfile() async {
     try {
       isLoading.value = true;
 
@@ -239,9 +239,11 @@ class AuthController extends GetxController {
         errorMessage.value = response.message;
       }
       debugPrint('👤 User profile fetched: ${response.data}');
+      return response;
     } catch (e) {
       debugPrint('👤 Error fetching user profile: $e');
       errorMessage.value = 'Failed to fetch profile: $e';
+      throw e;
     } finally {
       isLoading.value = false;
     }
@@ -918,9 +920,20 @@ class AuthController extends GetxController {
       return;
     }
 
-    // All fields filled, go to main app
-    print('🧭 All fields filled, navigating to main app: ${AppRoutes.parent}');
-    // Clear all previous screens and go to parent screen
-    Get.offAll(() => const ParentScreen(), transition: Transition.fadeIn);
+    // BOTH fields must be filled to proceed to main app
+    if (currentUser.value!.allUserFieldsFilled &&
+        currentUser.value!.allProfileFieldsFilled) {
+      print(
+        '🧭 Both user and profile fields are filled, navigating to main app: ${AppRoutes.parent}',
+      );
+      // Clear all previous screens and go to parent screen
+      Get.offAll(() => const ParentScreen(), transition: Transition.fadeIn);
+    } else {
+      print(
+        '🧭 Warning: Reached end of navigation logic without both fields filled',
+      );
+      // Fallback - this should not happen given the checks above
+      Get.offAll(() => const WhatsNameView(), transition: Transition.fadeIn);
+    }
   }
 }

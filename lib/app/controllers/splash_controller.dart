@@ -39,11 +39,40 @@ class SplashController extends GetxController {
         debugPrint('🔑 Token found, user is authenticated');
         _authController.isAuthenticated.value = true;
 
-        // Fetch user profile in background
-        await _authController.fetchUserProfile();
+        try {
+          // Fetch user profile
+          final profileResponse = await _authController.fetchUserProfile();
+          if (!profileResponse.success) {
+            debugPrint('❌ Failed to fetch user profile');
+            Get.snackbar(
+              'Error',
+              'Failed to load user profile',
+              duration: const Duration(seconds: 3),
+              snackPosition: SnackPosition.BOTTOM,
+              backgroundColor: Colors.red,
+            );
+            // Clear token and navigate to initial screen
+            await _authRepository.removeAuthToken();
+            _authController.isAuthenticated.value = false;
+            Get.offAllNamed(AppRoutes.initial);
+            return;
+          }
 
-        // Navigate to ParentScreen
-        Get.offAllNamed(AppRoutes.parent);
+          // If profile fetch was successful, navigate to ParentScreen
+          Get.offAllNamed(AppRoutes.parent);
+        } catch (e) {
+          debugPrint('❌ Error fetching user profile: $e');
+          Get.snackbar(
+            'Error',
+            'Failed to load user profile',
+            duration: const Duration(seconds: 3),
+            snackPosition: SnackPosition.BOTTOM,
+          );
+          // Clear token and navigate to initial screen
+          await _authRepository.removeAuthToken();
+          _authController.isAuthenticated.value = false;
+          Get.offAllNamed(AppRoutes.initial);
+        }
       } else {
         debugPrint('🔑 No token found, user is not authenticated');
         // Navigate to initial screen for authentication
@@ -51,6 +80,12 @@ class SplashController extends GetxController {
       }
     } catch (e) {
       debugPrint('🔑 Error checking auth status: $e');
+      Get.snackbar(
+        'Error',
+        'Authentication error',
+        duration: const Duration(seconds: 3),
+        snackPosition: SnackPosition.BOTTOM,
+      );
       // In case of error, navigate to initial screen
       Get.offAllNamed(AppRoutes.initial);
     } finally {

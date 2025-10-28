@@ -1,10 +1,12 @@
 import 'package:dot_connections/app/core/utils/app_utils.dart';
 import 'package:dot_connections/app/data/api/nearby_users_api_client.dart';
 import 'package:dot_connections/app/data/models/nearby_user_model.dart';
+import 'package:dot_connections/app/views/screens/parent/map/widgets/map_user_details_sheet.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class MapServices {
   final MatchApiClient _nearbyUsersApi = MatchApiClient();
@@ -131,6 +133,11 @@ class MapServices {
         ),
         onTap: () {
           print('Tapped on user: ${user.name}');
+          Get.bottomSheet(
+            MapUserDetailsSheet(user: user),
+            isScrollControlled: true,
+            backgroundColor: Colors.transparent,
+          );
         },
       );
 

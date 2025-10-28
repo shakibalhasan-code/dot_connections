@@ -33,7 +33,7 @@ class FindScreen extends StatelessWidget {
               children: [
                 _headerWidget(),
                 // SizedBox(height: 10.h),
-                controller.cardList.isNotEmpty
+                controller.cardList.isNotEmpty && controller.cardList.length > 0
                     ? Expanded(
                         child: Stack(
                           children: [
@@ -46,9 +46,15 @@ class FindScreen extends StatelessWidget {
                                   horizontal: 5.w,
                                   vertical: 16.h,
                                 ),
-                                initialIndex: controller.activeProfile.value,
+                                initialIndex:
+                                    controller.activeProfile.value >=
+                                        controller.cardList.length
+                                    ? 0
+                                    : controller.activeProfile.value,
                                 onSwipe: (previousIndex, currentIndex, direction) {
-                                  if (currentIndex != null) {
+                                  if (currentIndex != null &&
+                                      currentIndex <
+                                          controller.cardList.length) {
                                     // Schedule the callback to run after the build is complete
                                     WidgetsBinding.instance
                                         .addPostFrameCallback((_) {
@@ -68,7 +74,8 @@ class FindScreen extends StatelessWidget {
                                       right: true,
                                     ),
                                 cardBuilder: (context, index, x, y) {
-                                  if (index < controller.cardList.length) {
+                                  if (index >= 0 &&
+                                      index < controller.cardList.length) {
                                     return UserProfileWidget(
                                       userProfile: controller.cardList[index],
                                     );
@@ -163,13 +170,35 @@ class FindScreen extends StatelessWidget {
                           ],
                         ),
                       )
-                    : Center(
-                        child: Text(
-                          'No profiles available',
-                          style: AppTextStyle.primaryTextStyle(
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.grey,
+                    : Expanded(
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.favorite_outline,
+                                size: 64.sp,
+                                color: Colors.grey[400],
+                              ),
+                              SizedBox(height: 16.h),
+                              Text(
+                                'No profiles available',
+                                style: AppTextStyle.primaryTextStyle(
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              SizedBox(height: 8.h),
+                              Text(
+                                'Check back later for new connections',
+                                style: AppTextStyle.primaryTextStyle(
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.grey.shade600,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),

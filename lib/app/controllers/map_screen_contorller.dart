@@ -15,7 +15,7 @@ class MapScreenContorller extends GetxController {
   Position? currentLocation;
   List<NearbyUser> nearbyUsers = [];
   List<NearbyUser> connectedUsers = [];
-  
+
   // Search radius in kilometers (default 5km)
   double _searchRadius = 5.0;
   double _pendingRadius = 5.0;
@@ -32,7 +32,7 @@ class MapScreenContorller extends GetxController {
   double get searchRadius => _searchRadius;
   double get pendingRadius => _pendingRadius;
   bool get hasPendingRadiusChange => _hasPendingRadiusChange;
-  
+
   void setSearchRadius(double radius) {
     if (_pendingRadius != radius) {
       _pendingRadius = radius;
@@ -41,7 +41,7 @@ class MapScreenContorller extends GetxController {
       update();
     }
   }
-  
+
   Future<void> applyPendingRadius() async {
     if (_hasPendingRadiusChange) {
       _searchRadius = _pendingRadius;
@@ -95,7 +95,35 @@ class MapScreenContorller extends GetxController {
       // Fetch nearby users
       print('👥 Fetching nearby users...');
       await _fetchNearbyUsers();
-      print('✅ Nearby users fetched');
+      // Print detailed information for each user
+      print('\n📍 Nearby Users Details:');
+      print('Total users found: ${nearbyUsers.length}');
+      print('Search radius: ${_searchRadius}km');
+      print('Connected users: ${connectedUsers.length}');
+      print('\n=== User Details ===');
+      for (int i = 0; i < nearbyUsers.length; i++) {
+        final user = nearbyUsers[i];
+        print('\nUser ${i + 1}:');
+        print('Name: ${user.name}');
+        print('Age: ${user.age}');
+        print('Gender: ${user.gender}');
+        print('Distance: ${user.distanceKm.toStringAsFixed(1)}km');
+        print(
+          'Location: ${user.location.latitude}, ${user.location.longitude}',
+        );
+        print('Bio: ${user.bio}');
+        print('School: ${user.school}');
+        print('Workplace: ${user.workplace}');
+        print('Study Level: ${user.studyLevel}');
+        print('Religion: ${user.religious}');
+        print('Height: ${user.height}cm');
+        print('Looking For: ${user.lookingFor}');
+        print('Interested In: ${user.interestedIn}');
+        print('Interests: ${user.interests.join(", ")}');
+        print('Connected: ${user.isConnected}');
+        print('-------------------');
+      }
+      print('\n✅ Nearby users fetched and logged');
     } catch (e) {
       print('❌ Error initializing map: $e');
       Get.snackbar(
@@ -135,20 +163,29 @@ class MapScreenContorller extends GetxController {
 
   Future<void> _fetchNearbyUsers() async {
     try {
-      final users = await _mapServices.getNearbyUsers(radius: _searchRadius.round());
+      final users = await _mapServices.getNearbyUsers(
+        radius: _searchRadius.round(),
+      );
       nearbyUsers = users;
       connectedUsers = users.where((user) => user.isConnected).toList();
 
       await _updateMapElements();
 
-      print(
-        'Fetched ${nearbyUsers.length} nearby users within ${_searchRadius}km radius, ${connectedUsers.length} connected',
-      );
-      if (nearbyUsers.isNotEmpty) {
+      print('📍 Nearby Users Summary:');
+      print('Total users found: ${nearbyUsers.length}');
+      print('Search radius: ${_searchRadius}km');
+      print('Connected users: ${connectedUsers.length}');
+
+      for (var user in nearbyUsers) {
+        print('👤 User: ${user.name}');
+        print('   Age: ${user.age}');
+        print('   Distance: ${user.distanceKm.toStringAsFixed(1)}km');
         print(
-          'First user location: ${nearbyUsers[0].location.latitude}, ${nearbyUsers[0].location.longitude}',
+          '   Location: ${user.location.latitude}, ${user.location.longitude}',
         );
+        print('   Connected: ${user.isConnected}');
       }
+
       update();
     } catch (e) {
       print('Error fetching nearby users: $e');
@@ -165,7 +202,7 @@ class MapScreenContorller extends GetxController {
 
     try {
       print('🗺️ Updating map elements for ${nearbyUsers.length} nearby users');
-      
+
       // Clear existing markers and polylines
       markers.clear();
       polylines.clear();
@@ -193,7 +230,9 @@ class MapScreenContorller extends GetxController {
         print('✅ Added ${userPolylines.length} polylines for connected users');
       }
 
-      print('🗺️ Map elements updated: ${markers.length} markers, ${polylines.length} polylines');
+      print(
+        '🗺️ Map elements updated: ${markers.length} markers, ${polylines.length} polylines',
+      );
       update();
     } catch (e) {
       print('❌ Error updating map elements: $e');

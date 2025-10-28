@@ -248,8 +248,8 @@ class _MapScreenState extends State<MapScreen> {
         initialCameraPosition: controller.initialCameraPosition,
         markers: controller.markers,
         polylines: controller.polylines,
-        myLocationEnabled: false,
-        myLocationButtonEnabled: false,
+        myLocationEnabled: true,
+        myLocationButtonEnabled: true,
         mapType: MapType.terrain,
         zoomControlsEnabled: false,
         compassEnabled: true,
@@ -305,7 +305,7 @@ class _MapScreenState extends State<MapScreen> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
-            
+
             // Search Radius Section
             Container(
               padding: const EdgeInsets.all(16),
@@ -332,7 +332,10 @@ class _MapScreenState extends State<MapScreen> {
                         if (controller.hasPendingRadiusChange)
                           Container(
                             margin: const EdgeInsets.only(left: 8),
-                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 6,
+                              vertical: 2,
+                            ),
                             decoration: BoxDecoration(
                               color: Colors.orange,
                               borderRadius: BorderRadius.circular(8),
@@ -362,19 +365,34 @@ class _MapScreenState extends State<MapScreen> {
                     const SizedBox(height: 12),
                     SliderTheme(
                       data: SliderTheme.of(context).copyWith(
-                        activeTrackColor: controller.hasPendingRadiusChange ? Colors.orange : Colors.blue,
-                        inactiveTrackColor: (controller.hasPendingRadiusChange ? Colors.orange : Colors.blue).withOpacity(0.3),
-                        thumbColor: controller.hasPendingRadiusChange ? Colors.orange : Colors.blue,
-                        overlayColor: (controller.hasPendingRadiusChange ? Colors.orange : Colors.blue).withOpacity(0.2),
+                        activeTrackColor: controller.hasPendingRadiusChange
+                            ? Colors.orange
+                            : Colors.blue,
+                        inactiveTrackColor:
+                            (controller.hasPendingRadiusChange
+                                    ? Colors.orange
+                                    : Colors.blue)
+                                .withOpacity(0.3),
+                        thumbColor: controller.hasPendingRadiusChange
+                            ? Colors.orange
+                            : Colors.blue,
+                        overlayColor:
+                            (controller.hasPendingRadiusChange
+                                    ? Colors.orange
+                                    : Colors.blue)
+                                .withOpacity(0.2),
                         trackHeight: 4,
-                        thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
+                        thumbShape: const RoundSliderThumbShape(
+                          enabledThumbRadius: 8,
+                        ),
                       ),
                       child: Slider(
                         value: controller.pendingRadius,
                         min: 1.0,
                         max: 50.0,
                         divisions: 49,
-                        label: '${controller.pendingRadius.toStringAsFixed(1)} km',
+                        label:
+                            '${controller.pendingRadius.toStringAsFixed(1)} km',
                         onChanged: (value) {
                           controller.setSearchRadius(value);
                         },
@@ -448,9 +466,9 @@ class _MapScreenState extends State<MapScreen> {
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 20),
-            
+
             // Action buttons
             ListTile(
               leading: const Icon(Icons.refresh),

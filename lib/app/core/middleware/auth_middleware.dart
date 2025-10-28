@@ -49,14 +49,25 @@ class AuthMiddleware extends GetMiddleware {
         return RouteSettings(name: AppRoutes.howTall);
       }
 
-      // If attempting to access auth or setup screens when already fully set up,
+      // If attempting to access auth or setup screens when BOTH fields are filled,
       // redirect to main app
-      if (route == AppRoutes.initial ||
-          route == AppRoutes.email ||
-          route == AppRoutes.otp ||
-          route == AppRoutes.name ||
-          route == AppRoutes.dob) {
+      if ((user.allUserFieldsFilled && user.allProfileFieldsFilled) &&
+          (route == AppRoutes.initial ||
+              route == AppRoutes.email ||
+              route == AppRoutes.otp ||
+              route == AppRoutes.name ||
+              route == AppRoutes.dob)) {
         return RouteSettings(name: AppRoutes.parent);
+      }
+
+      // If trying to access parent screen but not all fields are filled, redirect appropriately
+      if (route == AppRoutes.parent &&
+          !(user.allUserFieldsFilled && user.allProfileFieldsFilled)) {
+        if (!user.allUserFieldsFilled) {
+          return RouteSettings(name: AppRoutes.name);
+        } else if (!user.allProfileFieldsFilled) {
+          return RouteSettings(name: AppRoutes.howTall);
+        }
       }
     } else {
       // If unauthenticated user tries to access protected routes, redirect to initial

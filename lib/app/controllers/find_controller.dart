@@ -52,6 +52,9 @@ class FindController extends GetxController {
 
         if (validProfiles.isNotEmpty) {
           cardList.assignAll(validProfiles);
+          // Reset active profile index to 0 when new profiles are loaded
+          activeProfile.value = 0;
+          activeProfileImage.value = 0;
           debugPrint(
             'Successfully loaded ${validProfiles.length} valid profiles',
           );
@@ -93,14 +96,32 @@ class FindController extends GetxController {
     required int previousIndex,
     required CardSwiperDirection direction,
   }) {
+    // Validate indices to prevent out of bounds access
+    if (previousIndex < 0 || previousIndex >= cardList.length) {
+      debugPrint(
+        'Invalid previousIndex: $previousIndex, cardList length: ${cardList.length}',
+      );
+      return;
+    }
+
+    if (currentIndex < 0 || currentIndex > cardList.length) {
+      debugPrint(
+        'Invalid currentIndex: $currentIndex, cardList length: ${cardList.length}',
+      );
+      return;
+    }
+
     // Add haptic feedback
     HapticFeedback.lightImpact();
 
     activeProfile.value = currentIndex;
+
+    ///set the default active image value
+    activeProfileImage.value = 0;
+
     update();
+
     if (direction == CardSwiperDirection.left) {
-      ///set the default active image value
-      activeProfileImage.value = 0;
       final toUserId = cardList[previousIndex].id;
       final isLiked = false;
       _findApiServices.swipeActions(
@@ -111,9 +132,6 @@ class FindController extends GetxController {
 
       // TODO: ACTION WHEN USER SWIPE PROFILE TO THE LEFT
     } else if (direction == CardSwiperDirection.right) {
-      ///set the default active image value
-      activeProfileImage.value = 0;
-
       // TODO: ACTION WHEN USER SWIPE PROFILE TO THE right
       final toUserId = cardList[previousIndex].id;
       final isLiked = true;
@@ -127,12 +145,18 @@ class FindController extends GetxController {
 
   //user ignore profile action's logic
   void swipeByActions(CardSwiperDirection direction) {
+    // Check if there are cards to swipe
+    if (cardList.isEmpty) {
+      debugPrint('No cards available to swipe');
+      return;
+    }
+
     // Add haptic feedback
     HapticFeedback.mediumImpact();
 
     ///set the default active image value
     activeProfileImage.value = 0;
-    debugPrint('>>>>>>>>>>>>ignore button clicked');
+    debugPrint('>>>>>>>>>>>>Action button clicked for direction: $direction');
 
     // Schedule the swipe operation to happen after the current frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
