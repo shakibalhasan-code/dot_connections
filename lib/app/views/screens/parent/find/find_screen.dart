@@ -33,7 +33,8 @@ class FindScreen extends StatelessWidget {
               children: [
                 _headerWidget(),
                 // SizedBox(height: 10.h),
-                controller.cardList.isNotEmpty && controller.cardList.length > 0
+                (controller.cardList.isNotEmpty &&
+                        controller.cardList.length > 0)
                     ? Expanded(
                         child: Stack(
                           children: [
@@ -46,6 +47,10 @@ class FindScreen extends StatelessWidget {
                                   horizontal: 5.w,
                                   vertical: 16.h,
                                 ),
+                                numberOfCardsDisplayed:
+                                    controller.cardList.length >= 3
+                                    ? 3
+                                    : controller.cardList.length,
                                 initialIndex:
                                     controller.activeProfile.value >=
                                         controller.cardList.length
