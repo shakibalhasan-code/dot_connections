@@ -106,19 +106,17 @@ class WidgetHelper {
     required Status status,
     required BuildContext toastContext,
   }) {
-    ScaffoldMessenger.of(
-      toastContext,
-    ).showSnackBar(
+    ScaffoldMessenger.of(toastContext).showSnackBar(
       SnackBar(
         duration: Duration(seconds: 2),
         content: Text(message),
-        padding: EdgeInsets.symmetric(
-          horizontal: 10.w,
-          vertical: 5.h
-        ),
-        backgroundColor: status == Status.success ? Colors.green : status == Status.warning ? CupertinoColors.systemYellow : Colors.red,
-        )
-        
-        );
+        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
+        backgroundColor: status == Status.success
+            ? Colors.green
+            : status == Status.warning
+            ? CupertinoColors.systemYellow
+            : Colors.red,
+      ),
+    );
   }
 }

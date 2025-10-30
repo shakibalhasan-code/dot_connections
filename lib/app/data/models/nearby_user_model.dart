@@ -17,6 +17,8 @@ class NearbyUser {
   final String name;
   final int age;
   final bool isConnected;
+  final String? profilePicture;
+  final List<String> photos;
 
   NearbyUser({
     required this.id,
@@ -37,6 +39,8 @@ class NearbyUser {
     required this.name,
     required this.age,
     required this.isConnected,
+    this.profilePicture,
+    this.photos = const [],
   });
 
   factory NearbyUser.fromJson(Map<String, dynamic> json) {
@@ -59,6 +63,8 @@ class NearbyUser {
       name: json['name'] ?? '',
       age: json['age'] ?? 0,
       isConnected: json['isConnected'] ?? false,
+      profilePicture: json['profilePicture'],
+      photos: List<String>.from(json['photos'] ?? []),
     );
   }
 
@@ -82,6 +88,8 @@ class NearbyUser {
       'name': name,
       'age': age,
       'isConnected': isConnected,
+      'profilePicture': profilePicture,
+      'photos': photos,
     };
   }
 

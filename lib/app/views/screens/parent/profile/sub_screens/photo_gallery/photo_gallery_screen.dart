@@ -17,8 +17,7 @@ class PhotoGalleryScreen extends StatelessWidget {
           // backgroundColor: AppColors.scaffoldBg,
           appBar: AppBar(
             // backgroundColor: Colors.white
-            
-            ),
+          ),
           body: Padding(
             padding: EdgeInsetsGeometry.symmetric(
               horizontal: 16.w,

@@ -208,9 +208,8 @@ class MapScreenContorller extends GetxController {
       polylines.clear();
 
       // Add current location marker
-      final currentLocationMarker = _mapServices.createCurrentLocationMarker(
-        currentLocation!,
-      );
+      final currentLocationMarker = await _mapServices
+          .createCurrentLocationMarker(currentLocation!);
       markers.add(currentLocationMarker);
 
       // Add user markers only if we have nearby users

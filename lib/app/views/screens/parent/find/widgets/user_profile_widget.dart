@@ -194,12 +194,14 @@ class UserProfileWidget extends StatelessWidget {
                     size: 18.h,
                   ),
                   SizedBox(width: 8.w),
-                  Text(
-                    userProfile.displayLocation,
-                    style: AppTextStyle.primaryTextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.white,
+                  Expanded(
+                    child: Text(
+                      userProfile.displayLocation,
+                      style: AppTextStyle.primaryTextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ],

@@ -8,6 +8,4 @@ class AppImages {
   static String welcomeImage = '$appImagesPath/welcome_image.png';
   static String annetteBlack = '$appImagesPath/Annette_Black.png';
   static String eleanorPena = '$appImagesPath/Eleanor_Pena.png';
-
-
 }

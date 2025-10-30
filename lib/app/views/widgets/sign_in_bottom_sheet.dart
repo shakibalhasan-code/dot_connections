@@ -20,8 +20,35 @@ class _SignInBottomSheetState extends State<SignInBottomSheet> {
   final AuthController authController = Get.find<AuthController>();
   int _currentStep = 0;
 
-  void _nextStep() {
+  Future<void> _nextStep() async {
     if (_currentStep < 1) {
+      // If moving from email step to OTP step, send OTP first
+      if (_currentStep == 0) {
+        try {
+          // Transfer email to AuthController and send OTP
+          authController.emailController.text = controller.email.value;
+          await authController.sendOtp();
+
+          // Show success message
+          Get.snackbar(
+            'OTP Sent',
+            'OTP has been sent to ${controller.email.value}',
+            backgroundColor: AppColors.primaryColor,
+            colorText: Colors.white,
+            duration: const Duration(seconds: 2),
+          );
+        } catch (e) {
+          // Show error message and don't proceed to next step
+          Get.snackbar(
+            'Error',
+            'Failed to send OTP: $e',
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+          );
+          return; // Don't proceed to next step if OTP sending failed
+        }
+      }
+
       setState(() {
         _currentStep++;
       });
@@ -48,22 +75,22 @@ class _SignInBottomSheetState extends State<SignInBottomSheet> {
     // Transfer the values from AppInitialController to AuthController
     authController.emailController.text = controller.email.value;
     authController.otpController.text = controller.otp.value;
-    
+
     // Show loading indicator
     setState(() {
       // Show loading if needed
     });
-    
+
     try {
       // Close the bottom sheet before navigation to prevent UI stacking
       Navigator.pop(context);
-      
+
       // Wait a short time to ensure the bottom sheet is fully closed
       await Future.delayed(const Duration(milliseconds: 100));
-      
+
       // Call the AuthController's verifyOtp method
       await authController.verifyOtp();
-      
+
       // Note: Navigation is now handled entirely by the authController
     } catch (e) {
       print('Error during sign in: $e');
@@ -95,9 +122,7 @@ class _SignInBottomSheetState extends State<SignInBottomSheet> {
                   topRight: Radius.circular(24),
                 ),
               ),
-              child: ListView(
-                controller: scrollController,
-                shrinkWrap: true,
+              child: Column(
                 children: [
                   // Handle bar
                   Container(
@@ -121,15 +146,15 @@ class _SignInBottomSheetState extends State<SignInBottomSheet> {
                           ),
                         Expanded(
                           child: Text(
-                            _currentStep == 0 
-                                ? 'Sign In' 
-                                : 'Verify OTP',
+                            _currentStep == 0 ? 'Sign In' : 'Verify OTP',
                             style: const TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
                               color: AppColors.primaryTextColor,
                             ),
-                            textAlign: _currentStep > 0 ? TextAlign.left : TextAlign.center,
+                            textAlign: _currentStep > 0
+                                ? TextAlign.left
+                                : TextAlign.center,
                           ),
                         ),
                         IconButton(
@@ -141,12 +166,18 @@ class _SignInBottomSheetState extends State<SignInBottomSheet> {
                   ),
                   // Content
                   Expanded(
-                    child: PageView(
-                      controller: _pageController,
-                      physics: const NeverScrollableScrollPhysics(),
+                    child: ListView(
+                      controller: scrollController,
+                      shrinkWrap: true,
                       children: [
-                        _buildEmailStep(),
-                        _buildOtpStep(),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.6,
+                          child: PageView(
+                            controller: _pageController,
+                            physics: const NeverScrollableScrollPhysics(),
+                            children: [_buildEmailStep(), _buildOtpStep()],
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -202,17 +233,15 @@ class _SignInBottomSheetState extends State<SignInBottomSheet> {
             // Email validation message
             GetBuilder<AppInitialController>(
               builder: (ctrl) {
-                if (ctrl.email.value.isNotEmpty && !GetUtils.isEmail(ctrl.email.value)) {
+                if (ctrl.email.value.isNotEmpty &&
+                    !GetUtils.isEmail(ctrl.email.value)) {
                   return Text(
                     'Please enter a valid email address',
-                    style: const TextStyle(
-                      color: Colors.red,
-                      fontSize: 12,
-                    ),
+                    style: const TextStyle(color: Colors.red, fontSize: 12),
                   );
                 }
                 return const SizedBox.shrink();
-              }
+              },
             ),
             const SizedBox(height: 100),
             // Continue button
@@ -224,19 +253,32 @@ class _SignInBottomSheetState extends State<SignInBottomSheet> {
                   onPressed: ctrl.isEmailButtonEnabled ? _nextStep : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryColor,
-                    disabledBackgroundColor: AppColors.primaryColor.withOpacity(0.3),
+                    disabledBackgroundColor: AppColors.primaryColor.withOpacity(
+                      0.3,
+                    ),
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: Text(
-                    'Continue',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
+                  child: Obx(
+                    () => authController.isLoading.value && _currentStep == 0
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : Text(
+                            'Continue',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
                   ),
                 ),
               ),
@@ -271,7 +313,7 @@ class _SignInBottomSheetState extends State<SignInBottomSheet> {
                   fontWeight: FontWeight.w600,
                   color: AppColors.primaryColor,
                 ),
-              )
+              ),
             ),
             const SizedBox(height: 32),
             // OTP input field
@@ -309,10 +351,7 @@ class _SignInBottomSheetState extends State<SignInBottomSheet> {
                   ),
                   decoration: BoxDecoration(
                     color: AppColors.fieldBgColor,
-                    border: Border.all(
-                      color: AppColors.primaryColor,
-                      width: 2,
-                    ),
+                    border: Border.all(color: AppColors.primaryColor, width: 2),
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
@@ -338,7 +377,7 @@ class _SignInBottomSheetState extends State<SignInBottomSheet> {
                 onPressed: () async {
                   // Transfer email from AppInitialController to AuthController
                   authController.emailController.text = controller.email.value;
-                  
+
                   // Call the AuthController's sendOtp method
                   try {
                     await authController.sendOtp();
@@ -375,34 +414,37 @@ class _SignInBottomSheetState extends State<SignInBottomSheet> {
                 width: double.infinity,
                 margin: const EdgeInsets.only(bottom: 40),
                 child: ElevatedButton(
-                  onPressed: ctrl.isOtpButtonEnabled 
-                    ? () => _handleSignInSuccess()
-                    : null,
+                  onPressed: ctrl.isOtpButtonEnabled
+                      ? () => _handleSignInSuccess()
+                      : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryColor,
-                    disabledBackgroundColor: AppColors.primaryColor.withOpacity(0.3),
+                    disabledBackgroundColor: AppColors.primaryColor.withOpacity(
+                      0.3,
+                    ),
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: Obx(() => authController.isLoading.value
-                    ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 2,
-                        ),
-                      )
-                    : Text(
-                        'Verify & Sign In',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                        ),
-                      ),
+                  child: Obx(
+                    () => authController.isLoading.value
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : Text(
+                            'Verify & Sign In',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
                   ),
                 ),
               ),

@@ -72,7 +72,7 @@ class SubscriptionScreen extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: 10.w,
-                          
+
                           vertical: 10.h,
                         ),
 
@@ -132,7 +132,7 @@ class SubscriptionScreen extends StatelessWidget {
             ),
             const Spacer(),
             CommonRoundedButton(title: 'Continue', onPressed: () {}),
-            SizedBox(height: 30.h,)
+            SizedBox(height: 30.h),
           ],
         ),
       ),

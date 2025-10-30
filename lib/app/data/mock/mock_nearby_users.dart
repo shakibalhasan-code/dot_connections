@@ -1,0 +1,91 @@
+import 'package:dot_connections/app/data/models/nearby_user_model.dart';
+
+class MockNearbyUsersData {
+  static List<NearbyUser> getSampleUsers() {
+    return [
+      NearbyUser(
+        id: '1',
+        name: 'Sarah Johnson',
+        age: 26,
+        bio: 'Love hiking and photography! Always up for new adventures.',
+        gender: 'female',
+        height: 165,
+        interestedIn: 'male',
+        interests: ['photography', 'hiking', 'travel', 'music'],
+        location: LocationModel(latitude: 23.8103, longitude: 90.4125),
+        lookingFor: 'relationship',
+        religious: 'christian',
+        school: 'University of Dhaka',
+        studyLevel: 'bachelor',
+        workplace: 'Tech Solutions Ltd',
+        userId: 'user1',
+        distance: 2100,
+        distanceKm: 2.1,
+        isConnected: false,
+        profilePicture:
+            'https://images.unsplash.com/photo-1494790108755-2616b612b217?w=400',
+        photos: [
+          'https://images.unsplash.com/photo-1494790108755-2616b612b217?w=400',
+          'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400',
+          'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400',
+          'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400',
+        ],
+      ),
+      NearbyUser(
+        id: '2',
+        name: 'Alex Martinez',
+        age: 28,
+        bio: 'Software developer by day, musician by night 🎸',
+        gender: 'male',
+        height: 178,
+        interestedIn: 'female',
+        interests: ['music', 'coding', 'gaming', 'movies'],
+        location: LocationModel(latitude: 23.8200, longitude: 90.4200),
+        lookingFor: 'friendship',
+        religious: 'agnostic',
+        school: 'MIT',
+        studyLevel: 'master',
+        workplace: 'Google',
+        userId: 'user2',
+        distance: 1500,
+        distanceKm: 1.5,
+        isConnected: true,
+        profilePicture:
+            'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400',
+        photos: [
+          'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400',
+          'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400',
+          'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400',
+        ],
+      ),
+      NearbyUser(
+        id: '3',
+        name: 'Emma Wilson',
+        age: 24,
+        bio: 'Fitness enthusiast and yoga instructor. Namaste! 🧘‍♀️',
+        gender: 'female',
+        height: 160,
+        interestedIn: 'male',
+        interests: ['yoga', 'fitness', 'meditation', 'healthy-living'],
+        location: LocationModel(latitude: 23.8000, longitude: 90.4000),
+        lookingFor: 'relationship',
+        religious: 'buddhist',
+        school: 'Yoga Alliance',
+        studyLevel: 'certification',
+        workplace: 'Pure Yoga Studio',
+        userId: 'user3',
+        distance: 3200,
+        distanceKm: 3.2,
+        isConnected: false,
+        profilePicture: null, // No profile picture, will use photos array
+        photos: [
+          'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400',
+          'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=400',
+          'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400',
+          'https://images.unsplash.com/photo-1521577352947-9bb58764b69a?w=400',
+          'https://images.unsplash.com/photo-1506629905607-d8b8e44bc2a9?w=400',
+        ],
+      ),
+    ];
+  }
+}

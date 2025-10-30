@@ -12,7 +12,8 @@ class CommonTextFeild extends StatelessWidget {
     super.key,
     required this.hint,
     required this.isPassword,
-    required this.type, required this.controller,
+    required this.type,
+    required this.controller,
   });
 
   @override
@@ -23,7 +24,7 @@ class CommonTextFeild extends StatelessWidget {
         borderRadius: BorderRadius.circular(10.r),
       ),
       child: Padding(
-        padding:  EdgeInsets.symmetric(horizontal: 8.w),
+        padding: EdgeInsets.symmetric(horizontal: 8.w),
         child: TextField(
           controller: controller,
           decoration: InputDecoration(

@@ -62,7 +62,6 @@ class TermsConditionScreen extends StatelessWidget {
                 color: AppColors.primaryTextColor,
               ),
             ),
-
           ],
         ),
       ),

@@ -1,4 +1,5 @@
 import 'package:dot_connections/app/core/utils/app_utils.dart';
+import 'package:dot_connections/app/core/utils/map_marker_utils.dart';
 import 'package:dot_connections/app/data/api/nearby_users_api_client.dart';
 import 'package:dot_connections/app/data/models/nearby_user_model.dart';
 import 'package:dot_connections/app/views/screens/parent/map/widgets/map_user_details_sheet.dart';
@@ -116,10 +117,19 @@ class MapServices {
     for (int i = 0; i < users.length; i++) {
       final user = users[i];
 
-      // Create custom marker icon based on connection status
-      BitmapDescriptor markerIcon = await _createCustomMarkerIcon(
-        user.isConnected,
-        user.name,
+      // Get the first available photo (profile picture or first photo from array)
+      String? firstPhotoUrl = user.profilePicture;
+      if ((firstPhotoUrl == null || firstPhotoUrl.isEmpty) &&
+          user.photos.isNotEmpty) {
+        firstPhotoUrl = user.photos.first;
+      }
+
+      // Create custom marker with profile picture
+      BitmapDescriptor markerIcon = await MapMarkerUtils.createProfileMarker(
+        profilePictureUrl: firstPhotoUrl,
+        initials: MapMarkerUtils.getInitials(user.name),
+        isConnected: user.isConnected,
+        size: 120,
       );
 
       final marker = Marker(
@@ -144,25 +154,8 @@ class MapServices {
       markers.add(marker);
     }
 
-    print('Created ${markers.length} user markers');
+    print('Created ${markers.length} user markers with profile pictures');
     return markers;
-  }
-
-  /// Create custom marker icon
-  Future<BitmapDescriptor> _createCustomMarkerIcon(
-    bool isConnected,
-    String userName,
-  ) async {
-    try {
-      // For simplicity, using default colored markers
-      // You can customize this further with custom images or generated markers
-      return isConnected
-          ? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen)
-          : BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
-    } catch (e) {
-      print('Error creating custom marker: $e');
-      return BitmapDescriptor.defaultMarker;
-    }
   }
 
   /// Create polylines for connected users
@@ -207,11 +200,15 @@ class MapServices {
   }
 
   /// Create current location marker
-  Marker createCurrentLocationMarker(Position position) {
+  Future<Marker> createCurrentLocationMarker(Position position) async {
+    final markerIcon = await MapMarkerUtils.createCurrentLocationMarker(
+      size: 100,
+    );
+
     return Marker(
       markerId: const MarkerId('current_location'),
       position: LatLng(position.latitude, position.longitude),
-      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+      icon: markerIcon,
       infoWindow: const InfoWindow(
         title: 'You',
         snippet: 'Your current location',

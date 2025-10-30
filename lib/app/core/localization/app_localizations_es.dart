@@ -357,7 +357,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get passButtonHint => 'Doble toque para pasar a esta persona';
 
   @override
-  String get superLikeButtonHint => 'Doble toque para super me gusta a esta persona';
+  String get superLikeButtonHint =>
+      'Doble toque para super me gusta a esta persona';
 
   @override
   String get recordingHint => 'Grabando mensaje de audio';

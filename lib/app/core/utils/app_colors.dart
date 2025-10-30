@@ -12,12 +12,11 @@ class AppColors {
 
   static const Color scaffoldBg = Colors.white;
   static const Color fieldBgColor = Color(0xFFF8F3F8); // Very light lavender
-  static const Color chipBgColor = Color(0xFFE8DDEF); // Slightly darker lavender
+  static const Color chipBgColor = Color(
+    0xFFE8DDEF,
+  ); // Slightly darker lavender
   static const Color primaryTextColor = Color(0xFF2D2D2D);
   static const Color secondaryTextColor = Color(0xFF5A5A5A);
   static const Color primaryTransParentCard = Color(0xFFF3EDF5);
   static const Color iconShapeColor = Color(0xFFF0E5F2);
-
-
-  
 }

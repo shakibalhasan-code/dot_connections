@@ -43,7 +43,11 @@ class CommonRoundedButton extends StatelessWidget {
         onPressed: onPressed,
         child: Text(
           title,
-          style: AppTextStyle.primaryTextStyle(fontSize: fontSize, fontWeight: fontWeight, color:textColor),
+          style: AppTextStyle.primaryTextStyle(
+            fontSize: fontSize,
+            fontWeight: fontWeight,
+            color: textColor,
+          ),
         ),
       ),
     );
