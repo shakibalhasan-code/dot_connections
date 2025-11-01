@@ -1,4 +1,3 @@
-import 'package:dot_connections/app/core/utils/app_routes.dart';
 import 'package:dot_connections/app/core/utils/text_style.dart';
 import 'package:dot_connections/app/data/models/nearby_user_model.dart';
 import 'package:dot_connections/app/views/widgets/photo_slider.dart';
@@ -191,11 +190,7 @@ class MapUserDetailsSheet extends StatelessWidget {
                           width: double.infinity,
                           child: ElevatedButton(
                             onPressed: () {
-                              Get.back(); // Close bottom sheet
-                              Get.toNamed(
-                                AppRoutes.conversation,
-                                arguments: {'userId': user.userId},
-                              );
+                              _handleStartChat(user);
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.purple,
@@ -257,6 +252,61 @@ class MapUserDetailsSheet extends StatelessWidget {
           fontSize: 14.sp,
           color: Colors.purple,
         ),
+      ),
+    );
+  }
+
+  void _handleStartChat(NearbyUser user) {
+    // Show information dialog first
+    Get.dialog(
+      AlertDialog(
+        title: Text(
+          'Start Chat with ${user.name}',
+          style: AppTextStyle.primaryTextStyle(
+            fontSize: 18.sp,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'You can only chat with connected users.',
+              style: AppTextStyle.primaryTextStyle(fontSize: 14.sp),
+            ),
+            SizedBox(height: 8.h),
+            Text(
+              'To chat with ${user.name}, you both need to match first through the matching system.',
+              style: AppTextStyle.primaryTextStyle(
+                fontSize: 14.sp,
+                color: Colors.grey.shade600,
+              ),
+            ),
+            SizedBox(height: 8.h),
+            Text(
+              'Try finding them in the "Find" section and swipe right if you\'re interested!',
+              style: AppTextStyle.primaryTextStyle(
+                fontSize: 13.sp,
+                color: Colors.purple.shade600,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text(
+              'OK',
+              style: AppTextStyle.primaryTextStyle(
+                fontSize: 14.sp,
+                color: Colors.purple,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

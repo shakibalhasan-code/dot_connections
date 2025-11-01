@@ -7,6 +7,7 @@ class Message {
   final bool isMe;
   final MessageType type;
   final String userAvatar;
+  final String? userName; // User's name for generating initials
   final String? audioUrl; // For network audio
   final String? audioPath; // For local audio files
   final XFile? imageFile; // For local image files
@@ -17,6 +18,7 @@ class Message {
     required this.isMe,
     required this.type,
     required this.userAvatar,
+    this.userName,
     this.audioUrl,
     this.audioPath,
     this.imageFile,

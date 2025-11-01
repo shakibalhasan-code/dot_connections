@@ -1,9 +1,10 @@
+import 'package:dot_connections/app/controllers/chat_controller.dart';
 import 'package:dot_connections/app/core/utils/app_routes.dart';
 import 'package:dot_connections/app/data/models/chat_model.dart';
+import 'package:dot_connections/app/views/widgets/user_avatar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class ChatItem extends StatelessWidget {
   final Chat chat;
@@ -13,10 +14,44 @@ class ChatItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () => Get.toNamed(AppRoutes.conversation),
-      leading: CircleAvatar(
-        radius: 28.r,
-        backgroundImage: AssetImage(chat.imageUrl),
+      onTap: () {
+        // Mark chat as read
+        final chatController = Get.find<ChatController>();
+        chatController.markChatAsRead(chat.partnerId);
+
+        // Navigate to conversation and pass partnerId
+        Get.toNamed(
+          AppRoutes.conversation,
+          arguments: {
+            'partnerId': chat.partnerId,
+            'partnerName': chat.name,
+            'partnerImage': chat.imageUrl,
+          },
+        );
+      },
+      leading: Stack(
+        children: [
+          SafeAvatarWidget(
+            radius: 28,
+            imageUrl: chat.imageUrl,
+            userName: chat.name,
+          ),
+          // Online indicator
+          if (chat.isOnline)
+            Positioned(
+              right: 2.w,
+              bottom: 2.h,
+              child: Container(
+                width: 12.w,
+                height: 12.h,
+                decoration: BoxDecoration(
+                  color: Colors.green,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white, width: 2.w),
+                ),
+              ),
+            ),
+        ],
       ),
       title: Text(
         chat.name,

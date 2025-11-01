@@ -39,15 +39,53 @@ class ChatScreen extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Obx(
-              () => ListView.builder(
-                itemCount: controller.chats.length,
-                itemBuilder: (context, index) {
-                  final chat = controller.chats[index];
-                  return ChatItem(chat: chat);
-                },
-              ),
-            ),
+            child: Obx(() {
+              if (controller.isLoading && controller.chats.isEmpty) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              if (controller.chats.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.chat_bubble_outline,
+                        size: 64.sp,
+                        color: Colors.grey[400],
+                      ),
+                      SizedBox(height: 16.h),
+                      Text(
+                        'No conversations yet',
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                      SizedBox(height: 8.h),
+                      Text(
+                        'Start chatting with your matches!',
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          color: Colors.grey[500],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              return RefreshIndicator(
+                onRefresh: controller.refreshChats,
+                child: ListView.builder(
+                  itemCount: controller.chats.length,
+                  itemBuilder: (context, index) {
+                    final chat = controller.chats[index];
+                    return ChatItem(chat: chat);
+                  },
+                ),
+              );
+            }),
           ),
         ],
       ),

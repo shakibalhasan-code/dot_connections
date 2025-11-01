@@ -1,7 +1,7 @@
 import 'package:dot_connections/app/controllers/conversation_controller.dart';
+import 'package:dot_connections/app/controllers/auth_controller.dart';
 import 'package:dot_connections/app/core/localization/localization_service.dart';
 import 'package:dot_connections/app/core/utils/app_colors.dart';
-import 'package:dot_connections/app/views/screens/parent/chat/widgets/audio_player_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -188,16 +188,24 @@ class MessageInputField extends StatelessWidget {
                           : Colors.grey,
                     ),
                     onPressed: () {
+                      final currentUserId =
+                          Get.find<AuthController>().currentUser.value?.id ??
+                          '';
+
                       if (controller.audioPath != null &&
                           controller.audioPath!.isNotEmpty) {
                         // Send audio message
-                        controller.sendAudioMessage(controller.audioPath!);
+                        controller.sendAudioMessage(
+                          controller.audioPath!,
+                          currentUserId,
+                        );
                       } else if (controller.messageFeildController.text
                           .trim()
                           .isNotEmpty) {
                         // Send text message
                         controller.sendTextMessage(
                           controller.messageFeildController.text,
+                          currentUserId,
                         );
                         controller.messageFeildController.clear();
                       }

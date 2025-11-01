@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:dot_connections/app/core/utils/app_colors.dart';
 import 'package:dot_connections/app/data/models/conversation_model.dart';
 import 'package:dot_connections/app/views/screens/parent/chat/widgets/audio_player_widget.dart';
+import 'package:dot_connections/app/views/widgets/user_avatar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -35,9 +36,10 @@ class MessageBubble extends StatelessWidget {
         if (!isMe)
           Padding(
             padding: EdgeInsets.only(right: 8.w),
-            child: CircleAvatar(
-              radius: 14.r,
-              backgroundImage: AssetImage(message.userAvatar),
+            child: SafeAvatarWidget(
+              radius: 14,
+              imageUrl: message.userAvatar,
+              userName: message.userName,
             ),
           ),
         Container(
@@ -53,9 +55,10 @@ class MessageBubble extends StatelessWidget {
         if (isMe)
           Padding(
             padding: EdgeInsets.only(left: 8.w),
-            child: CircleAvatar(
-              radius: 14.r,
-              backgroundImage: AssetImage(message.userAvatar),
+            child: SafeAvatarWidget(
+              radius: 14,
+              imageUrl: message.userAvatar,
+              userName: message.userName,
             ),
           ),
       ],

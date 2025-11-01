@@ -1,3 +1,4 @@
+import 'package:dot_connections/app/core/services/socket_service.dart';
 import 'package:dot_connections/app/core/utils/app_routes.dart';
 import 'package:dot_connections/app/data/models/auth_models.dart' hide Location;
 import 'package:dot_connections/app/data/models/user_personal_data.dart';
@@ -926,6 +927,10 @@ class AuthController extends GetxController {
       print(
         '🧭 Both user and profile fields are filled, navigating to main app: ${AppRoutes.parent}',
       );
+
+      // Register user with socket service for real-time features
+      _registerWithSocketService();
+
       // Clear all previous screens and go to parent screen
       Get.offAll(() => const ParentScreen(), transition: Transition.fadeIn);
     } else {
@@ -934,6 +939,21 @@ class AuthController extends GetxController {
       );
       // Fallback - this should not happen given the checks above
       Get.offAll(() => const WhatsNameView(), transition: Transition.fadeIn);
+    }
+  }
+
+  /// Register user with socket service for real-time features
+  void _registerWithSocketService() {
+    try {
+      if (currentUser.value?.id != null) {
+        final socketService = SocketService.instance;
+        socketService.registerUser(currentUser.value!.id);
+        debugPrint(
+          '🔌 User registered with socket service: ${currentUser.value!.id}',
+        );
+      }
+    } catch (e) {
+      debugPrint('❌ Failed to register with socket service: $e');
     }
   }
 }

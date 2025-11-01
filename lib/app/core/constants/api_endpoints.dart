@@ -6,6 +6,7 @@ class ApiEndpoints {
       dotenv.env['API_BASE_URL'] ?? 'http://10.10.12.125:5009/api/v1';
   static String get rootUrl =>
       dotenv.env['API_ROOT_URL'] ?? 'http://10.10.12.125:5009';
+
   // Auth Endpoints
   static String get user => '$baseUrl/user';
   static String get verifyOtp => '$baseUrl/user/verify-otp';
@@ -34,4 +35,15 @@ class ApiEndpoints {
 
   ///get match requests
   static String get getMatches => '$baseUrl/match/requests';
+  static String get getConnectionRequests => '$baseUrl/match/requests';
+  static String get getConnections => '$baseUrl/match/connections';
+  static String get getSentRequests => '$baseUrl/match/sent-requests';
+  static String respondToRequest(String requestId) =>
+      '$baseUrl/match/requests/$requestId';
+
+  // Chat Endpoints
+  static String get getChatList => '$baseUrl/chat/';
+  static String getChatMessages(String userId) =>
+      '$baseUrl/message/chat/$userId';
+  static String get sendMessageWithImage => '$baseUrl/message/image';
 }
