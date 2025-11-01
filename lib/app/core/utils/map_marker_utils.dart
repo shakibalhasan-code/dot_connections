@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:dot_connections/app/core/constants/api_endpoints.dart';
 
 class MapMarkerUtils {
   /// Create a custom marker with user profile picture
@@ -18,10 +19,16 @@ class MapMarkerUtils {
       ui.Image? profileImage;
 
       if (profilePictureUrl != null && profilePictureUrl.isNotEmpty) {
+        // Construct full URL if the profilePictureUrl is a relative path
+        String fullUrl = profilePictureUrl;
+        if (profilePictureUrl.startsWith('/')) {
+          fullUrl = '${ApiEndpoints.rootUrl}$profilePictureUrl';
+        }
+
         try {
           // Add timeout to prevent hanging
           final response = await http
-              .get(Uri.parse(profilePictureUrl))
+              .get(Uri.parse(fullUrl))
               .timeout(const Duration(seconds: 5));
 
           if (response.statusCode == 200 && response.bodyBytes.isNotEmpty) {
@@ -35,7 +42,7 @@ class MapMarkerUtils {
             profileImage = frameInfo.image;
           }
         } catch (e) {
-          print('Error loading profile image from $profilePictureUrl: $e');
+          print('Error loading profile image from $fullUrl: $e');
           // Will use placeholder instead
         }
       }

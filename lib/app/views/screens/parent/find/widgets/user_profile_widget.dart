@@ -30,6 +30,14 @@ class UserProfileWidget extends StatelessWidget {
     );
   }
 
+  /// Construct full URL if the imageUrl is a relative path
+  String _getFullImageUrl(String imageUrl) {
+    if (imageUrl.startsWith('/')) {
+      return '${ApiEndpoints.rootUrl}$imageUrl';
+    }
+    return imageUrl;
+  }
+
   /// Profile image view
   Widget _buildProfileImage() {
     // Determine the image URL
@@ -53,7 +61,7 @@ class UserProfileWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(24.r),
         child: imageUrl != null
             ? CachedNetworkImage(
-                imageUrl: '${ApiEndpoints.rootUrl}$imageUrl',
+                imageUrl: _getFullImageUrl(imageUrl),
                 fit: BoxFit.cover,
                 placeholder: (context, url) => Container(
                   color: Colors.grey[300],

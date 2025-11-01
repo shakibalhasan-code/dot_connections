@@ -13,6 +13,14 @@ import 'package:reorderable_grid/reorderable_grid.dart';
 class ReorderingImageWidget extends StatelessWidget {
   const ReorderingImageWidget({super.key});
 
+  /// Construct full URL if the imageUrl is a relative path
+  String _getFullImageUrl(String imageUrl) {
+    if (imageUrl.startsWith('/')) {
+      return '${ApiEndpoints.rootUrl}$imageUrl';
+    }
+    return imageUrl;
+  }
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ProfileContorller>(
@@ -106,7 +114,7 @@ class ReorderingImageWidget extends StatelessWidget {
                                 '========>>>>>> ERRORR>>>>>>>>>>>>> $value',
                               );
                             },
-                            imageUrl: '${ApiEndpoints.rootUrl}$item',
+                            imageUrl: _getFullImageUrl(item),
                             fit: BoxFit.cover,
                           ),
                         ),

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:dot_connections/app/core/constants/api_endpoints.dart';
 
 class PhotoSlider extends StatefulWidget {
   final List<String> photos;
@@ -151,9 +152,22 @@ class _PhotoSliderState extends State<PhotoSlider> {
     );
   }
 
+  /// Construct full URL if the photoUrl is a relative path
+  String _getFullImageUrl(String photoUrl) {
+    if (photoUrl.startsWith('/')) {
+      return '${ApiEndpoints.rootUrl}$photoUrl';
+    }
+    return photoUrl;
+  }
+
   Widget _buildPhotoItem(String photoUrl) {
+    final fullUrl = _getFullImageUrl(photoUrl);
+
+    // Debug print for troubleshooting
+    debugPrint('PhotoSlider: Loading image from: $fullUrl');
+
     return CachedNetworkImage(
-      imageUrl: photoUrl,
+      imageUrl: fullUrl,
       fit: BoxFit.cover,
       placeholder: (context, url) => Container(
         color: Colors.grey[300],
